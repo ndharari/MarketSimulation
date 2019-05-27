@@ -10,9 +10,12 @@ En cada período el mercado ordena de forma aleatoria a los compradores y estos 
 
 A su vez, consumidores y vendedores tienen un precio esperado $P^e$. Si en el periodo anterior se realizó un intercambio, el precio esperado será aquel del intercambio efectuado. En caso de que no se haya hecho, $P^e$ será el menor (mayor) entre el precio de reserva y el promedio entre el último precio "visto".
 
-### Compradores
+### Known problems / Future improvements
 
-
-
-### Vendedores
+- Need to figure out what happens if Nº sellers > Nº buyers
+- Differences in market compositions should be seen.
+- Better the ajust mechanism.
+- End game at market equilibrium, not at set number of turns
+- Add some Graphical interface to analyse results
+(graph showing convergence)
 
