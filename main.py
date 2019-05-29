@@ -16,7 +16,7 @@ Known problems / Future improvements:
 listSellers = [Seller(i, 0, 20) for i in range(5)]
 listBuyers = [Buyer(i, 20, 40) for i in range(5)]
 
-market = Market(listSellers, listBuyers, 30)
+market = Market(listSellers, listBuyers, 50)
 
 while not market.checkEndOfTime():
     market.moveTime()
