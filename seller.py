@@ -29,8 +29,7 @@ class Seller():
     def expect(self):
         if self.__traded:
             self.__expectedPrice = self.__lastPrice
-        elif self.__lastPrice < self.__reservePrice:
-            self.__reservePrice
         else:
-            self.__expectedPrice = round((self.__lastPrice +
-                                          self.__expectedPrice)/2, 2)
+            self.__expectedPrice = max(round((self.__lastPrice +
+                                             self.__expectedPrice)/2, 2),
+                                       self.__reservePrice)
