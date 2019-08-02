@@ -1,5 +1,7 @@
 import random
+
 import matplotlib.pyplot as plt
+
 
 class Market():
     """Se crea un mercado con lista de compradores y vendedores
@@ -29,17 +31,17 @@ class Market():
         numBuyers = len(self.__listBuyers)
 
         # Desordena tanto a los compradores como a los vendedores
-        Shuf_Sellers = random.sample(self.__listSellers, numSellers) # Shuffles Sellers
-        Shuf_Buyers = random.sample(self.__listBuyers, numBuyers) # Shuffles Buyers
+        Shuf_Sellers = random.sample(self.__listSellers, numSellers)  # Shuffles Sellers
+        Shuf_Buyers = random.sample(self.__listBuyers, numBuyers)  # Shuffles Buyers
 
         # Aparea a los que se juntan
         # zipea con compradores primero si son más que los vendedores
         if numBuyers >= numSellers:
-            paired = list(zip(Shuf_Sellers, Shuf_Buyers))  
+            paired = list(zip(Shuf_Sellers, Shuf_Buyers))
         else:
-            paired = list(zip(Shuf_Buyers, Shuf_Sellers)) #in reverse!
+            paired = list(zip(Shuf_Buyers, Shuf_Sellers))  # in reverse!
             paired = [(s, b) for s, b in paired]
-        
+
         # Aparea a los que se juntan
         print("The Buyers and Sellers paired for time " +
               str(self.__time) + " are ")
@@ -77,7 +79,7 @@ class Market():
             seller.record(self.__time)
         for buyer in self.__listBuyers:
             buyer.record(self.__time)
-        
+
         self.__endOfTime = self.checkEndOfTime()
 
     def checkEndOfTime(self):
@@ -93,12 +95,12 @@ class Market():
         plt.xlabel("time")
         plt.ylabel("Expected Prices")
         plt.title("Price convergence")
-        for t in range(self.__maxrounds):
-            for b in self.__listBuyers:
-                l = b.getRecord()
-                plt.plot(t, l[t][1], 'r.')
-            for s in self.__listSellers:
-                l = s.getRecord()
-                plt.plot(t, l[t][1], 'g.')
+        t_list = list(range(self.__maxrounds + 1))
+        for b in self.__listBuyers:
+            buyerRec = b.getRecord()
+            plt.plot(t_list, buyerRec, '-ro', alpha=0.5)
+        for s in self.__listSellers:
+            sellerRec = s.getRecord()
+            plt.plot(t_list, sellerRec, '-go', alpha=0.5)
         plt.legend()
         plt.show()

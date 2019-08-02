@@ -11,7 +11,7 @@ class Buyer():
         self.__reservePrice = random.randint(minR, maxR)
         self.__expectedPrice = random.randint(minR, self.__reservePrice)
         self.__lastPrice = self.__expectedPrice
-        self.__record = [(0, self.__expectedPrice)]
+        self.__record = [self.__expectedPrice]
         self.__paired = False
 
     def getName(self):
@@ -22,7 +22,7 @@ class Buyer():
 
     def getExpPrice(self):
         return self.__expectedPrice
-    
+
     def getRecord(self):
         return self.__record
 
@@ -48,4 +48,4 @@ class Buyer():
         self.prepareNext()
 
     def record(self, time):
-        self.__record.append((time, self.__expectedPrice))
+        self.__record.append(self.__expectedPrice)
