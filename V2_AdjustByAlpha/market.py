@@ -37,38 +37,38 @@ class Market():
         La función toma como input un par de agentes ordenados:
         pair = [seller, buyer]
         """
-        #Sets local variable names 
+        # Sets local variable names
         seller = pair[0]
         buyer = pair[1]
-        #Update paired status
+        # Update paired status
         seller.updatePaired(True)
         buyer.updatePaired(True)
-        #Exchange mechanism:
+        # Exchange mechanism:
         if seller.getExpPrice() <= buyer.getExpPrice():
-            #Prints traded prices.
+            # Prints traded prices.
             print(str(seller.getName()) + " and " +
                     str(buyer.getName()) + " exchange at price " +
                     str(seller.getExpPrice()) + "\n")
-            #Updates traded status as True
+            # Updates traded status as True
             seller.updateTraded(True)
             buyer.updateTraded(True)
         else:
-            #Prints trade failure
+            # Prints trade failure
             print(str(seller.getName()) + " and " +
                     str(buyer.getName()) + " did not exchange. \n")
-            #Updates traded status as True
+            # Updates traded status as True
             seller.updateTraded(False)
             buyer.updateTraded(False)
         # Prepares next round CHECK IF NEEDED
         seller.expect()
         buyer.expect()
-    
+
     def randomPairing(self, listSellers, listBuyers):
         """
         Gets both the list of sellers and buyers and returns a random paired
         list  always in the shape [[s,b], ...,  [s,b]]
         """
-        #Obtiene el largo de las listas
+        # Obtiene el largo de las listas
         numSellers = len(listSellers)
         numBuyers = len(listBuyers)
 
@@ -87,7 +87,7 @@ class Market():
     def openMarket(self):
         """
         Main function of the Market object. When the market opens, Sellers and
-        Buyers get paired. Then, the exchange mechanism takes place. Then, 
+        Buyers get paired. Then, the exchange mechanism takes place. Then,
         sellers and buyers both reset their booleans for traded and paired to False.
         Finally, the market checks if the final round has been reached.
         """
@@ -110,10 +110,10 @@ class Market():
         # And prepares next round
         for seller in self.__listSellers:
             seller.record()
-            seller.reseteStates()
+            seller.resetStates()
         for buyer in self.__listBuyers:
             buyer.record()
-            buyer.reseteStates()
+            buyer.resetStates()
 
         self.__endOfTime = self.checkEndOfTime()
 
@@ -129,24 +129,20 @@ class Market():
         plt.title("Price convergence")
         t_list = list(range(self.__maxrounds + 1))
 
-        #Graphs the record of expected prices in each round for Sellers
+        # Graphs the record of expected prices in each round for Sellers
         for s in self.__listSellers:
             sellerRec = s.getRecord()
             plt.plot(t_list, sellerRec, '-go', alpha=0.5)
 
-        #Graphs the record of expected prices in each round for Buyers
+        # Graphs the record of expected prices in each round for Buyers
         for b in self.__listBuyers:
             buyerRec = b.getRecord()
             plt.plot(t_list, buyerRec, '-ro', alpha=0.5)
-        
-        #Creates the legend with labeling
+
+        # Creates the legend with labeling
         seller = mpatches.Patch(color='g', label='Sellers')
         buyer = mpatches.Patch(color='r', label='Buyers')
         plt.legend(handles=[seller, buyer])
 
-        #Plots
+        # Plots
         plt.show()
-        
-
-
-

@@ -39,7 +39,7 @@ class Buyer():
     def updatePaired(self, value):
         self.__paired = value
 
-    def reseteStates(self):
+    def resetStates(self):
         self.__traded = False
         self.__paired = False
 
@@ -58,5 +58,3 @@ class Buyer():
         else:
             self.__expectedPrice = min(round(self.__record[-1]*(1 + self.__alpha), 2),
                                              self.__reservePrice)
-
-

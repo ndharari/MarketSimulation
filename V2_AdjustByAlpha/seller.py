@@ -39,10 +39,10 @@ class Seller():
     def updatePaired(self, value):
         self.__paired = value
 
-    def reseteStates(self):
+    def resetStates(self):
         self.__traded = False
         self.__paired = False
-    
+
     def record(self):
         self.__record.append(self.__expectedPrice)
 
@@ -57,5 +57,3 @@ class Seller():
         else:
             self.__expectedPrice = max(round(self.__record[-1]*(1 - self.__alpha), 2),
                                              self.__cost)
-
-
