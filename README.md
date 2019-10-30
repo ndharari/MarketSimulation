@@ -12,7 +12,6 @@ Al comenzar cada ronda, los compradores se dirigen hacia los vendedores de maner
 
 Una explicación más minuciosa sobre los parámetros del modelo y el mecanismo de ajuste  se puede encontrar haciendo click [aquí.](https://www.overleaf.com/read/vdmyrpszhbcx "Simulación de Mercado en Python")
 
-
 ## Known problems / Future improvements
 
 - Need to figure out what happens if Nº sellers > Nº buyers
