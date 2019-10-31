@@ -12,10 +12,8 @@ class Market():
     """
 
     def __init__(self, listSellers, listBuyers, maxrounds=50):
-        self.__staticListBuyers = listBuyers
-        self.__staticListSellers = listSellers
-        self.__dinamicListBuyers = listBuyers
-        self.__dinamicListSellers = listSellers
+        self.__staticListBuyers, self.__dinamicListBuyers  = listBuyers, listBuyers
+        self.__staticListSellers, self.__dinamicListSellers = listSellers, listSellers
         self.__time = 0
         self.__endOfTime = False
         self.__maxrounds = maxrounds
@@ -91,14 +89,14 @@ class Market():
         """
         #Updates the dinamic lists
         for agent in dinamicAgentList:
+            agent.updateAttrition()
             # If peak andurance reached, remove from list
             if agent.getMeanAttrition() == 1:
+                agent.updateTired()
                 dinamicAgentList.remove(agent)
             else:
-                agent.updatePriceRecord() #Updates prices
                 agent.resetStates() # And prepares next round
-                
-    
+                 
     def openMarket(self):
         """
         Main function of the Market object. When the market opens, Sellers and
@@ -126,6 +124,12 @@ class Market():
         self.dinamicUpdater(self.__dinamicListSellers)
         self.dinamicUpdater(self.__dinamicListBuyers)
 
+        for s in self.__staticListSellers:
+            s.updatePriceRecord()
+        
+        for b in self.__staticListBuyers:
+            b.updatePriceRecord()
+
         self.__endOfTime = self.checkEndOfTime()
 
     def checkEndOfTime(self):
@@ -139,7 +143,6 @@ class Market():
         sellers and buyers.
         """
         tmax = self.__maxrounds + 1
-
         plt.xlabel("time")
         plt.ylabel("Expected Prices")
         plt.title("Price convergence")
@@ -147,11 +150,10 @@ class Market():
 
         # Graphs the record of expected prices on each round
         # and all-time costs for all Sellers
-        for s in self.__StaticListSellers:
+        for s in self.__staticListSellers:
             #Plots the price record for the endured turns
             sellerRec = s.getPriceRecord()
-            sellerT = len(sellerRec)
-            plt.plot(sellerT, sellerRec, '-go', alpha=0.5)
+            plt.plot(t_list, sellerRec, '-go', alpha=0.5)
             
             #Plots the cost for all t
             sellerCost = [s.getCost() for i in range(tmax)]
@@ -159,13 +161,12 @@ class Market():
 
         # Graphs the record of expected prices on each round
         # and all-time Expected Prices for all Buyers
-        for b in self.__StaticListBuyers:
+        for b in self.__staticListBuyers:
             #Plots the price record for the endured turns
             buyerRec = b.getPriceRecord()
-            buyerT = len(buyerRec)
-            plt.plot(buyerT, sellerRec, '-go', alpha=0.5)
+            plt.plot(t_list, buyerRec, '-ro', alpha=0.5)
             
-            #Plots the cost for all t
+            #Plots the reserve price for all t
             buyerEPrice = [b.getReservePrice() for i in range(tmax)]
             plt.plot(t_list, buyerEPrice, '-r', alpha= 0.2)
         

@@ -30,6 +30,7 @@ class Seller():
         self.__endurance = 5 # Max number of failures it endures
         self.__attrition = deque([0 for i in range(self.__endurance)], 
                                     maxlen = self.__endurance) #list with default lenght
+        self.__tired = False
 
     def getName(self):
         return self.__name
@@ -60,11 +61,19 @@ class Seller():
         self.__paired = False
 
     def updatePriceRecord(self):
+        if self.__tired:
+            self.__priceRecord.append(None)
         self.__priceRecord.append(self.__expectedPrice)
     
     def updateAttrition(self):
-        if self.paired and not self.__traded:
+        if self.__paired:
+            if self.__traded:
+                self.__attrition.append(0)
             self.__attrition.append(1)
+            
+    
+    def updateTired(self):
+        self.__tired = True
 
     def expect(self):
         """
@@ -73,9 +82,9 @@ class Seller():
         price is the cost.
         """
         if self.__traded:
-            self.__expectedPrice = round(self.__priceRecord[-1] * (1 + self.__alpha), 1)
+            self.__expectedPrice = round(self.__priceRecord[-1] * (1 + self.__alpha))
         else:
-            self.__expectedPrice = max(round(self.__priceRecord[-1]*(1 - self.__alpha), 1),
+            self.__expectedPrice = max(round(self.__priceRecord[-1]*(1 - self.__alpha)),
                                              self.__cost)
     
     
