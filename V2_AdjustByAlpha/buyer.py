@@ -1,4 +1,7 @@
 import random
+from statistics import mean
+
+from collections import deque
 
 
 class Buyer():
@@ -6,9 +9,15 @@ class Buyer():
     id = name
     minR = minimum posible reserve price
     maxR = maximum possible reserve price
+    alpha = rate of price ajustment
+    endurance = max number of failures
+
 
     Each Buyer has a different reserve price wich is invariant. Their expected
     prices for each round gets updated following the .expect rule.
+
+    If for the last e pairings the buyer could not buy, it gives up and
+    leaves the market. 
     """
 
     def __init__(self, id, minR, maxR):
@@ -16,10 +25,13 @@ class Buyer():
         self.__name = "B_" + str(id)
         self.__reservePrice = random.randint(minR, maxR)
         self.__expectedPrice = random.randint(minR, self.__reservePrice)
-        self.__record = [self.__expectedPrice]
+        self.__priceRecord = [self.__expectedPrice]
         self.__paired = False
         self.__traded = False
         self.__alpha = 0.05
+        self.__endurance = 5 # Max number of failures it endures
+        self.__attrition = deque([0 for i in range(self.__endurance)], 
+                                    maxlen = self.__endurance) #list with default lenght
 
     def getName(self):
         return self.__name
@@ -30,8 +42,14 @@ class Buyer():
     def getExpPrice(self):
         return self.__expectedPrice
 
-    def getRecord(self):
-        return self.__record
+    def getPriceRecord(self):
+        return self.__priceRecord
+    
+    def getAttrition(self):
+        return self.__attrition
+
+    def getMeanAttrition(self):
+        return mean(self.__attrition)
 
     def updateTraded(self, value):
         self.__traded = value
@@ -43,8 +61,12 @@ class Buyer():
         self.__traded = False
         self.__paired = False
 
-    def record(self):
-        self.__record.append(self.__expectedPrice)
+    def updatePriceRecord(self):
+        self.__priceRecord.append(self.__expectedPrice)
+
+    def updateAttrition(self):
+        if self.paired and not self.__traded:
+            self.__attrition.append(1)
 
     def expect(self):
         """
@@ -54,7 +76,7 @@ class Buyer():
         """
 
         if self.__traded:
-            self.__expectedPrice = round(self.__record[-1] * (1 - self.__alpha), 2)
+            self.__expectedPrice = round(self.__priceRecord[-1] * (1 - self.__alpha), 1)
         else:
-            self.__expectedPrice = min(round(self.__record[-1]*(1 + self.__alpha), 2),
+            self.__expectedPrice = min(round(self.__priceRecord[-1]*(1 + self.__alpha), 1),
                                              self.__reservePrice)

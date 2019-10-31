@@ -7,15 +7,15 @@ import matplotlib.patches as mpatches
 class Market():
     """
     Se crea un mercado con lista de compradores y vendedores
-    predefinidas. La condición de cierre del mercado es que todos los precios
-    por los que se intercambia en t sean iguales a los de t+1.
-    Cada inicio de ronda, los vendedores se mezclan y van a acercarse al
-    vendedor que se encuentre más cercano
+    predefinidas. Cada inicio de ronda, los vendedores se mezclan
+    y van a acercarse al vendedor que se encuentre más cercano.
     """
 
     def __init__(self, listSellers, listBuyers, maxrounds=50):
-        self.__listBuyers = listBuyers
-        self.__listSellers = listSellers
+        self.__staticListBuyers = listBuyers
+        self.__staticListSellers = listSellers
+        self.__dinamicListBuyers = listBuyers
+        self.__dinamicListSellers = listSellers
         self.__time = 0
         self.__endOfTime = False
         self.__maxrounds = maxrounds
@@ -59,7 +59,7 @@ class Market():
             # Updates traded status as True
             seller.updateTraded(False)
             buyer.updateTraded(False)
-        # Prepares next round CHECK IF NEEDED
+        # After the trade, both parts reexamin their preferences.
         seller.expect()
         buyer.expect()
 
@@ -84,6 +84,21 @@ class Market():
             paired = list(zip(listBuyers, listSellers))  # in reverse!
             return [(s, b) for b, s in paired]
 
+    def dinamicUpdater(self, dinamicAgentList):
+        """
+        Cheks if peak attrition has been reached, and drops the laggers
+        from the market. 
+        """
+        #Updates the dinamic lists
+        for agent in dinamicAgentList:
+            # If peak andurance reached, remove from list
+            if agent.getMeanAttrition() == 1:
+                dinamicAgentList.remove(agent)
+            else:
+                agent.updatePriceRecord() #Updates prices
+                agent.resetStates() # And prepares next round
+                
+    
     def openMarket(self):
         """
         Main function of the Market object. When the market opens, Sellers and
@@ -93,7 +108,8 @@ class Market():
         """
 
         # Aparea a los que se juntan
-        paired = self.randomPairing(self.__listSellers, self.__listBuyers)
+        paired = self.randomPairing(self.__dinamicListSellers, 
+                                    self.__dinamicListBuyers)
 
         # Printea los pares
         print("The Buyers and Sellers paired for time " +
@@ -106,14 +122,9 @@ class Market():
         for pair in paired:
             self.exchangeMechanism(pair)
 
-        # Records time and prices for both sellers and buyers
-        # And prepares next round
-        for seller in self.__listSellers:
-            seller.record()
-            seller.resetStates()
-        for buyer in self.__listBuyers:
-            buyer.record()
-            buyer.resetStates()
+        # Dinamic lists drop the laggers
+        self.dinamicUpdater(self.__dinamicListSellers)
+        self.dinamicUpdater(self.__dinamicListBuyers)
 
         self.__endOfTime = self.checkEndOfTime()
 
@@ -123,25 +134,44 @@ class Market():
         return True
 
     def graph(self):
-        # Graphs the convcergence
+        """" 
+        Graphs the price path, the costs and the reserve price for all
+        sellers and buyers.
+        """
+        tmax = self.__maxrounds + 1
+
         plt.xlabel("time")
         plt.ylabel("Expected Prices")
         plt.title("Price convergence")
-        t_list = list(range(self.__maxrounds + 1))
+        t_list = list(range(tmax))
 
-        # Graphs the record of expected prices in each round for Sellers
-        for s in self.__listSellers:
-            sellerRec = s.getRecord()
-            plt.plot(t_list, sellerRec, '-go', alpha=0.5)
+        # Graphs the record of expected prices on each round
+        # and all-time costs for all Sellers
+        for s in self.__StaticListSellers:
+            #Plots the price record for the endured turns
+            sellerRec = s.getPriceRecord()
+            sellerT = len(sellerRec)
+            plt.plot(sellerT, sellerRec, '-go', alpha=0.5)
+            
+            #Plots the cost for all t
+            sellerCost = [s.getCost() for i in range(tmax)]
+            plt.plot(t_list, sellerCost, '-g', alpha= 0.2)
 
-        # Graphs the record of expected prices in each round for Buyers
-        for b in self.__listBuyers:
-            buyerRec = b.getRecord()
-            plt.plot(t_list, buyerRec, '-ro', alpha=0.5)
-
+        # Graphs the record of expected prices on each round
+        # and all-time Expected Prices for all Buyers
+        for b in self.__StaticListBuyers:
+            #Plots the price record for the endured turns
+            buyerRec = b.getPriceRecord()
+            buyerT = len(buyerRec)
+            plt.plot(buyerT, sellerRec, '-go', alpha=0.5)
+            
+            #Plots the cost for all t
+            buyerEPrice = [b.getReservePrice() for i in range(tmax)]
+            plt.plot(t_list, buyerEPrice, '-r', alpha= 0.2)
+        
         # Creates the legend with labeling
-        seller = mpatches.Patch(color='g', label='Sellers')
-        buyer = mpatches.Patch(color='r', label='Buyers')
+        seller = mpatches.Patch(color ='g', label='Sellers')
+        buyer = mpatches.Patch(color ='r', label='Buyers')
         plt.legend(handles=[seller, buyer])
 
         # Plots
