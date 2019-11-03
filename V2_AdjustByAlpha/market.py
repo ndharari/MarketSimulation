@@ -135,9 +135,11 @@ class Market():
 
     def checkEndOfTime(self):
         #Checks also for positive amounts of both buyers and sellers
-        if self.__time < self.__maxrounds:
-            return False
-        return True
+        if len(self.__dinamicListBuyers) > 0 and len(self.__dinamicListSellers) >0:
+            if self.__time < self.__maxrounds:
+                return False
+            return True
+
 
     def plotPath(self, agentList, color, alpha):
         for agent in agentList:
@@ -178,16 +180,27 @@ class Market():
         plt.show()
 
     def getStatic(self, tipe):
+        """
+        For debbuging. Requires tipe = ["s", "b"]
+        """
         if tipe == "b":
             return len(self.__staticListBuyers)
-        else:
+        elif tipe == "s":
             return len(self.__staticListSellers)
+        else:
+            raise NameError
+
         
     def getDinamic(self, tipe):
+        """
+        For debbuging. Requires tipe = ["s", "b"]
+        """
         if tipe == "b":
             return len(self.__dinamicListBuyers)
-        else:
+        elif tipe == "s":
             return len(self.__dinamicListSellers)
+        else: 
+            return NameError
 
 
             

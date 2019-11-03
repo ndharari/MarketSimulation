@@ -6,13 +6,11 @@ from seller import Seller
 
 """
 Known problems / Future improvements:
-- Better the ajust mechanism
-- End game at market equilibrium, not at set number of turns ~~tricky~~
-- Better the graphical interface
+- Suplementary graphical interface
 """
 
-listSellers = [Seller(i, 10, 20) for i in range(1)]
-listBuyers = [Buyer(i, 20, 30) for i in range(3)]
+listSellers = [Seller(i, 10, 20, round=2) for i in range(1)]
+listBuyers = [Buyer(i, 20, 30, round=2) for i in range(3)]
 
 market = Market(listSellers, listBuyers, 50)
 

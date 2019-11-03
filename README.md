@@ -14,9 +14,4 @@ Una explicación más minuciosa sobre los parámetros del modelo y el mecanismo 
 
 ## Known problems / Future improvements
 
-- Need to figure out what happens if Nº sellers > Nº buyers
-- Differences in market compositions should be seen.
-- Better the adjust mechanism.
-- End game at market equilibrium, not at set number of turns
-- Add some Graphical interface to analyze results
-(graph showing convergence)
+- Known bug: sometimes sellers and buyers get 

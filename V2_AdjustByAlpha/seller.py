@@ -10,6 +10,7 @@ class Seller():
     maxC = max possible cost
     alpha = rate of price ajustment
     endurance = max number of failures
+    round = rounding parameter
 
     Each Seller has a different cost wich is invariant. Their expected
     prices for each round gets updated following the .expect rule
@@ -18,7 +19,7 @@ class Seller():
     leaves the market. 
     """
 
-    def __init__(self, id, minC, maxC):
+    def __init__(self, id, minC, maxC, alpha=0.05, endurance=3, round=0):
         self.__id = id
         self.__name = "S_" + str(id)
         self.__cost = random.randint(minC, maxC)
@@ -26,11 +27,12 @@ class Seller():
         self.__priceRecord = [self.__expectedPrice]
         self.__paired = False
         self.__traded = False
-        self.__alpha = 0.05
-        self.__endurance = 3 # Max number of failures it endures
+        self.__alpha = alpha
+        self.__endurance = endurance # Max number of failures it endures
         self.__attrition = deque([0 for i in range(self.__endurance)], 
                                     maxlen = self.__endurance) #list with default lenght
         self.__tired = False
+        self.__round = round
 
     def getName(self):
         return self.__name
@@ -82,10 +84,11 @@ class Seller():
         If the Seller doesn't make a deal, he lowers its price. The lowest possible
         price is the cost.
         """
+        r, alpha = self.__round, self.__alpha
         if self.__traded:
-            self.__expectedPrice = round(self.__priceRecord[-1] * (1 + self.__alpha) )
+            self.__expectedPrice = round(self.__priceRecord[-1] * (1 + alpha), r)
         else:
-            self.__expectedPrice = max(round(self.__priceRecord[-1]*(1 - self.__alpha) ),
+            self.__expectedPrice = max(round(self.__priceRecord[-1]*(1 - alpha), r),
                                              self.__cost)
     
     
