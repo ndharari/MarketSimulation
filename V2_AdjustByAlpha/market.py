@@ -148,7 +148,6 @@ class Market():
             plt.plot(tline, path, color, alpha=alpha)
 
     def graph(self):
-<<<<<<< HEAD
         tMax = self.__maxrounds + 1
 
         # Graphs the convcergence
@@ -158,7 +157,7 @@ class Market():
         t_list = list(range(tMax))
 
         # Graphs the record of expected prices in each round for Sellers
-        for s in self.__listSellers:
+        for s in self.__dinamicListSellers:
             sellerRec = s.getRecord()
             sellerCost = [s.getCost() for i in range(tMax)]
             print(sellerCost)
@@ -166,14 +165,13 @@ class Market():
             plt.plot(t_list, sellerCost, '-g', alpha=0.1)
 
         # Graphs the record of expected prices in each round for Buyers
-        for b in self.__listBuyers:
+        for b in self.__dinamicListBuyers:
             buyerRec = b.getRecord()
             buyerEPrice = [b.getExpPrice() for i in range(tMax)]
             plt.plot(t_list, buyerRec, '-ro', alpha=0.5)
             plt.plot(t_list, buyerEPrice, '-r', alpha=0.1)
 
 
-=======
         """" 
         Graphs the price path, the costs and the reserve price for all
         sellers and buyers.
@@ -198,7 +196,6 @@ class Market():
         plt.xlabel("time")
         plt.ylabel("Expected Prices")
         plt.title("Price convergence")
->>>>>>> 7435af81439e564cf303ce0e4ec2ea357f7762d3
         # Creates the legend with labeling
         seller = mpatches.Patch(color='g', label='Sellers')
         buyer = mpatches.Patch(color='r', label='Buyers')
