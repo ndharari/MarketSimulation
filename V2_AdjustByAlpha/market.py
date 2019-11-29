@@ -1,4 +1,4 @@
-import random
+from random import sample
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -13,8 +13,8 @@ class Market():
 
     def __init__(self, listSellers, listBuyers, maxrounds=50):
         self.__staticListSellers, self.__staticListBuyers  = listSellers, listBuyers
-        self.__dinamicListSellers = list(listSellers) #Needs list() to create the double
-        self.__dinamicListBuyers = list(listBuyers) #Needs list() to create the double
+        self.__dinamicListSellers = list(listSellers) # Needs list() to create the double
+        self.__dinamicListBuyers = list(listBuyers) # Needs list() to create the double
         self.__time = 0
         self.__endOfTime = False
         self.__maxrounds = maxrounds
@@ -70,8 +70,8 @@ class Market():
         numBuyers = len(listBuyers)
 
         # Desordena tanto a los compradores como a los vendedores
-        listSellers = random.sample(listSellers, numSellers)  # Shuffles Sellers
-        listBuyers = random.sample(listBuyers, numBuyers)  # Shuffles Buyers
+        listSellers = sample(listSellers, numSellers)  # Shuffles Sellers
+        listBuyers = sample(listBuyers, numBuyers)  # Shuffles Buyers
 
         # Aparea a los que se juntan
         # Zipea con compradores primero si son más que los vendedores
@@ -148,29 +148,6 @@ class Market():
             plt.plot(tline, path, color, alpha=alpha)
 
     def graph(self):
-        tMax = self.__maxrounds + 1
-
-        # Graphs the convcergence
-        plt.xlabel("time")
-        plt.ylabel("Expected Prices")
-        plt.title("Price convergence")
-        t_list = list(range(tMax))
-
-        # Graphs the record of expected prices in each round for Sellers
-        for s in self.__dinamicListSellers:
-            sellerRec = s.getRecord()
-            sellerCost = [s.getCost() for i in range(tMax)]
-            print(sellerCost)
-            plt.plot(t_list, sellerRec, '-go', alpha=0.5)
-            plt.plot(t_list, sellerCost, '-g', alpha=0.1)
-
-        # Graphs the record of expected prices in each round for Buyers
-        for b in self.__dinamicListBuyers:
-            buyerRec = b.getRecord()
-            buyerEPrice = [b.getExpPrice() for i in range(tMax)]
-            plt.plot(t_list, buyerRec, '-ro', alpha=0.5)
-            plt.plot(t_list, buyerEPrice, '-r', alpha=0.1)
-
 
         """" 
         Graphs the price path, the costs and the reserve price for all
@@ -185,11 +162,11 @@ class Market():
 
         #Prints bounds
         for s in self.__staticListSellers:
-            sellerCost = [s.getCost() for i in range(tmax)]
+            sellerCost = [s.getCost() for i in t_list]
             plt.plot(t_list, sellerCost, '-g', alpha= 0.2)
         
         for b in self.__staticListBuyers:
-            buyerEPrice = [b.getReservePrice() for i in range(tmax)]
+            buyerEPrice = [b.getReservePrice() for i in t_list]
             plt.plot(t_list, buyerEPrice, '-r', alpha=0.2)
 
         # Aestetics
@@ -224,7 +201,8 @@ class Market():
         elif tipe == "s":
             return len(self.__dinamicListSellers)
         else: 
-            return NameError
+            raise NameError
 
 
             
+
