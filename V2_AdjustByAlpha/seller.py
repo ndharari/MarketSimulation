@@ -94,7 +94,7 @@ class Seller():
         if tipe == "delta":
             self.expectByDelta()
         elif tipe == "alpha":
-            self.expectByalpha()
+            self.expectByAlpha()
         else: 
             raise NameError
     

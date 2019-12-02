@@ -36,7 +36,7 @@ class Buyer():
         self.__expectedPrice = round(uniform(minR, self.__reservePrice), self.__round)
         self.__priceRecord = [self.__expectedPrice]
         self.__attrition = deque([0 for i in range(self.__endurance)], 
-                                    maxlen = self.__endurance) #list with default lenght
+                                    maxlen = self.__endurance) # list with default lenght
 
     def getName(self):
         return self.__name
@@ -94,7 +94,7 @@ class Buyer():
         if tipe == "delta":
             self.expectByDelta()
         elif tipe == "alpha":
-            self.expectByalpha()
+            self.expectByAlpha()
         else:
             raise NameError
 
