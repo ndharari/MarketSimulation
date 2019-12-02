@@ -155,7 +155,7 @@ class Market():
         """
         tmax = self.__maxrounds
         t_list = list(range(tmax))
-
+        
         # Prints the record of expected prices on each round:
         self.plotPath(self.__staticListSellers, '-go', alpha=0.5)
         self.plotPath(self.__staticListBuyers, '-ro', alpha=0.5)
@@ -170,13 +170,18 @@ class Market():
             plt.plot(t_list, buyerEPrice, '-r', alpha=0.2)
 
         # Aestetics
-        plt.xlabel("time")
-        plt.ylabel("Expected Prices")
-        plt.title("Price convergence")
+        numB = len(self.__staticListBuyers)
+        numS = len(self.__staticListSellers)
+        plt.xlabel("Tiempo")
+        plt.ylabel("Precios Esperados")
+        plt.title(f"Convergencia del precio con {numB} comprador{'es' if numB > 1 else ''} "
+        f"y {numS} vendedor{'es' if numS>1 else ''}")
+            
+
         # Creates the legend with labeling
         seller = mpatches.Patch(color='g', label='Sellers')
         buyer = mpatches.Patch(color='r', label='Buyers')
-        plt.legend(handles=[seller, buyer])
+        plt.legend(handles=[seller, buyer])    
         # Plots
         plt.show()
 
