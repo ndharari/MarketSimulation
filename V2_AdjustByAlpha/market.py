@@ -2,7 +2,6 @@ from random import sample
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from matplotlib.offsetbox import AnchoredText
 
 import seaborn as sns
 
@@ -189,11 +188,11 @@ class Market():
                 plt.plot(t_list, buyerEPrice, '-r', alpha=0.2)
 
             # Aestetics
-            #Checks for quantities and plurals
+            #Checks for quantities and plurals in static
             numB = len(self.__staticListBuyers)
-            pluralB = 'es' if numB > 1 else ''
+            static_pluralB = 'es' if numB > 1 else ''
             numS = len(self.__staticListSellers)
-            pluralS = 'es' if numS > 1 else ''
+            static_pluralS = 'es' if numS > 1 else ''
 
             plt.xlabel("Tiempo")
             plt.ylabel("Precios Esperados")
@@ -201,21 +200,27 @@ class Market():
             
             # Creates the legends with labeling
             # First Legend
-            seller = mpatches.Patch(color='g', label=f'${numS}$ Vendedor{pluralS}')
-            buyer = mpatches.Patch(color='r', label=f'${numB}$ Comprador{pluralB}')
+            seller = mpatches.Patch(color='g', label=f'${numS}$ Vendedor{static_pluralS}')
+            buyer = mpatches.Patch(color='r', label=f'${numB}$ Comprador{static_pluralB}')
             plt.legend(handles=[seller, buyer], bbox_to_anchor=(1.04, 1), loc="upper left")
             
              
             # Creates the remaining counter
             remainingBuyers = len(self.__dinamicListBuyers)
             remainingSellers = len(self.__dinamicListSellers)
-            counter = f"    En $T = {tmax}$\n{remainingBuyers} Compradores\n{remainingSellers} Vendedores"
+            #Checks for quantities and plurals in dinamic
+            dinamic_pluralB = 'es' if numB > 1 else ''
+            dinamic_pluralS = 'es' if numS > 1 else ''
+
+            counter = (f"    En $T = {tmax}$\n{remainingSellers} Vendedor{dinamic_pluralS}"
+                      f"\n{remainingBuyers} Comprador{dinamic_pluralB}")
+                      
 
 
             # place a text box in upper left in axes coords
 
-            plt.annotate(counter, xy=(1, .6), xycoords='axes fraction',
-                        xytext=(53, 0), textcoords='offset points')
+            plt.annotate(counter, xy=(1, .63), xycoords='axes fraction',
+                        xytext=(52, 0), textcoords='offset points')
                         
             # Plots
             plt.show()
