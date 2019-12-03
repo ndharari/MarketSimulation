@@ -2,7 +2,11 @@ from random import sample
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.offsetbox import AnchoredText
 
+import seaborn as sns
+
+import pandas as pd
 
 class Market():
     """
@@ -11,19 +15,22 @@ class Market():
     y van a acercarse al vendedor que se encuentre más cercano.
     """
 
-    def __init__(self, listSellers, listBuyers, maxrounds=50):
+    def __init__(self, listSellers, listBuyers, maxrounds=50, echo=True):
         self.__staticListSellers, self.__staticListBuyers  = listSellers, listBuyers
         self.__dinamicListSellers = list(listSellers) # Needs list() to create the double
         self.__dinamicListBuyers = list(listBuyers) # Needs list() to create the double
         self.__time = 0
         self.__endOfTime = False
         self.__maxrounds = maxrounds
+        self.__echo = echo # Shows text interface
+        self.__agentDataFrame = pd.DataFrame()
 
     def moveTime(self):
         if self.__endOfTime:
             print("Cannot, end of times")
         else:
-            print("-- \n")
+            if self.__echo:
+                print("-- \n")
             self.openMarket()
             self.__time += 1
 
@@ -40,22 +47,25 @@ class Market():
         # Sets local variable names
         seller = pair[0]
         buyer = pair[1]
+        echo = self.__echo # Shows text interface
         # Update paired status
         seller.updatePaired(True)
         buyer.updatePaired(True)
         # Exchange mechanism:
         if seller.getExpPrice() <= buyer.getExpPrice():
-            # Prints traded prices.
-            print(str(seller.getName()) + " and " +
-                    str(buyer.getName()) + " exchange at price " +
-                    str(seller.getExpPrice()) + "\n")
+            if echo:
+                # Prints traded prices.
+                print(str(seller.getName()) + " and " +
+                        str(buyer.getName()) + " exchange at price " +
+                        str(seller.getExpPrice()) + "\n")
             # Updates traded status as True
             seller.updateTraded(True)
             buyer.updateTraded(True)
         else:
-            # Prints trade failure
-            print(str(seller.getName()) + " and " +
-                    str(buyer.getName()) + " did not exchange. \n")
+            if echo:
+                # Prints trade failure
+                print(str(seller.getName()) + " and " +
+                        str(buyer.getName()) + " did not exchange. \n")
             # Updates traded status as False
             seller.updateTraded(False)
             buyer.updateTraded(False)
@@ -111,16 +121,19 @@ class Market():
         for traded and paired to False. Finally, the market checks if the final round has 
         been reached.
         """
+
+        echo = self.__echo  # Shows text interface
         # Aparea a los que se juntan
         paired = self.randomPairing(self.__dinamicListSellers, 
                                     self.__dinamicListBuyers)
 
-        # Printea los pares
-        print("The Buyers and Sellers paired for time " +
-              str(self.__time) + " are ")
-        print([(s.getName(), b.getName()) for s, b in paired])
-        print("\n With expected prices")
-        print([(s.getExpPrice(), b.getExpPrice()) for s, b in paired])
+        if echo:
+            # Printea los pares
+            print("The Buyers and Sellers paired for time " +
+                str(self.__time) + " are ")
+            print([(s.getName(), b.getName()) for s, b in paired])
+            print("\n With expected prices")
+            print([(s.getExpPrice(), b.getExpPrice()) for s, b in paired])
 
         # Ocurre el mecanismo de mercado
         for pair in paired:
@@ -140,50 +153,72 @@ class Market():
                 return False
             return True
 
-
-    def plotPath(self, agentList, color, alpha):
+    def matplotPath(self, agentList, color, alpha):
         for agent in agentList:
             path = agent.getPriceRecord()
             tline = [i for i in range(len(path))]
             plt.plot(tline, path, color, alpha=alpha)
 
-    def graph(self):
+    def matplotGraph(self, style='Solarize_Light2'):
 
         """" 
         Graphs the price path, the costs and the reserve price for all
         sellers and buyers.
+
+        Requires [style = "style_name"]
         """
-        tmax = self.__maxrounds
-        t_list = list(range(tmax))
         
-        # Prints the record of expected prices on each round:
-        self.plotPath(self.__staticListSellers, '-go', alpha=0.5)
-        self.plotPath(self.__staticListBuyers, '-ro', alpha=0.5)
-
-        #Prints bounds
-        for s in self.__staticListSellers:
-            sellerCost = [s.getCost() for i in t_list]
-            plt.plot(t_list, sellerCost, '-g', alpha= 0.2)
-        
-        for b in self.__staticListBuyers:
-            buyerEPrice = [b.getReservePrice() for i in t_list]
-            plt.plot(t_list, buyerEPrice, '-r', alpha=0.2)
-
-        # Aestetics
-        numB = len(self.__staticListBuyers)
-        numS = len(self.__staticListSellers)
-        plt.xlabel("Tiempo")
-        plt.ylabel("Precios Esperados")
-        plt.title(f"Convergencia del precio con {numB} comprador{'es' if numB > 1 else ''} "
-        f"y {numS} vendedor{'es' if numS>1 else ''}")
+        # Sets Style for the graph
+        assert style in plt.style.available, NameError
+        with plt.style.context(style):
             
+            tmax = self.__maxrounds
+            t_list = list(range(tmax))
+            
+            # Prints the record of expected prices on each round:
+            self.matplotPath(self.__staticListSellers, '-go', alpha=0.5)
+            self.matplotPath(self.__staticListBuyers, '-ro', alpha=0.5)
 
-        # Creates the legend with labeling
-        seller = mpatches.Patch(color='g', label='Sellers')
-        buyer = mpatches.Patch(color='r', label='Buyers')
-        plt.legend(handles=[seller, buyer])    
-        # Plots
-        plt.show()
+            #Prints bounds
+            for s in self.__staticListSellers:
+                sellerCost = [s.getCost() for i in t_list]
+                plt.plot(t_list, sellerCost, '-g', alpha= 0.2)
+            
+            for b in self.__staticListBuyers:
+                buyerEPrice = [b.getReservePrice() for i in t_list]
+                plt.plot(t_list, buyerEPrice, '-r', alpha=0.2)
+
+            # Aestetics
+            #Checks for quantities and plurals
+            numB = len(self.__staticListBuyers)
+            pluralB = 'es' if numB > 1 else ''
+            numS = len(self.__staticListSellers)
+            pluralS = 'es' if numS > 1 else ''
+
+            plt.xlabel("Tiempo")
+            plt.ylabel("Precios Esperados")
+            plt.title(r"Convergencia del precio esperado")
+            
+            # Creates the legends with labeling
+            # First Legend
+            seller = mpatches.Patch(color='g', label=f'${numS}$ Vendedor{pluralS}')
+            buyer = mpatches.Patch(color='r', label=f'${numB}$ Comprador{pluralB}')
+            plt.legend(handles=[seller, buyer], bbox_to_anchor=(1.04, 1), loc="upper left")
+            
+             
+            # Creates the remaining counter
+            remainingBuyers = len(self.__dinamicListBuyers)
+            remainingSellers = len(self.__dinamicListSellers)
+            counter = f"    En $T = {tmax}$\n{remainingBuyers} Compradores\n{remainingSellers} Vendedores"
+
+
+            # place a text box in upper left in axes coords
+
+            plt.annotate(counter, xy=(1, .6), xycoords='axes fraction',
+                        xytext=(53, 0), textcoords='offset points')
+                        
+            # Plots
+            plt.show()
 
     def getStatic(self, tipe):
         """
@@ -195,9 +230,9 @@ class Market():
             return len(self.__staticListSellers)
         else:
             raise NameError
-
         
     def getDinamic(self, tipe):
+
         """
         For debbuging. Requires tipe = ["s", "b"]
         """
@@ -208,6 +243,43 @@ class Market():
         else: 
             raise NameError
 
+    def dataFrameMaker(self):
+        """
+        Makes a pd.database from all agents in the market
+        [id, Name_of_Agent, Time, Price, Reserve Price]
+        """
 
+        allAgents = self.__staticListSellers + self.__staticListBuyers
+        for agent in allAgents:
+           # Checks nature of agents
+            if isinstance(agent, Seller):
+                URes = agent.getCost()
+                tipe = "Vendedor"
+            elif isinstance(agent, Buyer):
+                URes = agent.getReservePrice()
+                tipe = "Comprador"
+            else:
+                raise NameError
             
+            # Unpacks values
+            priceList = agent.getPriceRecord()
+            time_played = len(priceList)
+    
+            #Arranges the dict for the dataframe
+            agentDict = {
+                "Nombre": agent.getName(),
+                "Tipo": tipe,
+                "Precio": priceList,
+                "Tiempo": [i for i in range(time_played)],
+                "Utilidad Reserva": URes
+            }   
+            
+            tempDf = pd.DataFrame(agentDict)
+            self.__agentDataFrame = self.__agentDataFrame.append(tempDf, ignore_index=True)
 
+    def getDataFrame(self):
+        
+        """
+        Returns agent data
+        """
+        return self.__agentDataFrame
