@@ -1,6 +1,6 @@
-from buyer import Buyer
+from agents import Buyer, Seller
 from market import Market
-from seller import Seller
+
 
 """
 Known problems / Future improvements:
