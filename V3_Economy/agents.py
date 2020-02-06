@@ -7,48 +7,55 @@ class Agent:
     """
     Parent class for agents in the game. Not suposed to be used alone.
 
-    id = name. 
-    min = minimum posible cost/reserve price. 
-    max = maximum possible reserve price. 
-    tipe = "alpha" or "delta". 
-    alpha = rate of price ajustment. 
-    delta = fixed rate of price ajustment. 
-    endurance = max number of failures. 
-    r = rounding parameter. 
+    Arguments:
+        id {str} -- name
+        min {float} -- minimum posible cost/reserve price.
+        max {float} -- maximum possible reserve price.
+
+    Keyword Arguments:
+        endurance {int} -- max number of failures (default: {3})
+        tipe {str} -- "alpha" or "delta" (default: {"delta"})
+        delta {float} -- fixed rate of price ajustment (default: {0.5})
+        alpha {float} -- rate of price ajustment (default: {0.05})
+        r {int} -- rounding parameter (default: {2})
     """
 
     def __init__(self, id, min, max, endurance=3, tipe="delta", delta=0.5,
                  alpha=0.05, r=2):
-        
-        #Sets the parameters
+
+        # Sets the parameters
         self.id, self.tipe, self.delta, self.round = id, tipe, delta, r
-        self.alpha, self.endurance = alpha, endurance 
-        
+        self.alpha, self.endurance = alpha, endurance
+
         self.attrition = deque([0 for i in range(self.endurance)],
-                                 maxlen=self.endurance)  # list with default lenght
-        
+                               maxlen=self.endurance)  # list with default lenght
+
         self.paired = self.traded = self.tired = False
-        
+        # two because list is mutable.
+        self.pairedRecord, self.tradedRecord = [], []
         self.name = self.expectedPrice = self.priceRecord = None  # Placeholders
 
-    def getMeanAttrition(self): 
+    def getMeanAttrition(self):
         return mean(self.attrition)
 
-    def updatePriceRecord(self): 
+    def updatePriceRecord(self):
         if self.tired:
             self.priceRecord.append(None)
         else:
             self.priceRecord.append(self.expectedPrice)
-    
-    def updateAttrition(self): 
+
+    def updateAttrition(self):
         if self.paired:
             if self.traded:
                 self.attrition.append(0)
             else:
                 self.attrition.append(1)
-    
-    def resetStates(self): 
-        #TODO: DELETE FUNCTION WHEN RECORD IS ADDED
+
+    def recordResetStates(self):
+        """Resets and records states
+        """
+        self.tradedRecord.append(
+            self.traded), self.pairedRecord.append(self.paired)
         self.traded = False
         self.paired = False
 
@@ -80,7 +87,9 @@ class Agent:
         """
         Restarts the agent for another simulation of the market
         """
-        
+
+        self.attrition = deque([0 for i in range(self.endurance)],
+                               maxlen=self.endurance)
         self.expectedPrice = self.priceRecord[0]
         self.priceRecord = [self.expectedPrice]
         self.paired = self.traded = self.tired = False
@@ -88,20 +97,22 @@ class Agent:
 
 class Buyer(Agent):
     """
-    id = name
-    minR = minimum posible reserve price
-    maxR = maximum possible reserve price
-    tipe = "alpha" or "delta"
-    alpha = rate of price ajustment
-    delta = fixed rate of price ajustment
-    endurance = max number of failures
-    r = rounding parameter
+        Each Buyer has a different reserve price wich is invariant. Their expected
+        prices for each round gets updated following the .expect rule.
+        If for the last e pairings the buyer could not buy, it gives up and
+        leaves the market.  
 
-    Each Buyer has a different reserve price wich is invariant. Their expected
-    prices for each round gets updated following the .expect rule.
+    Arguments:
+        id {str} -- name
+        minR {float} -- minimum posible reserve price
+        maxR {float} -- maximum possible reserve price
 
-    If for the last e pairings the buyer could not buy, it gives up and
-    leaves the market. 
+    Keyword Arguments:
+        endurance {int} -- max number of failures (default: {3})
+        tipe {str} -- "alpha" or "delta" (default: {"delta"})
+        delta {float} -- fixed rate of price ajustment (default: {0.5})
+        alpha {float} -- rate of price ajustment (default: {0.05})
+        r {int} -- rounding parameter (default: {2})
     """
 
     def __init__(self, id, minR, maxR, endurance=3, tipe="delta", delta=0.5,
@@ -111,7 +122,8 @@ class Buyer(Agent):
 
         self.reservePrice = round(uniform(minR, maxR), self.round)
         self.name = "B_" + str(id)
-        self.expectedPrice = round(uniform(minR, self.reservePrice), self.round)
+        self.expectedPrice = round(
+            uniform(minR, self.reservePrice), self.round)
         self.priceRecord = [self.expectedPrice]
 
     def getReservePrice(self):
@@ -132,7 +144,7 @@ class Buyer(Agent):
                 self.priceRecord[-1] * (1 - alpha), r)
         else:
             self.expectedPrice = min(round(self.priceRecord[-1]*(1 + alpha), r),
-                                       self.reservePrice)
+                                     self.reservePrice)
 
     def expectByDelta(self):
         """
@@ -149,24 +161,27 @@ class Buyer(Agent):
             self.expectedPrice = self.priceRecord[-1] - delta
         else:
             self.expectedPrice = min(self.priceRecord[-1] + delta,
-                                       self.reservePrice)
+                                     self.reservePrice)
+
 
 class Seller(Agent):
     """
-    id = name
-    minC = minimum posible cost
-    maxC = max possible cost
-    tipe = "alpha" or "delta"
-    alpha = rate of price ajustment
-    delta = fixed rate of price ajustment
-    endurance = max number of failures
-    r = rounding parameter
-
     Each Seller has a different cost wich is invariant. Their expected
-    prices for each round gets updated following the .expect rule
+        prices for each round gets updated following the .expect rule
+        If for the last e pairings the seller could not sell, it gives up and
+        leaves the market. 
 
-    If for the last e pairings the seller could not sell, it gives up and
-    leaves the market. 
+    Arguments:
+        id {str} -- name
+        minC {float} -- minimum possible cost
+        maxC {float} -- max possible cost
+
+    Keyword Arguments:
+        endurance {int} -- max number of failures (default: {3})
+        tipe {str} -- "alpha" or "delta" (default: {"delta"})
+        delta {float} -- fixed rate of price ajustment (default: {0.5})
+        alpha {float} -- rate of price ajustment (default: {0.05})
+        r {int} -- rounding parameter (default: {2})
     """
 
     def __init__(self, id, minC, maxC, endurance=3, tipe="delta", delta=0.5,
@@ -178,7 +193,6 @@ class Seller(Agent):
         self.name = "S_" + str(id)
         self.expectedPrice = round(uniform(self.cost, maxC), self.round)
         self.priceRecord = [self.expectedPrice]
-
 
     def getCost(self):
         return self.cost
@@ -198,7 +212,7 @@ class Seller(Agent):
                 self.priceRecord[-1] * (1 + alpha), r)
         else:
             self.expectedPrice = max(round(self.priceRecord[-1]*(1 - alpha), r),
-                                       self.cost)
+                                     self.cost)
 
     def expectByDelta(self):
         """
@@ -215,4 +229,4 @@ class Seller(Agent):
             self.expectedPrice = self.priceRecord[-1] + delta
         else:
             self.expectedPrice = max(self.priceRecord[-1] - delta,
-                                       self.cost)
+                                     self.cost)
