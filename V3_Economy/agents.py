@@ -45,10 +45,11 @@ class Agent:
             self.priceRecord.append(self.expectedPrice)
 
     def updateAttrition(self):
-        if self.paired and not self.traded:
-            self.attrition.append(1)
-        else:
-            self.attrition.append(0)
+        if self.paired:
+            if not self.traded: 
+                self.attrition.append(1)
+            else:
+                self.attrition.append(0)
                 
 
     # Expect functions, for children. Required by .expect()

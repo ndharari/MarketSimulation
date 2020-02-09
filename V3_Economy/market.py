@@ -26,7 +26,7 @@ class Market():
 
     def moveTime(self):
         if self.endOfTime:
-            print("Cannot, end of times")
+            print("Cannot, end of time")
         else:
             if self.echo:
                 print("-- \n")
@@ -38,8 +38,7 @@ class Market():
         Resets the Market for a second run
         """
         # Needs list() to create the double
-        self.dinamicListSellers = list(
-            self.staticListSellers)
+        self.dinamicListSellers = list(self.staticListSellers)
         self.dinamicListBuyers = list(self.staticListBuyers)
         self.time = 0
         self.endOfTime = False
@@ -67,15 +66,15 @@ class Market():
             if echo:
                 # Prints traded prices.
                 print(str(seller.name) + " and " +
-                      str(buyer.name()) + " exchange at price " +
-                      str(seller.expectedPrice()) + "\n")
+                      str(buyer.name) + " exchange at price " +
+                      str(seller.expectedPrice) + "\n")
             # Updates traded status as True
             seller.traded = buyer.traded = True
         else:
             if echo:
                 # Prints trade failure
-                print(str(seller.name()) + " and " +
-                      str(buyer.name()) + " did not exchange. \n")
+                print(str(seller.name) + " and " +
+                      str(buyer.name) + " did not exchange. \n")
             # Updates traded status as False
             seller.traded = buyer.traded = False
 
@@ -100,21 +99,21 @@ class Market():
             paired = list(zip(listBuyers, listSellers))  # in reverse!
             return [(s, b) for b, s in paired]
 
-    def dinamicUpdater(self, agentList):
+    def dinamicUpdater(self, inAgentList):
         """
         All agents that are participating in the market reevaluate their preferences
         And update their price records. Cheks if peak attrition has been reached, 
         and drops the laggers from the market. 
         """
+        echo = self.echo
+        agentList = list(inAgentList)
 
         #Loops in reverse so remove doesn't clash with the iteration pointer
-        for agent in reversed(agentList): 
+        for agent in agentList: 
             # After the trade, both parts re-examin their preferences.
             agent.expect()
             # And updates their price record
             agent.updatePriceRecord()
-            # # alternative:
-            # agent.priceRecord.append(agent.expectedPrice)
             # Updates the dinamic lists
             agent.tradedRecord.append(agent.traded)
             agent.pairedRecord.append(agent.paired)
@@ -122,9 +121,11 @@ class Market():
             # If peak endurance reached, remove from list
             if agent.getMeanAttrition() == 1:
                 agent.tired = True
-                agentList.remove(agent)
+                if echo:
+                    print("Agent {} quit".format(agent.name))
+                inAgentList.remove(agent)
             else:
-                self.paired = self.traded = False  # Prepares next round
+                agent.paired = agent.traded = False  # Prepares next round
 
     def openMarket(self):
         """
@@ -162,10 +163,11 @@ class Market():
 
     def checkEndOfTime(self):
         # Checks also for positive amounts of both buyers and sellers
-        if len(self.dinamicListBuyers) > 0 and len(self.dinamicListSellers) > 0:
-            if self.time < self.maxrounds:
-                return False
-            return True
+        if (self.dinamicListBuyers and self.dinamicListSellers and
+         (self.time < self.maxrounds)):
+            return False
+        else:
+            return True 
 
     def matplotPath(self, agentList, color, alpha):
         for agent in agentList:

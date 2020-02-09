@@ -107,4 +107,15 @@ l = [i for i in range (5)]
 te_juro(l)
 l
 
-            
+a = [1]
+b = [1]
+c = 5
+d = 5
+if (a) and (b) and (c <= d):
+    print(False)
+else:
+    print(True)     
+
+
+if a:
+    print("la reputa")

@@ -8,10 +8,8 @@ from market import Market
 # TODO: Known problems / Future improvements:
 """
 - Change graphical interphace to Altair/Seaborn
-- Check if model still works.
 - Program the overall checks
 - Program the endurance checks
-- Sometimes the whole program crashes. Problem with sample?
 """
 
 
@@ -34,8 +32,9 @@ def simulation(market, N, echo=False):
     simulation_dict = OrderedDict()  # Creates the Dict
 
     for i in range(N):
-        while not market.checkEndOfTime():
+        while not market.endOfTime:
             market.moveTime()
+        print(market.endOfTime)
 
         # For supported styles, plt.style.available
         if echo:
@@ -58,12 +57,14 @@ def simulation(market, N, echo=False):
 
 
 # Sets up everything
-listSellers = [Seller(i, 10, 20, tipe="delta") for i in range(1)]
-listBuyers = [Buyer(i, 20, 30, tipe="delta") for i in range(4)]
-market = Market(listSellers, listBuyers, 40, echo=False)
+listSellers = [Seller(i, 10, 20, tipe="delta") for i in range(4)]
+listBuyers = [Buyer(i, 20, 30, tipe="delta") for i in range(1)]
+market = Market(listSellers, listBuyers, 50, echo=True)
 
 # Runs the simulations
-simulation_df = simulation(market, 2, echo=True)
+simulation_df = simulation(market, 1, echo=True)
 
+simulation_df.filter(regex="1_B_._Paired")
+simulation_df.filter(regex="1_._._Traded")
 
 simulation_df
