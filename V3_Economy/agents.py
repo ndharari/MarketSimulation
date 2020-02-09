@@ -40,24 +40,16 @@ class Agent:
 
     def updatePriceRecord(self):
         if self.tired:
-            self.priceRecord.append(None)
+            print("Problema, no debería estar en la lista")
         else:
             self.priceRecord.append(self.expectedPrice)
 
     def updateAttrition(self):
-        if self.paired:
-            if self.traded:
-                self.attrition.append(0)
-            else:
-                self.attrition.append(1)
-
-    def recordResetStates(self):
-        """Resets and records states
-        """
-        self.tradedRecord.append(
-            self.traded), self.pairedRecord.append(self.paired)
-        self.traded = False
-        self.paired = False
+        if self.paired and not self.traded:
+            self.attrition.append(1)
+        else:
+            self.attrition.append(0)
+                
 
     # Expect functions, for children. Required by .expect()
 
@@ -93,6 +85,7 @@ class Agent:
         self.expectedPrice = self.priceRecord[0]
         self.priceRecord = [self.expectedPrice]
         self.paired = self.traded = self.tired = False
+        self.pairedRecord, self.tradedRecord = [], [] 
 
 
 class Buyer(Agent):

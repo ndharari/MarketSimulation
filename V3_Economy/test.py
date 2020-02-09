@@ -5,11 +5,11 @@ class Parent:
         self.__value1 = VALUE1
 
     def get_x(self):
-        return self.__x 
-    
+        return self.__x
+
     def get_y(self):
         return self.__y
-    
+
     def get_z(self):
         return self.__z
 
@@ -18,6 +18,7 @@ class Parent:
 
     def set_z(self, z):
         self.__z = z
+
 
 class Child0(Parent):
     def __init__(self, x, y, z):
@@ -47,6 +48,63 @@ dos.get_VALUE()
 cero.get_VALUE()
 uno.get_VALUE()
 
+import pandas as pd
+from collections import OrderedDict
+
+priceList = [i for i in range(5)]
+URes = 4
+paired = [i^2 for i in range (5)]
+traded = [i+5 for i in range (5)]
 
 
+# o_dict = OrderedDict()
+# for i in range (4):
+#     o_dict.update(
+#         OrderedDict(
+#         {sim_id + name + "Precio": priceList,
+#         sim_id + name + "Utilidad Reserva": URes,
+#         sim_id + name + "Paired": paired,
+#         sim_id + name + "Traded": traded
+#     }
+#     )
+#     )
 
+
+# o_dict
+
+
+pd.DataFrame.from_dict(o_dict)
+
+from collections import deque
+from statistics import mean
+dq = deque([0 for i in range(3)], maxlen=3)
+dq
+dq.append(1)
+mean(dq)
+
+a = False
+b = True
+
+a and not b
+
+agentlist = []
+if not agentlist:
+    print("empty")
+
+
+a = list(range(5))
+for b in reversed(a):
+    if b == 2:
+        a.remove(b)
+a
+
+def te_juro(l):
+    for b in reversed(l):
+        if b==2:
+            l.remove(b)
+
+l = [i for i in range (5)]
+te_juro(l)
+l
+
+            

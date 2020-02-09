@@ -1,11 +1,9 @@
-from random import sample
-
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-
-import seaborn as sns
-
 import pandas as pd
+import seaborn as sns
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+from random import sample
+from collections import OrderedDict
 
 
 class Market():
@@ -24,7 +22,7 @@ class Market():
         self.endOfTime = False
         self.maxrounds = maxrounds
         self.echo = echo  # Shows text interface
-        self.df = pd.DataFrame()
+        self.agent_dict = OrderedDict()
 
     def moveTime(self):
         if self.endOfTime:
@@ -45,7 +43,7 @@ class Market():
         self.dinamicListBuyers = list(self.staticListBuyers)
         self.time = 0
         self.endOfTime = False
-        self.df = pd.DataFrame()
+        self.agent_dict = OrderedDict()
 
     def exchangeMechanism(self, pair):
         """
@@ -109,19 +107,24 @@ class Market():
         and drops the laggers from the market. 
         """
 
-        for agent in agentList:
-            # After the trade, both parts reexamin their preferences.
+        #Loops in reverse so remove doesn't clash with the iteration pointer
+        for agent in reversed(agentList): 
+            # After the trade, both parts re-examin their preferences.
             agent.expect()
             # And updates their price record
             agent.updatePriceRecord()
+            # # alternative:
+            # agent.priceRecord.append(agent.expectedPrice)
             # Updates the dinamic lists
+            agent.tradedRecord.append(agent.traded)
+            agent.pairedRecord.append(agent.paired)
             agent.updateAttrition()
             # If peak endurance reached, remove from list
             if agent.getMeanAttrition() == 1:
                 agent.tired = True
                 agentList.remove(agent)
             else:
-                agent.recordResetStates()  # And prepares next round
+                self.paired = self.traded = False  # Prepares next round
 
     def openMarket(self):
         """
@@ -153,9 +156,8 @@ class Market():
 
         # Makes the agent expect, updates their attrition, their prices and
         # decides who is tired and deletes them
-        self.dinamicUpdater(self.dinamicListSellers)
-        self.dinamicUpdater(self.dinamicListBuyers)
-
+        self.dinamicUpdater(self.dinamicListSellers), self.dinamicUpdater(
+            self.dinamicListBuyers)
         self.endOfTime = self.checkEndOfTime()
 
     def checkEndOfTime(self):
@@ -167,13 +169,12 @@ class Market():
 
     def matplotPath(self, agentList, color, alpha):
         for agent in agentList:
-            path = agent.priceRecord
-            tline = [i for i in range(len(path))]
+            path = agent.priceRecord[:-1]
+            # As priceRecord is a variable for t+1, deletes last one (not played)
+            tline = [i for i in range(len(path))]  
             plt.plot(tline, path, color, alpha=alpha)
 
     def matplotGraph(self, style='Solarize_Light2'):
-
-        # TODO: move this function to *Economy* class!
         """" 
         Graphs the price path, the costs and the reserve price for all
         sellers and buyers.
@@ -239,34 +240,36 @@ class Market():
             # Plots
             plt.show()
 
-    def dataFrameMaker(self, sim_id=0):
-
-        # TODO: make module to be market's main output!
+    def dictMaker(self, sim_id=0):
         """
-        Makes a pd.database from all agents in the market. Repeats
+        Makes an ordered dict from all agents in the market. Repeats
         [Price, Reserve Utiliy, Paired, Traded]
         """
         sim_id = str(sim_id) + "_"
 
         allAgents = self.staticListSellers + self.staticListBuyers
+        self.agent_dict = OrderedDict()
         for agent in allAgents:
-           # Checks nature of agents
-            if isinstance(agent, Seller):
-                URes = agent.cost
-            else:
-                isinstance(agent, Buyer)
-                URes = agent.reservePrice
 
             # Unpacks values
-            priceList = agent.priceRecord
+            # As priceRecord is a variable for t+1, deletes last one (not played)
+            priceList = agent.priceRecord[:-1]
             name = agent.name + "_"
+            last_played = min(self.maxrounds, len(agent.pairedRecord))
 
-            # Arranges the dict for the dataframe
-            agentDict = {
-                sim_id + name + "Precio": priceList,
-                sim_id + name + "Utilidad Reserva": URes,
-                sim_id + name + "Paired": agent.paired,
-                sim_id + name + "Traded": agent.traded
-            }
-            tempDf = pd.DataFrame(agentDict)
-            self.df = self.df.append(tempDf, ignore_index=True, sort=False)
+           # Checks nature of agents
+            if isinstance(agent, Seller):
+                URes = [agent.cost for i in range(last_played)]
+            else:
+                URes = [agent.reservePrice for i in range(last_played)]
+
+            # Updates Orderd Dict with agents data
+            self.agent_dict.update(
+                OrderedDict(
+                    {sim_id + name + "Precio": priceList,
+                     sim_id + name + "Utilidad Reserva": URes,
+                     sim_id + name + "Paired": agent.pairedRecord,
+                     sim_id + name + "Traded": agent.tradedRecord
+                     }
+                )
+            )
