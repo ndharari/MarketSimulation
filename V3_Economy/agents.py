@@ -2,6 +2,12 @@ from statistics import mean
 from collections import deque
 from random import uniform
 
+# Defines a funtion to random to arbitrary resolutions
+
+
+def roundPartial(value, resolution):
+    return round(value / resolution) * resolution
+
 
 class Agent:
     """
@@ -46,11 +52,10 @@ class Agent:
 
     def updateAttrition(self):
         if self.paired:
-            if not self.traded: 
+            if not self.traded:
                 self.attrition.append(1)
             else:
                 self.attrition.append(0)
-                
 
     # Expect functions, for children. Required by .expect()
 
@@ -86,7 +91,7 @@ class Agent:
         self.expectedPrice = self.priceRecord[0]
         self.priceRecord = [self.expectedPrice]
         self.paired = self.traded = self.tired = False
-        self.pairedRecord, self.tradedRecord = [], [] 
+        self.pairedRecord, self.tradedRecord = [], []
 
 
 class Buyer(Agent):
@@ -114,10 +119,18 @@ class Buyer(Agent):
         super().__init__(id, minR, maxR, endurance, tipe, delta,
                          alpha, r)
 
-        self.reservePrice = round(uniform(minR, maxR), self.round)
         self.name = "B_" + str(id)
-        self.expectedPrice = round(
-            uniform(minR, self.reservePrice), self.round)
+        if self.tipe == "delta":
+            # roundPartial only for delta tipes
+            self.reservePrice = roundPartial(uniform(minR, maxR), self.delta)
+            self.expectedPrice = roundPartial(
+                uniform(minR, self.reservePrice), self.delta)
+        elif self.tipe == "alpha":
+            self.reservePrice = round(uniform(minR, maxR), self.round)
+            self.reservePrice = round(uniform(minR, maxR), self.round)
+        else:
+            raise ValueError
+
         self.priceRecord = [self.expectedPrice]
 
     def getReservePrice(self):
@@ -183,9 +196,18 @@ class Seller(Agent):
         super().__init__(id, minC, maxC, endurance, tipe, delta,
                          alpha, r)
 
-        self.cost = round(uniform(minC, maxC), self.round)
         self.name = "S_" + str(id)
-        self.expectedPrice = round(uniform(self.cost, maxC), self.round)
+
+        if self.tipe == "delta":
+            # roundPartial only for delta tipes
+            self.cost = roundPartial(uniform(minC, maxC), self.delta)
+            self.expectedPrice = roundPartial(
+                uniform(self.cost, maxC), self.delta)
+        elif self.tipe == "alpha":
+            self.cost = round(uniform(minC, maxC), self.round)
+            self.expectedPrice = round(uniform(self.cost, maxC), self.round)
+        else:
+            raise ValueError
         self.priceRecord = [self.expectedPrice]
 
     def getCost(self):

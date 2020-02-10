@@ -108,8 +108,8 @@ class Market():
         echo = self.echo
         agentList = list(inAgentList)
 
-        #Loops in reverse so remove doesn't clash with the iteration pointer
-        for agent in agentList: 
+        # Loops in reverse so remove doesn't clash with the iteration pointer
+        for agent in agentList:
             # After the trade, both parts re-examin their preferences.
             agent.expect()
             # And updates their price record
@@ -145,7 +145,7 @@ class Market():
 
         if echo:
             # Printea los pares
-            print("The Buyers and Sellers paired for time " +
+            print("The Sellers and Buyers paired for time " +
                   str(self.time) + " are ")
             print([(s.name, b.name) for s, b in paired])
             print("\n With expected prices")
@@ -164,16 +164,16 @@ class Market():
     def checkEndOfTime(self):
         # Checks also for positive amounts of both buyers and sellers
         if (self.dinamicListBuyers and self.dinamicListSellers and
-         (self.time < self.maxrounds)):
+                (self.time < self.maxrounds)):
             return False
         else:
-            return True 
+            return True
 
     def matplotPath(self, agentList, color, alpha):
         for agent in agentList:
             path = agent.priceRecord[:-1]
             # As priceRecord is a variable for t+1, deletes last one (not played)
-            tline = [i for i in range(len(path))]  
+            tline = [i for i in range(len(path))]
             plt.plot(tline, path, color, alpha=alpha)
 
     def matplotGraph(self, style='Solarize_Light2'):
