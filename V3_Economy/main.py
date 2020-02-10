@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from random import randint
 
 import pandas as pd
 
@@ -9,14 +10,12 @@ from market import Market
 
 # TODO: Known problems / Future improvements:
 """
-- Change graphical interphace to Altair/Seaborn
 - Program the overall checks
 - Program the endurance checks
-- Change index to time
-- In Heymann Graph extend all Ures until the end
+- Add last following function
 """
 
-
+# Simulator function
 def simulation(market, N, echo=False):
     """Runs the simulation for a given market N times.
 
@@ -59,18 +58,8 @@ def simulation(market, N, echo=False):
 
     return pd.DataFrame(dict([(key, pd.Series(value)) for key, value in simulation_dict.items()]))
 
-
-# Sets up everything
-listSellers = [Seller(i, 10, 20, endurance=3, delta=0.5) for i in range(2)]
-listBuyers = [Buyer(i, 20, 30, endurance=3, delta=0.5) for i in range(1)]
-market = Market(listSellers, listBuyers, 50, echo=False)
-
-# Runs the simulations
-simulation_df = simulation(market, 10, echo=True)
-
-
 # Heymann et al style graph
-def heymann(dataFrame, side="S"):
+def heymann(dataFrame, side="S", style='opaque'):
     """ Graphs an aggregated style graph like the one found in Heymann et al 2014
 
     Arguments:
@@ -78,6 +67,7 @@ def heymann(dataFrame, side="S"):
 
     Keyword Arguments:
         side {str} -- Buyer ("B") or Seller ("S") (default: {"S"})
+        stryle {str} -- Styler for altair themes
 
     Returns:
         output -- Altair **interactive** graph
@@ -99,7 +89,8 @@ def heymann(dataFrame, side="S"):
 
     # Gets all URes (only first simulation)
     # Uses .fillna(dataFrame.mean() to extend the lineall the way through
-    ures_df = dataFrame.filter(regex="^(1_)._._Utilidad Reserva").fillna(dataFrame.mean())
+    ures_df = dataFrame.filter(
+        regex="^(1_)._._Utilidad Reserva").fillna(dataFrame.mean())
     ures_df.index.names = ['time']
     ures_df = ures_df.reset_index()
     # Melts the dataframe for Altair
@@ -109,37 +100,122 @@ def heymann(dataFrame, side="S"):
 
     # Makes the graph.
     # Data in wide-form, must make several graphs
-    base = alt.Chart(plot_df.reset_index()).mark_line().encode(x="time:Q")
+    with alt.themes.enable(style):
 
-    no_ures = alt.layer(
-        base.mark_line(color='#BC2D30').encode(y=alt.Y('max:Q',
-                                                       scale=alt.Scale(zero=False))),
+        base = alt.Chart(plot_df.reset_index()).mark_line().encode(x="time:Q")
 
-        base.mark_line(color='#6F3D79').encode(y=alt.Y('min:Q',
-                                                       scale=alt.Scale(zero=False))),
+        no_ures = alt.layer(
+            base.mark_line(color='#BC2D30').encode(y=alt.Y('max:Q',
+                                                           scale=alt.Scale(zero=False))),
 
-        base.mark_point(color='#2E578C').encode(y=alt.Y('avg:Q',
-                                                        scale=alt.Scale(zero=False))),
+            base.mark_line(color='#6F3D79').encode(y=alt.Y('min:Q',
+                                                           scale=alt.Scale(zero=False))),
 
-        base.mark_line(color='#E7A13D').encode(y=alt.Y('sample:Q',
-                                                       scale=alt.Scale(zero=False))),
-    ).interactive().properties(title='Simulaciones')
+            base.mark_point(color='#2E578C', opacity=0.6).encode(y=alt.Y('avg:Q',
+                                                                         scale=alt.Scale(zero=False))),
 
-    ures = alt.Chart(ures_df).mark_line(opacity=0.4).encode(
-        x="time:Q",
-        y=alt.Y('value:Q',
-                scale=alt.Scale(zero=False)),
-        detail='variable',
-        color=alt.Color('tipo',
-                        scale=alt.Scale(
-                            domain=['S', 'B'],
-                            range=['green', 'red'])))
+            base.mark_line(color='#E7A13D').encode(y=alt.Y('sample:Q',
+                                                           scale=alt.Scale(zero=False))),
+        ).interactive().properties(title='Simulaciones')
+
+        ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
+            x="time:Q",
+            y=alt.Y('value:Q',
+                    scale=alt.Scale(zero=False)),
+            detail='variable',
+            color=alt.Color('tipo',
+                            scale=alt.Scale(
+                                domain=['S', 'B'],
+                                range=['green', 'red'])))
 
     return no_ures + ures
 
+# Sample following
+def following_sample(dataFrame, side="S", name=0, style='opaque'):
+    """ Graphs an aggregated style graph like the one found in Heymann et al 2014
 
+    Arguments:
+        dataFrame {Pandas Data Frame} -- The simulation Data Frame
+        dataFrame {int} -- The ith agent meant to sample (default: {"0"})
+
+
+    Keyword Arguments:
+        side {str} -- Buyer ("B") or Seller ("S") (default: {"S"})
+        stryle {str} -- Styler for altair themes
+
+    Returns:
+        output -- Altair **interactive** graph
+    """
+
+    plot_df = pd.DataFrame()
+    ures_df = pd.DataFrame()
+
+    assert (side == "S" or side == "B"), 'Side must be S or B'
+
+    # Sets regex expression
+    reg1 = "{}_{}_Precio".format(side, name)
+
+    # Gets all iterations to a melted pd.dataFrame
+    plot_df = dataFrame.filter(regex=reg1)
+    plot_df = plot_df.assign(avg=plot_df.mean(axis=1))
+    plot_df.index.names = ['time']
+    plot_df = plot_df.reset_index()
+    plot_df = plot_df.melt("time")
+    plot_df['tipo'] = ['P' if 'P' in x else 'avg' for x in plot_df['variable']]
+
+    # Gets all URes (only first simulation)
+    # Uses .fillna(dataFrame.mean() to extend the lineall the way through
+    ures_df = dataFrame.filter(regex="^(1_)._._Uti").fillna(dataFrame.mean())
+    ures_df.index.names = ['time']
+    ures_df = ures_df.reset_index()
+    # Melts the dataframe for Altair
+    ures_df = ures_df.melt("time")
+    # Sets tipo so altair doesn't mix up observations. Remember: Altair divides lines by colour
+    ures_df['tipo'] = ['S' if 'S' in x else 'B' for x in ures_df['variable']]
+
+    # Makes the graph.
+    # Data in wide-form, must make several graphs
+    with alt.themes.enable(style):
+
+        base = alt.Chart(plot_df).mark_line(opacity=0.6).encode(
+            x="time:Q",
+            y=alt.Y('value:Q',
+                    scale=alt.Scale(zero=False)),
+            detail='variable',
+            color=alt.Color('tipo',
+                            scale=alt.Scale(
+                                domain=['S', 'B', 'P', 'avg'],
+                                range=['green', 'red', '#2E578C', '#E7A13D']))
+        )
+
+        ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
+            x="time:Q",
+            y=alt.Y('value:Q',
+                    scale=alt.Scale(zero=False)),
+            detail='variable',
+            color=alt.Color('tipo',
+                            scale=alt.Scale(
+                                domain=['S', 'B'],
+                                range=['green', 'red', '#2E578C', '#E7A13D']))
+        ).interactive().properties(title='Simulaciones')
+
+    return base + ures
+
+
+# Sets up everything
+listSellers = [Seller(i, 10, 20, endurance=3, delta=0.5) for i in range(2)]
+listBuyers = [Buyer(i, 20, 30, endurance=3, delta=0.5) for i in range(1)]
+market = Market(listSellers, listBuyers, 50, echo=False)
+
+# Runs the simulations
+simulation_df = simulation(market, 10, echo=True)
+simulation_df
+
+# Makes the Heymann et al style Graph
 heymann_graph = heymann(simulation_df, "S")
 heymann_graph
 
+# Aggregates and follows a sample agent
+follows = following_sample(simulation_df, "S", 1)
+follows
 
-simulation_df
