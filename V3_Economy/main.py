@@ -10,7 +10,6 @@ from market import Market
 
 # TODO: Known problems / Future improvements:
 """
-- Program the overall checks
 - Program the endurance checks
 - Add last following function
 """
@@ -132,11 +131,145 @@ def heymann(dataFrame, side="S", style='opaque'):
 
 # Sample following
 def following_sample(dataFrame, side="S", name=0, style='opaque'):
-    """ Graphs an aggregated style graph like the one found in Heymann et al 2014
+    """ Graphs all the expected prices of an agent and its averages
 
     Arguments:
         dataFrame {Pandas Data Frame} -- The simulation Data Frame
-        dataFrame {int} -- The ith agent meant to sample (default: {"0"})
+
+    Keyword Arguments:
+        side {str} -- Buyer ("B") or Seller ("S") (default: {"S"})
+        name {int} -- The ith agent meant to sample (default: {"0"})
+        stryle {str} -- Styler for altair themes
+
+    Returns:
+        output -- Altair **interactive** graph
+    """
+
+    plot_df = pd.DataFrame()
+    ures_df = pd.DataFrame()
+
+    assert (side == "S" or side == "B"), 'Side must be S or B'
+
+    # Sets regex expression
+    reg1 = "{}_{}_Precio".format(side, name)
+
+    # Gets all iterations to a melted pd.dataFrame
+    plot_df = dataFrame.filter(regex=reg1)
+    plot_df = plot_df.assign(avg=plot_df.mean(axis=1))
+    plot_df.index.names = ['time']
+    plot_df = plot_df.reset_index()
+    plot_df = plot_df.melt("time")
+    plot_df['tipo'] = ['P' if 'P' in x else 'avg' for x in plot_df['variable']]
+
+    # Gets all URes (only first simulation)
+    # Uses .fillna(dataFrame.mean() to extend the lineall the way through
+    ures_df = dataFrame.filter(regex="^(1_)._._Uti").fillna(dataFrame.mean())
+    ures_df.index.names = ['time']
+    ures_df = ures_df.reset_index()
+    # Melts the dataframe for Altair
+    ures_df = ures_df.melt("time")
+    # Sets tipo so altair doesn't mix up observations. Remember: Altair divides lines by colour
+    ures_df['tipo'] = ['S' if 'S' in x else 'B' for x in ures_df['variable']]
+
+    # Makes the graph.
+    # Data in wide-form, must make several graphs
+    with alt.themes.enable(style):
+
+        base = alt.Chart(plot_df).mark_line(opacity=0.6).encode(
+            x="time:Q",
+            y=alt.Y('value:Q',
+                    scale=alt.Scale(zero=False)),
+            detail='variable',
+            color=alt.Color('tipo',
+                            scale=alt.Scale(
+                                domain=['S', 'B', 'P', 'avg'],
+                                range=['green', 'red', '#2E578C', '#E7A13D']))
+        )
+
+        ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
+            x="time:Q",
+            y=alt.Y('value:Q',
+                    scale=alt.Scale(zero=False)),
+            detail='variable',
+            color=alt.Color('tipo',
+                            scale=alt.Scale(
+                                domain=['S', 'B'],
+                                range=['green', 'red', '#2E578C', '#E7A13D']))
+        ).interactive().properties(title='Simulaciones')
+
+    return base + ures
+
+
+def avg_vs_avg(dataFrame, style='opaque'):
+    """ Graphs an aggregated style graph showing Avg Price vs Avg Price
+
+    Arguments:
+        dataFrame {Pandas Data Frame} -- The simulation Data Frame
+
+    Keyword Arguments:
+        stryle {str} -- Styler for altair themes
+
+    Returns:
+        output -- Altair **interactive** graph
+    """
+
+    plot_df = pd.DataFrame()
+    ures_df = pd.DataFrame()
+
+    # Sets regex expression
+    reg1 = "S_._Precio".format(side, name)
+
+    # Gets all iterations to a melted pd.dataFrame
+    plot_df['Avg Seller'] = dataFrame.filter(regex="S_._Precio").mean(axis=1)
+    plot_df['Avg Buyer'] = dataFrame.filter(regex="B_._Precio").mean(axis=1)
+    plot_df.index.names = ['time']
+    plot_df = plot_df.reset_index()
+    plot_df = plot_df.melt("time")
+
+    # Gets all URes (only first simulation)
+    # Uses .fillna(dataFrame.mean() to extend the lineall the way through
+    ures_df = dataFrame.filter(regex="^(1_)._._Uti").fillna(dataFrame.mean())
+    ures_df.index.names = ['time']
+    ures_df = ures_df.reset_index()
+    # Melts the dataframe for Altair
+    ures_df = ures_df.melt("time")
+    # Sets tipo so altair doesn't mix up observations. Remember: Altair divides lines by colour
+    ures_df['tipo'] = ['S' if 'S' in x else 'B' for x in ures_df['variable']]
+
+    # Makes the graph.
+    # Data in wide-form, must make several graphs
+    with alt.themes.enable(style):
+
+        base = alt.Chart(plot_df).mark_line(opacity=0.6).encode(
+            x="time:Q",
+            y=alt.Y('value:Q',
+                    scale=alt.Scale(zero=False)),
+            color=alt.Color('variable',
+                            scale=alt.Scale(
+                                domain=['S', 'B', 'Avg Seller', 'Avg Buyer'],
+                                range=['green', 'red', '#2E578C', '#E7A13D']))
+        )
+
+        ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
+            x="time:Q",
+            y=alt.Y('value:Q',
+                    scale=alt.Scale(zero=False)),
+            detail='variable',
+            color=alt.Color('tipo',
+                            scale=alt.Scale(
+                                domain=['S', 'B'],
+                                range=['green', 'red', '#2E578C', '#E7A13D']))
+        ).interactive().properties(title='Simulaciones')
+
+    return base + ures
+
+
+def intra_inter(dataFrame, side="S", style='opaque'):
+    """ Graphs an aggregated style graph showing the average between each simulation 
+
+    Arguments:
+        dataFrame {Pandas Data Frame} -- The simulation Data Frame
+        num {int} -- The number of simulations
 
 
     Keyword Arguments:
@@ -149,8 +282,6 @@ def following_sample(dataFrame, side="S", name=0, style='opaque'):
 
     plot_df = pd.DataFrame()
     ures_df = pd.DataFrame()
-
-    assert (side == "S" or side == "B"), 'Side must be S or B'
 
     # Sets regex expression
     reg1 = "{}_{}_Precio".format(side, name)
@@ -218,4 +349,7 @@ heymann_graph
 # Aggregates and follows a sample agent
 follows = following_sample(simulation_df, "S", 1)
 follows
+
+avgGraph = avg_vs_avg(simulation_df)
+avgGraph
 
