@@ -122,7 +122,7 @@ class Market():
             if agent.getMeanAttrition() == 1:
                 agent.tired = True
                 if echo:
-                    print("Agent {} quit".format(agent.name))
+                    print(f"Agent {agent.name} quit")
                 inAgentList.remove(agent)
             else:
                 agent.paired = agent.traded = False  # Prepares next round
@@ -176,7 +176,7 @@ class Market():
             tline = [i for i in range(len(path))]
             plt.plot(tline, path, color, alpha=alpha)
 
-    def matplotGraph(self, style='Solarize_Light2'):
+    def matplotGraph(self, style='Solarize_Light2', save=False, name=0):
         """" 
         Graphs the price path, the costs and the reserve price for all
         sellers and buyers.
@@ -239,8 +239,12 @@ class Market():
             plt.annotate(counter, xy=(1, .63), xycoords='axes fraction',
                          xytext=(52, 0), textcoords='offset points')
 
+            # Saves File
+            if save:
+                plt.savefig(str(name), bbox_inches='tight')
+
             # Plots
-            plt.show()
+            plt.show()         
 
     def dictMaker(self, sim_id=0):
         """

@@ -4,6 +4,7 @@ from random import randint
 import pandas as pd
 
 import altair as alt
+from altair_saver import save
 
 from agents import Buyer, Seller
 from market import Market
@@ -11,11 +12,13 @@ from market import Market
 # TODO: Known problems / Future improvements:
 """
 - Program the endurance checks
-- Add last following function
+- Add survivors aggregators and graphers
 """
 
+alt.data_transformers.disable_max_rows() # For Plotting porpuse
+
 # Simulator function
-def simulation(market, N, echo=False):
+def simulation(market, N, echo=False, save=False):
     """Runs the simulation for a given market N times.
 
     Arguments:
@@ -24,6 +27,7 @@ def simulation(market, N, echo=False):
 
     Keyword Arguments:
         echo {bool} -- If True, dislpays graphs for each iteration (default: {False})
+        save {bool} -- Saves output graph (default: {False})
 
     Returns:
         Matplotlib graph -- If echo, returns the matplotñlib graph of the simulation
@@ -40,7 +44,7 @@ def simulation(market, N, echo=False):
 
         # For supported styles, plt.style.available
         if echo:
-            market.matplotGraph('Solarize_Light2')
+            market.matplotGraph('Solarize_Light2', save=True, name=i)
 
         # Keeps the Data
         market.dictMaker(i+1)
@@ -58,7 +62,7 @@ def simulation(market, N, echo=False):
     return pd.DataFrame(dict([(key, pd.Series(value)) for key, value in simulation_dict.items()]))
 
 # Heymann et al style graph
-def heymann(dataFrame, side="S", style='opaque'):
+def heymann(dataFrame, side="S", style='opaque', save=False):
     """ Graphs an aggregated style graph like the one found in Heymann et al 2014
 
     Arguments:
@@ -77,7 +81,7 @@ def heymann(dataFrame, side="S", style='opaque'):
     assert (side == "S" or side == "B"), 'Side must be S or B'
 
     # Sets regex expression
-    reg = "{}_._Precio".format(side)
+    reg = f"{side}_._Precio"
 
     # Gets max, min, avg and a sample for column
     plot_df['max'] = dataFrame.filter(regex=reg).max(axis=1)
@@ -115,7 +119,7 @@ def heymann(dataFrame, side="S", style='opaque'):
 
             base.mark_line(color='#E7A13D').encode(y=alt.Y('sample:Q',
                                                            scale=alt.Scale(zero=False))),
-        ).interactive().properties(title='Simulaciones')
+        ).properties(title=f'Heymann et al Graph for {"Seller" if side == "S" else "Buyer"}')
 
         ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
             x="time:Q",
@@ -126,11 +130,13 @@ def heymann(dataFrame, side="S", style='opaque'):
                             scale=alt.Scale(
                                 domain=['S', 'B'],
                                 range=['green', 'red'])))
-
-    return no_ures + ures
+    chart = no_ures + ures
+    if save:
+        chart.save(f'Heymann {side}.svg')
+    return chart
 
 # Sample following
-def following_sample(dataFrame, side="S", name=0, style='opaque'):
+def following_sample(dataFrame, side="S", name=0, style='opaque', save=False):
     """ Graphs all the expected prices of an agent and its averages
 
     Arguments:
@@ -151,7 +157,7 @@ def following_sample(dataFrame, side="S", name=0, style='opaque'):
     assert (side == "S" or side == "B"), 'Side must be S or B'
 
     # Sets regex expression
-    reg1 = "{}_{}_Precio".format(side, name)
+    reg1 = f"{side}_{name}_Precio"
 
     # Gets all iterations to a melted pd.dataFrame
     plot_df = dataFrame.filter(regex=reg1)
@@ -195,12 +201,16 @@ def following_sample(dataFrame, side="S", name=0, style='opaque'):
                             scale=alt.Scale(
                                 domain=['S', 'B'],
                                 range=['green', 'red', '#2E578C', '#E7A13D']))
-        ).interactive().properties(title='Simulaciones')
+        ).properties(
+            title=f'Following a sample agent {"Seller" if side == "S" else "Buyer"}')
 
-    return base + ures
+    chart = base + ures
+    if save:
+        chart.save(f'Follow {side}.svg')
+    return chart
 
-
-def avg_vs_avg(dataFrame, style='opaque'):
+# Overall Average of sellers and buyers
+def avg_vs_avg(dataFrame, style='opaque', save=False):
     """ Graphs an aggregated style graph showing Avg Price vs Avg Price
 
     Arguments:
@@ -215,9 +225,6 @@ def avg_vs_avg(dataFrame, style='opaque'):
 
     plot_df = pd.DataFrame()
     ures_df = pd.DataFrame()
-
-    # Sets regex expression
-    reg1 = "S_._Precio".format(side, name)
 
     # Gets all iterations to a melted pd.dataFrame
     plot_df['Avg Seller'] = dataFrame.filter(regex="S_._Precio").mean(axis=1)
@@ -259,13 +266,17 @@ def avg_vs_avg(dataFrame, style='opaque'):
                             scale=alt.Scale(
                                 domain=['S', 'B'],
                                 range=['green', 'red', '#2E578C', '#E7A13D']))
-        ).interactive().properties(title='Simulaciones')
+        ).properties(title=f'Avg vs Avg across simulations')
+    
+    chart = base + ures
 
-    return base + ures
+    if save:
+        chart.save(f'avg vs avg.svg', scale_factor=2.0)
+    return chart
 
-
-def intra_inter(dataFrame, side="S", style='opaque'):
-    """ Graphs an aggregated style graph showing the average between each simulation 
+# Inter_intra comparison
+def intra_inter(dataFrame, side="S", style='opaque', save=False):
+    """ Graphs an aggregated style graph showing the average between each simulation
 
     Arguments:
         dataFrame {Pandas Data Frame} -- The simulation Data Frame
@@ -279,77 +290,88 @@ def intra_inter(dataFrame, side="S", style='opaque'):
     Returns:
         output -- Altair **interactive** graph
     """
-
-    plot_df = pd.DataFrame()
-    ures_df = pd.DataFrame()
-
-    # Sets regex expression
-    reg1 = "{}_{}_Precio".format(side, name)
-
-    # Gets all iterations to a melted pd.dataFrame
-    plot_df = dataFrame.filter(regex=reg1)
-    plot_df = plot_df.assign(avg=plot_df.mean(axis=1))
-    plot_df.index.names = ['time']
-    plot_df = plot_df.reset_index()
-    plot_df = plot_df.melt("time")
-    plot_df['tipo'] = ['P' if 'P' in x else 'avg' for x in plot_df['variable']]
-
+    plot_df=pd.DataFrame()
+    ures_df=pd.DataFrame()
+    assert (side == "S" or side == "B"), 'Side must be S or B'
+    # Gets the number of simulations
+    sim_str=dataFrame.columns[-1]
+    place=sim_str.find("_")
+    sim_num=int(sim_str[:place])
+    # Gets the overall average:
+    plot_df['Overall']=dataFrame.filter(regex=f"{side}_._Precio").mean(axis=1)
+    # Gets the average in each iteration:
+    for i in range(sim_num):
+        reg=f"{i}_{side}_._Precio"
+        plot_df[f'Avg {i}']=dataFrame.filter(regex=reg).mean(axis=1)
+    plot_df.index.names=['time']
+    plot_df=plot_df.reset_index()
+    plot_df=plot_df.melt("time")
+    plot_df['tipo']=[
+        'Avg' if 'Avg' in x else "Overall" for x in plot_df['variable']]
     # Gets all URes (only first simulation)
     # Uses .fillna(dataFrame.mean() to extend the lineall the way through
-    ures_df = dataFrame.filter(regex="^(1_)._._Uti").fillna(dataFrame.mean())
-    ures_df.index.names = ['time']
-    ures_df = ures_df.reset_index()
+    ures_df=dataFrame.filter(regex="^(1_)._._Uti").fillna(dataFrame.mean())
+    ures_df.index.names=['time']
+    ures_df=ures_df.reset_index()
     # Melts the dataframe for Altair
-    ures_df = ures_df.melt("time")
-    # Sets tipo so altair doesn't mix up observations. Remember: Altair divides lines by colour
-    ures_df['tipo'] = ['S' if 'S' in x else 'B' for x in ures_df['variable']]
-
+    ures_df=ures_df.melt("time")
+    # Sets tipo so altair doesn't mix up observations. Remember: Altair divides lines by color
+    ures_df['tipo']=['S' if 'S' in x else 'B' for x in ures_df['variable']]
     # Makes the graph.
     # Data in wide-form, must make several graphs
     with alt.themes.enable(style):
-
-        base = alt.Chart(plot_df).mark_line(opacity=0.6).encode(
+        base=alt.Chart(plot_df).mark_line(opacity=0.6).encode(
             x="time:Q",
             y=alt.Y('value:Q',
                     scale=alt.Scale(zero=False)),
             detail='variable',
             color=alt.Color('tipo',
                             scale=alt.Scale(
-                                domain=['S', 'B', 'P', 'avg'],
-                                range=['green', 'red', '#2E578C', '#E7A13D']))
+                                domain=['S', 'B', 'Avg', 'Overall'],
+                                range=['green', 'red', '#2E578C', 'magenta']))
         )
-
-        ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
+        ures=alt.Chart(ures_df).mark_line(opacity=0.3).encode(
             x="time:Q",
             y=alt.Y('value:Q',
                     scale=alt.Scale(zero=False)),
             detail='variable',
             color=alt.Color('tipo',
                             scale=alt.Scale(
-                                domain=['S', 'B'],
+                                domain=['S', 'B', 'avg', 'Overall'],
                                 range=['green', 'red', '#2E578C', '#E7A13D']))
-        ).interactive().properties(title='Simulaciones')
-
-    return base + ures
+        ).properties(title='Avg prices between simulations '  
+        f'and overall from {"Seller" if side == "S" else "Buyer"}')
+    chart=base + ures
+    if save:
+        chart.save(f'Inter-Intra {side}.svg', scale_factor=2.0)
+    return chart
 
 
 # Sets up everything
-listSellers = [Seller(i, 10, 20, endurance=3, delta=0.5) for i in range(2)]
-listBuyers = [Buyer(i, 20, 30, endurance=3, delta=0.5) for i in range(1)]
-market = Market(listSellers, listBuyers, 50, echo=False)
+listSellers=[Seller(i, 10, 20, endurance=5, delta=0.5) for i in range(4)]
+listBuyers=[Buyer(i, 20, 30, endurance=5, delta=0.5) for i in range(3)]
+market=Market(listSellers, listBuyers, 50, echo=False)
 
 # Runs the simulations
-simulation_df = simulation(market, 10, echo=True)
-simulation_df
+simulation_df=simulation(market, 100, echo=True)
 
-# Makes the Heymann et al style Graph
-heymann_graph = heymann(simulation_df, "S")
-heymann_graph
+
+# Makes the Heymann et al style graph
+heymann(simulation_df, "S", save=True)
+heymann(simulation_df, "B", save=True)
+
 
 # Aggregates and follows a sample agent
-follows = following_sample(simulation_df, "S", 1)
-follows
+following_sample(simulation_df, "S", 0, save=True)
+following_sample(simulation_df, "B", 0, save=True)
 
-avgGraph = avg_vs_avg(simulation_df)
-avgGraph
+# Aggregates and follows all agents
+avg_vs_avg(simulation_df, save=True)
 
+
+# Aggregates and follows all agents
+intra_inter(simulation_df, "S", save=True)
+intra_inter(simulation_df, "B", save=True)
+
+
+# TODO: grafico tipo avg vs avg  pero dividido en deciles
