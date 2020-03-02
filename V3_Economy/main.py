@@ -348,8 +348,8 @@ def intra_inter(dataFrame, side="S", style='opaque', save=False):
 
 
 # Sets up everything
-listSellers=[Seller(i, 10, 20, endurance=5, delta=0.5) for i in range(4)]
-listBuyers=[Buyer(i, 20, 30, endurance=5, delta=0.5) for i in range(3)]
+listSellers=[Seller(i, 10, 20, endurance=50, delta=0.5) for i in range(10)]
+listBuyers=[Buyer(i, 20, 30, endurance=50, delta=0.5) for i in range(1)]
 market=Market(listSellers, listBuyers, 50, echo=False)
 
 # Runs the simulations

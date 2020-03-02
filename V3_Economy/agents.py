@@ -102,7 +102,7 @@ class Buyer(Agent):
         leaves the market.  
 
     Arguments:
-        id {str} -- name
+        id {int} -- name
         minR {float} -- minimum posible reserve price
         maxR {float} -- maximum possible reserve price
 
@@ -179,7 +179,7 @@ class Seller(Agent):
         leaves the market. 
 
     Arguments:
-        id {str} -- name
+        id {int} -- name
         minC {float} -- minimum possible cost
         maxC {float} -- max possible cost
 

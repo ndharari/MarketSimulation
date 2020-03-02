@@ -1,5 +1,4 @@
 import pandas as pd
-import seaborn as sns
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from random import sample
@@ -106,7 +105,7 @@ class Market():
         and drops the laggers from the market. 
         """
         echo = self.echo
-        agentList = list(inAgentList)
+        agentList = list(inAgentList) # Makes a copy
 
         # Loops in reverse so remove doesn't clash with the iteration pointer
         for agent in agentList:
