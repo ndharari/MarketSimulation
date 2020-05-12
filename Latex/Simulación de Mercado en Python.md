@@ -13,8 +13,14 @@ En el siguiente trabajo se considera un modelo simple de mercado donde una pobla
 1. Que es un AMB
 2. Que es "complexity economics"
    - Escapando el Equilibrio
+   - kirman (2004)
+   - Arthur
+   - Hommes
+   - Dosi
 3. Que se busca en un modelo de agentes
 4. Otros modelos clásicos de agentes 
+   - Schelling
+   - Los modelos encontrados en carpeta Axelrod (kirman 2001)
 5. Citar Heymann et al 2014
 
 <!--AMB es un tipo de simulación, la conducción de una modelización de un sistema con datos de entrada para observar las salidas correspondientes (Bratley, Schrage & Fox, 1987). Recientemente se la ha presentado como una tercera metodología científica, como punto medio entre la deducción y la inducción. De forma análoga a la deducción parte de un conjunto explícito de supuestos, pero a diferencia de ésta, no busca probar teoremas, sino que puede generar grandes cantidades de datos que puede ser analizado de forma inductiva.--> 
@@ -178,9 +184,9 @@ Los parámetros iniciales para ambos grupos son los siguientes:
 | :-------------------: | :------: | :-----: |
 | $\underline{c} = 10 $ |  $\underline{r} = 20 $        | $T=50$ |
 | $\overline{c}=20$     | $\overline{r}=30$          |  |
-| $\alpha=0.05$         |   $\alpha=0.05$        |         |
+| $\Delta =0.5$   | $\Delta =0.50$ |         |
 | $e=3$                 |   $e=3$           |         |
-| `round` $=0$          |  `round` $=0$           |         |
+| `round` $=2$         |  `round` $=2$         |         |
 
 Se adjunta en el apéndice el código en su totalidad, como también puede encontrarse [aquí](https://github.com/ndharari/MarketSimulation]). Los gráficos presentados a continuación se realizaron utilizando los paquetes `altair` y `matplotlib`, mientras que el resto del código es elaboración personal.
 
@@ -194,3 +200,48 @@ INSERT CODE
 
 ### Bibliografía
 
+Albin, P., & Foley, D. K. (1992). Decentralized, dispersed exchange without an auctioneer. Journal of Economic Behavior & Organization, 18(1), 27-51. https://doi.org/10.1016/0167-2681(92)90051-C
+
+Arthur, W. B. (2015). Complexity and the economy. Oxford University Press.
+
+Axelrod, R. (2005). Advancing the Art of Simulation in the Social Sciences. In Handbook of Research on Nature Inspired Computing for Economy and Management (Idea Group, p. 13).
+
+Axelrod, R., & Tesfatsion, L. (2006). A guide for newcomers to agent-based modeling in the social sciences. In Handbook of Computational Economics, Vol. 2: Agent-Based Computational Economics (p. 13). Elsevier, North-Holland.
+
+Axtell, R. (2005). The Complexity of Exchange. The Economic Journal, 115(504), 193-210. https://doi.org/10.1111/j.1468-0297.2005.01001.x
+
+Chisari, O. O., Cicowiez, M., Escudé, G. J., Heymann, D., Kawamura, E., Perazzo, R., Romero, C. A., & Zimmermann, M. (s. f.). Progresos en economía computacional (1era ed.). Temas Grupo Editorial.
+
+Cimoli, M., Pereima, J. B., & Porcile, G. (2016). Introduction to the special issue SCED: Complexity and economic development. Structural Change and Economic Dynamics, 38, 1-2. https://doi.org/10.1016/j.strueco.2016.04.004
+
+Dosi, G., Fagiolo, G., & Roventini, A. (2008). The microfoundations of business cycles: An evolutionary, multi-agent model. Journal of Evolutionary Economics, 18, 413–432. https://doi.org/10.1007/s00191-008-0094-8
+
+Dosi, G., & Roventini, A. (2017). Agent-Based Macroeconomics and Classical Political Economy: Some Italian Roots. Italian Economic Journal, 3(3), 261-283. https://doi.org/10.1007/s40797-017-0065-z
+
+Gode, D. K., & Sunder, S. (1993). Allocative Efficiency of Markets with Zero-Intelligence Traders: Market as a Partial Substitute for Individual Rationality. Journal of Political Economy, 101(1), 119-137. https://doi.org/10.1086/261868
+
+Gordon, M. B., Nadal, J.-P., Phan, D., & Semeshenko, V. (2004). How to choose under social inﬂuence? 11.
+
+Hamill, L., & Gilbert, N. (2016). Agent-Based Modelling in Economics. Wiley.
+
+Heymann, D., Kawamura, E., Perazzo, R., & Zimmermann, M. G. (2014). Behavioral heuristics and market patterns in a Bertrand–Edgeworth game. Journal of Economic Behavior & Organization, 105, 124-139. https://doi.org/10.1016/j.jebo.2014.04.027
+
+Heymann, D., Perazzo, R. P. J., & Schuschny, A. R. (2004). Learning and imitation: Transitional dynamics in variants of the bam. Advances in Complex Systems, 07(01), 21-38. https://doi.org/10.1142/S0219525904000020
+
+Hommes, C. (2013). Behavioral Rationality and Heterogeneous Expectations in Complex Economic Systems. Cambridge University Press. https://doi.org/10.1017/CBO9781139094276
+
+Kirman, A. (2006). Demand Theory and General Equilibrium: From Explanation to Introspection, a Journey down the Wrong Road. History of Political Economy, 38(Suppl 1), 246-280. https://doi.org/10.1215/00182702-2005-025
+
+Kirman, A. P. (1992). Whom or What Does the Representative Individual Represent? The Journal of Economic Perspectives, 6(2), 117-136.
+
+Kirman, A. P., & Vriend, N. J. (2001). Evolving market structure: An ACE model of price dispersion and loyalty. Journal of Economic Dynamics & Control, 459-502.
+
+Schelling, T. C. (1978). Micromotives and macrobehavior (1st ed). Norton.
+
+Semeshenko, V., Gordon, M. B., & Nadal, J.-P. (2008). Collective states in social systems with interacting learning agents. Physica A: Statistical Mechanics and Its Applications, 387(19-20), 4903-4916. https://doi.org/10.1016/j.physa.2008.04.019
+
+Tesfatsion, L., & Judd, K. L. (Eds.1). (2006). Agent-based computational economics (1. ed). Elsevier, North-Holland.
+
+Vriend, N. J. (1995). Self-organization of markets: An example of a computational approach. Computational Economics, 8(3), 205-231. https://doi.org/10.1007/BF01298460
+
+Wilhite, A. (2001). Bilateral Trade and ‘Small-World’ Networks. Computational Economics, 18, 49-64.
