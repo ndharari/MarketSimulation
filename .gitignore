@@ -119,3 +119,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ignore Legacy models
+Legacy/
+# Ignore minor scripts
+rename.py

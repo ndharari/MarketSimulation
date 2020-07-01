@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 from random import sample
 from collections import OrderedDict
 
+import pandas as pd
+
+import altair as alt
+from altair_saver import save
 
 class Market():
     """
