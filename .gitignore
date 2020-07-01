@@ -124,3 +124,4 @@ dmypy.json
 Legacy/
 # Ignore minor scripts
 rename.py
+test.py
