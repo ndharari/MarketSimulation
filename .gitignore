@@ -124,4 +124,4 @@ dmypy.json
 Legacy/
 # Ignore minor scripts
 rename.py
-test.py
+V3_Economy/test.py
