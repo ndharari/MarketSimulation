@@ -2,7 +2,7 @@
 
 ## Nicolás David Harari
 
-El siguiente es el repositorio del código utilizado para la simulación de mi tesina de grado para la Lic. de Economía en la Universidad de Buenos Aires. El texto completo se puede encontrar aqui [aquí](../Tesis) en formatos `.md` y `.pdf`.
+El siguiente es el repositorio del código utilizado para la simulación de mi tesina de grado para la Lic. de Economía en la Universidad de Buenos Aires. El texto completo se puede encontrar [aquí](../Tesis) en formatos `.md` y `.pdf`.
 
 ###  Resumen
 
