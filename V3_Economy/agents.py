@@ -1,9 +1,8 @@
-from statistics import mean
 from collections import deque
 from random import uniform
+from statistics import mean
 
 # Defines a funtion to random to arbitrary resolutions
-
 
 def roundPartial(value, resolution):
     return round(value / resolution) * resolution

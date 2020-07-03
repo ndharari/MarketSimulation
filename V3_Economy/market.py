@@ -1,13 +1,11 @@
-import pandas as pd
+from collections import OrderedDict
+from random import sample
+
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
-from random import sample
-from collections import OrderedDict
-
 import pandas as pd
 
-import altair as alt
-from altair_saver import save
+from agents import Seller
 
 class Market():
     """
@@ -25,7 +23,9 @@ class Market():
         self.endOfTime = False
         self.maxrounds = maxrounds
         self.echo = echo  # Shows text interface
-        self.agent_dict = OrderedDict()
+        self.agents_dict = OrderedDict()
+        self.active_s_record = [len(self.dinamicListSellers)]
+        self.active_b_record = [len(self.dinamicListBuyers)]
 
     def moveTime(self):
         if self.endOfTime:
@@ -43,9 +43,11 @@ class Market():
         # Needs list() to create the double
         self.dinamicListSellers = list(self.staticListSellers)
         self.dinamicListBuyers = list(self.staticListBuyers)
+        self.active_s_record = [len(self.dinamicListSellers)]
+        self.active_b_record = [len(self.dinamicListBuyers)]
         self.time = 0
         self.endOfTime = False
-        self.agent_dict = OrderedDict()
+        self.agents_dict = OrderedDict()
 
     def exchangeMechanism(self, pair):
         """
@@ -162,6 +164,10 @@ class Market():
         # decides who is tired and deletes them
         self.dinamicUpdater(self.dinamicListSellers), self.dinamicUpdater(
             self.dinamicListBuyers)
+        
+        # Updates acive agents tracker:
+        self.active_s_record.append(len(self.dinamicListSellers))
+        self.active_b_record.append(len(self.dinamicListBuyers))
         self.endOfTime = self.checkEndOfTime()
 
     def checkEndOfTime(self):
@@ -228,8 +234,8 @@ class Market():
                        bbox_to_anchor=(1.04, 1), loc="upper left")
 
             # Creates the remaining counter
-            remainingBuyers = len(self.dinamicListBuyers)
-            remainingSellers = len(self.dinamicListSellers)
+            remainingBuyers = self.active_b_record[-1]
+            remainingSellers = self.active_s_record[-1]
             # Checks for quantities and plurals in dinamic
             dinamic_pluralB = 'es' if numB > 1 else ''
             dinamic_pluralS = 'es' if numS > 1 else ''
@@ -243,28 +249,43 @@ class Market():
                          xytext=(52, 0), textcoords='offset points')
 
             # Saves File
-            if save:
-                plt.savefig(str(name), bbox_inches='tight')
 
+            if save:
+                plt.savefig(f".\\output\\{name}", bbox_inches='tight')
+
+            
             # Plots
-            plt.show()         
+            plt.show() 
+                  
 
     def dictMaker(self, sim_id=0):
         """
         Makes an ordered dict from all agents in the market. Repeats
-        [Price, Reserve Utiliy, Paired, Traded]
+        [Price, Reserve Utiliy, Paired, Traded]. After that, stores
+        [Active Sellers, Active Buyers]
         """
         sim_id = str(sim_id) + "_"
 
+        # Updates Ordered Dict with GENERAL data
+        # As active_record are variables for t+1, deletes last one (not played)
+        self.agents_dict.update(
+            OrderedDict(
+                {sim_id + "Active Sellers": self.active_s_record[:-1],
+                 sim_id + "Active Buyers": self.active_b_record[:-1]
+                }
+            )
+        )
+
         allAgents = self.staticListSellers + self.staticListBuyers
-        self.agent_dict = OrderedDict()
+        # self.agents_dict = OrderedDict()
         for agent in allAgents:
 
             # Unpacks values
             # As priceRecord is a variable for t+1, deletes last one (not played)
             priceList = agent.priceRecord[:-1]
             name = agent.name + "_"
-            last_played = min(self.maxrounds, len(agent.pairedRecord))
+            last_played = min(self.maxrounds+1, len(agent.pairedRecord))
+
 
            # Checks nature of agents
             if isinstance(agent, Seller):
@@ -272,8 +293,8 @@ class Market():
             else:
                 URes = [agent.reservePrice for i in range(last_played)]
 
-            # Updates Orderd Dict with agents data
-            self.agent_dict.update(
+            # Updates Ordered Dict with agents data
+            self.agents_dict.update(
                 OrderedDict(
                     {sim_id + name + "Precio": priceList,
                      sim_id + name + "Utilidad Reserva": URes,
