@@ -4,8 +4,18 @@ import altair as alt
 import pandas as pd
 from altair_saver import save
 
+
+def stab_boxplt(dataFrame):
+
+    output = alt.Chart(dataFrame).mark_boxplot(
+        box = alt.MarkConfig(opacity=.7), 
+        median=alt.MarkConfig(color="Black")).encode(
+        x=alt.X('T_max:Q', title="Estabilidad alcanzada"),
+    )
+    return output
+
 # Heymann et al style graph
-def heymann(dataFrame, side="S", style='opaque', echo=False, save=False):
+def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False):
     """ Graphs an aggregated style graph like the one found in Heymann et al 2014
 
     Arguments:
@@ -75,7 +85,7 @@ def heymann(dataFrame, side="S", style='opaque', echo=False, save=False):
                 y=alt.Y('muestra:Q',
                         scale=alt.Scale(zero=False))
             )
-        ).properties(title='Gráfico estilo Heymann et al (2014) '
+        ).properties(title='Grafico estilo Heymann et al (2014) '
          f'para {"Vendedores" if side == "S" else "Compradores"}')
 
         ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
@@ -88,13 +98,14 @@ def heymann(dataFrame, side="S", style='opaque', echo=False, save=False):
                                 domain=['S', 'B'],
                                 range=['green', 'red'])))
     chart = no_ures + ures
+    output = chart & stab_boxplt(stab)
     if save:
-        chart.save(f'.\\output\\Heymann {side}.svg')
+        output.save(f'.\\output\\Heymann {side}.svg')
     if echo:
-            return chart
+            return output
 
 # Sample following
-def following_sample(dataFrame, side="S", name=0, style='opaque', echo=False, save=False):
+def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=False, save=False):
     """ Graphs all the expected prices of an agent and its averages
 
     Arguments:
@@ -168,13 +179,15 @@ def following_sample(dataFrame, side="S", name=0, style='opaque', echo=False, sa
             title=f'Recorrido de un {"vendedor" if side == "S" else "comprador"} al azar')
 
     chart = base + ures
+    output = chart & stab_boxplt(stab)
+
     if save:
-        chart.save(f'.\\output\\Follow {side}.svg')
+        output.save(f'.\\output\\Follow {side}.svg')
     if echo:
-            return chart
+            return output
 
 # Overall Average of sellers and buyers
-def avg_vs_avg(dataFrame, style='opaque', echo=False, save=False):
+def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False):
     """ Graphs an aggregated style graph showing Avg Price vs Avg Price
 
     Arguments:
@@ -237,17 +250,17 @@ def avg_vs_avg(dataFrame, style='opaque', echo=False, save=False):
                                 range=['green', 'red', '#2E578C', '#E7A13D']))
         ).properties(title=f'Media vs media a lo largo de las simulaciones')
 
-    
     chart = base + ures
+    output = chart & stab_boxplt(stab)
 
     if save:
-        chart.save(f'.\\output\\avg vs avg.svg', scale_factor=2.0)
+        output.save(f'.\\output\\avg vs avg.svg', scale_factor=2.0)
 
     if echo:
-            return chart
+            return output
 
 # Inter_intra comparison
-def intra_inter(dataFrame, side="S", style='opaque', echo=False, save=False):
+def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=False):
     """ Graphs an aggregated style graph showing the average between each simulation
 
     Arguments:
@@ -341,11 +354,13 @@ def intra_inter(dataFrame, side="S", style='opaque', echo=False, save=False):
                                 range=['green', 'red', '#2E578C', '#E7A13D']))
         ).properties(title='Media de los precios dentro y entre simulaciones para '  
         f' {"Vendedores" if side == "S" else "Compradores"}')
+    
     chart = ures + avg + overall
+    output = chart & stab_boxplt(stab)
     if save:
-        chart.save(f'.\\output\\Inter-Intra {side}.svg', scale_factor=2.0)
+        output.save(f'.\\output\\Inter-Intra {side}.svg', scale_factor=2.0)
 
     if echo:
-            return chart
+            return output
 
     

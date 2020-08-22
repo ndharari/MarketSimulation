@@ -56,8 +56,6 @@ Sin embargo, no es necesario contar con agentes tan sofisticados: Gode y Sunder 
 
 Finalmente, en su manual introductorio, Hamill y Gilbert (2016) plantean dos modelos de mercado basados en agentes. En el primero, consumidores definidos mediante precios de reserva máximos interactúan con firmas que ajustan tanto su capacidad como los precios de venta de un bien homogéneo. Como también plantea (Kirman 1992) la oferta agregada toma una forma suave aun cuando las firmas individuales son heterogéneas y el modelo logra replicar resultados de competencia perfecta. En el otro caso, utilizado para caracterizar el mercado de productos digitales, las firmas compiten por precio para ganar participación en un contexto de costos bajos, retornos crecientes a escala y sin límites de capacidad. 
 
-##### Modelos de Learning? 
-
 ---
 
 ###  El Modelo
@@ -99,25 +97,38 @@ Como se explicó en el apartado anterior, los agentes reevalúan periodo a perio
 >Donde el precio esperado no puede resultar menor que el costo individual.
 >
 
+
 >##### Ajuste de precios del comprador
->
 >$$
-\begin{equation}
+>\begin{equation}
 p_{b_j, t+1} = \left\{
 \begin{array}{ll}
 p_{j_i, t} - \Delta & {\textrm{si se efectúa el intercambio}} \\
 {\min{\{ p_{b_j, t} + \Delta}; \ r_{j}\}}  & {\textrm{si no se efectúa el intercambio}} \\
 \end{array}\right.
 \end{equation}
->$$
+$$
 >
-> Donde el precio esperado no puede resultar mayor al precio de reserva.
+>Donde el precio esperado no puede resultar mayor al precio de reserva.
 
 
 
 Por otro lado, se asume que los individuos mantienen cierta aversión a participar en el mercado y no lograr un intercambio. Sea entonces $ e \in \Z $ un parámetro de la resistencia de los individuos al fracaso, representando el número máximo de turnos consecutivos en los cuales el individuo formó parte de un par y no logró cerrar un intercambio. Este parámetro resulta esencial para asegurar el funcionamiento del modelo. Cuando los pares se forman, los individuos no tienen forma de reconocer a su interlocutor, sólo reciben del Mercado la confirmación - o negación- del intercambio. Suponga el escenario donde existe un vendedor con un costo alto $s_i(\hat{c})$ y el precio esperado del resto de los agentes es menor. Un comprador cualquiera, de encontrarse con $s_i(\hat{c})$ no puede identificar si el rechazo del intercambio ocurre porque el precio que demanda es demasiado exigente *en general* o sólo *en este caso particular*. De no limpiarse el mercado de aquellos consumidores con $U$ prohibitivos, la dinámica de precios esperados se mantiene indefinidamente en valores intermedios y las diferencias de cantidades de compradores y vendedores no se logran generar. De esta condición surge una importante salvedad: el juego terminará o bien al alcanzarse el número máximo de turnos o bien cuando de algún grupo (compradores, vendedores) ya no queden participantes.
 
-En el contexto del siguiente trabajo, tanto $e$ como $\Delta$ resultan parámetros generales del modelo comunes a todos los agentes, tanto consumidores como vendedores. Los costos y precios de reserva marcan la heterogeneidad. En resumen, cada agente tiene tres características individuales que mantienen a lo largo del juego,  $U$ ---costo $c_i$ para vendedores y precio de reserva $r_j$ para compradores---, el parámetro de ajuste $\Delta$ por el cual actualizan el precio esperado y la resistencia a la deserción $ e \in \Z $ (*endurance*). Finalmente, cada jugador tiene un precio esperado que considera *"justo"* para cada periodo. A continuación se expone la implementación del modelo y las dinámicas encontradas. 
+En el contexto del siguiente trabajo, tanto $e$ como $\Delta$ resultan parámetros generales del modelo comunes a todos los agentes, tanto consumidores como vendedores. Los costos y precios de reserva marcan la heterogeneidad. En resumen, cada agente tiene tres características individuales que mantienen a lo largo del juego, $U$ ---costo $c_i$ para vendedores y precio de reserva $r_j$ para compradores---, el parámetro de ajuste $\Delta$ por el cual actualizan el precio esperado y la resistencia a la deserción $ e \in \Z $ (*endurance*). Finalmente, cada jugador tiene un precio esperado que considera *"justo"* para cada periodo. A continuación se expone la implementación del modelo y las dinámicas encontradas. 
+
+#### Estabilidad
+
+Para buscar la estabilidad del sistema vamos a mirar al vendedor y comprador *promedio*. 
+
+[17:02, 7/10/2020] Nico Harari: hable con la rusa y me dijo que estacionariedad era demasiado. Así que me pidio que calcule alguna medida de "utilidad marginal"  por periodo.
+[17:03, 7/10/2020] Nico Harari: Así que voy a calcular en cada periodo la media entre los distintos Ps-Pb y si eso se mantiene dentro de un epsilon determinado de desvío durante una ventana diremos que es estable
+
+
+
+CALCULAR ESTABILIDAD:
+
+PERIODO A PERIODO CALCULAR EL PROMEDIO DE LA DIFERENCIA ENTRE EL PRECIO DEL COMPRADOR Y EL PRECIO DEL VENDEDOR. (UTILIDAD MARGINAL) CUANDO ESTO SE ESTABILIZA (SD MENOR A EPSILON) LLEGAMOS A UNA ESTABILIDAD. 
 
 ---
 
@@ -240,17 +251,19 @@ Patrones generales que se pueden encontrar en las dinámicas:
 
 - Existe un primer periodo de convergencia donde los agentes van actualizando sus expectativas antes que estas convergen a un nivel medio. En este periodo el sistema toma ciertas características complejas: como el apareamiento periodo a periodo resulta aleatorio es posible que *por casualidad* un agente que debería quedarse en el juego según sus utilidades de reserva abandone debido a que se encontró con  este periodo, al encontrarse aleatoriamente en una seguidilla de encuentros 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur est nisi, ut condimentum lacus lacinia vel. Quisque dapibus vel lectus vitae pellentesque. Nulla sit amet diam ac lacus euismod eleifend a sit amet lectus. Curabitur ultrices ipsum non volutpat interdum. Ut sed sapien mauris. Duis quis mi a ligula tincidunt placerat quis sit amet tellus. Sed aliquet magna sit amet bibendum iaculis. Etiam a accumsan justo. Aenean lorem nibh, posuere a varius eget, tincidunt et lectus. Integer viverra mauris quis ullamcorper dictum. Ut at viverra lacus. Nullam est augue, dictum eget lacus id, volutpat tincidunt tellus. Donec lorem velit, faucibus vitae justo sed, mollis dignissim ligula. Morbi feugiat aliquam leo, sit amet feugiat dui.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur est nisi, ut condimentum lacus lacinia vel. Quisque dapibus vel lectus vitae pellentesque. Nulla sit amet diam ac lacus euismod eleifend a sit amet lectus. Curabitur ultrices ipsum non volutpat interdum. Ut sed sapien mauris. Duis quis mi a ligula tincidunt placerat quis sit amet tellus. Sed aliquet magna sit amet bibendum iaculis. Etiam a accumsan justo. Aenean lorem nibh, posuere a varius eget, tincidunt et lectus. Integer viverra mauris quis ullamcorper dictum. Ut at viverra lacus. Nullam est augue, dictum eget lacus id, volutpat tincidunt tellus. Donec lorem velit, faucibus vitae justo sed, mollis dignissim ligula. Morbi feugiat aliquam leo, sit amet feugiat dui.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur est nisi, ut condimentum lacus lacinia vel. Quisque dapibus vel lectus vitae pellentesque. Nulla sit amet diam ac lacus euismod eleifend a sit amet lectus. Curabitur ultrices ipsum non volutpat interdum. Ut sed sapien mauris. Duis quis mi a ligula tincidunt placerat quis sit amet tellus. Sed aliquet magna sit amet bibendum iaculis. Etiam a accumsan justo. Aenean lorem nibh, posuere a varius eget, tincidunt et lectus. Integer viverra mauris quis ullamcorper dictum. Ut at viverra lacus. Nullam est augue, dictum eget lacus id, volutpat tincidunt tellus. Donec lorem velit, faucibus vitae justo sed, mollis dignissim ligula. Morbi feugiat aliquam leo, sit amet feugiat dui.
 
 
 
 ##### El rol de la resistencia
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam efficitur est nisi, ut condimentum lacus lacinia vel. Quisque dapibus vel lectus vitae pellentesque. Nulla sit amet diam ac lacus euismod eleifend a sit amet lectus. Curabitur ultrices ipsum non volutpat interdum. Ut sed sapien mauris. Duis quis mi a ligula tincidunt placerat quis sit amet tellus. Sed aliquet magna sit amet bibendum iaculis. Etiam a accumsan justo. Aenean lorem nibh, posuere a varius eget, tincidunt et lectus. Integer viverra mauris quis ullamcorper dictum. Ut at viverra lacus. Nullam est augue, dictum eget lacuvs id, volutpat tincidunt tellus. Donec lorem velit, faucibus vitae justo sed, mollis dignissim ligula. Morbi feugiat aliquam leo, sit amet feugiat dui.
+la varianble endurance garantiza en el modelo que los agentes puedan encontrar equilibrios a precios por encima del promedio. Esto ocurre porque, si los agentes se mantienen dando vueltas en el mercado, ensucian las señales de precios que reciben los otros. Si es posible que te encuentres con un individuo cuya utilidad ya fue descartada por el mercado (y vos, de no saberlo, reaccionás acordemente) se encuentra una tendencia a que los consumidores y vendedores se queden donde estan
+
+sin embargo, la resistencia genera otro efecto. Al mantener más tiempo en el juego a los agentes minimiza la posibilidad que uno de ellos se termine yendo del sistema por "mala suerte", es decir una racha negativa de $e$ adversarios que lo rechazan aún cuando su producto podría ---en el final de la simulación--- ser competitivo. Con un valor más alto de $e$ este evento se vuelve menos recurrente.
+
+Ahora bien, este efecto positivo trae una consecuencia directa: si tarda más que los agentes se vayan del mercado, también ocurre para aquellos ineficientes. Por lo tanto, se tardará más en llegar al equilibrio
+
+
 
 #### Tendencias generales
 
@@ -328,4 +341,3 @@ Wilhite, A. (2001). Bilateral Trade and ‘Small-World’ Networks. *Computation
   - El gráfico $E$ muestra el recorrido de un vendedor al azar en las distintas $N=100$ simulaciones.
   - Los gráficos $F$ y $G$ siguen el formato presente en Heymann et al (2014): muestran la menor y mayor realización del precio esperado (respectivamente, en colores rojo y violeta), su media (representada por los círculos azules) para cada periodo con una realización aleatoria. El primero muestra el valor para los compradores, el segundo para los vendedores.
   - Los gráficos $H$ e $I$ superponen el promedio a lo largo de las $N$ simulaciones para cada tipo de agentes con los promedios del precio esperado presentes en cada una de las simulaciones. La nube resultante muestra el movimiento promedio general del sistema. El primero 
-

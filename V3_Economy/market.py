@@ -1,9 +1,12 @@
 from collections import OrderedDict
 from random import sample
+from statistics import mean
+from itertools import chain
 
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 from agents import Seller
 
@@ -14,7 +17,8 @@ class Market():
     y van a acercarse al vendedor que se encuentre más cercano.
     """
 
-    def __init__(self, listSellers, listBuyers, maxrounds=50, echo=True):
+    def __init__(self, listSellers, listBuyers, t_low = 20, 
+                maxrounds=500, window = 10, epsilon = .1, echo=True):
         self.staticListSellers, self.staticListBuyers = listSellers, listBuyers
         # Needs list() to create the double
         self.dinamicListSellers = list(listSellers)
@@ -22,10 +26,18 @@ class Market():
         self.time = 0
         self.endOfTime = False
         self.maxrounds = maxrounds
+        self.t_low = t_low - 1
         self.echo = echo  # Shows text interface
         self.agents_dict = OrderedDict()
         self.active_s_record = [len(self.dinamicListSellers)]
         self.active_b_record = [len(self.dinamicListBuyers)]
+        self.mean_seller = []
+        self.mean_buyer = []
+        self.window = window
+        self.slope_seller = [0 for i in range(self.window)] 
+        self.slope_buyer = [0 for i in range(self.window)]
+        #Epsilon is defined as 2 times the max value of delta for the agents
+        self.epsilon = epsilon
 
     def moveTime(self):
         if self.endOfTime:
@@ -47,6 +59,10 @@ class Market():
         self.active_b_record = [len(self.dinamicListBuyers)]
         self.time = 0
         self.endOfTime = False
+        self.mean_seller = [] # s_mean list by timestamp
+        self.mean_buyer = [] # b_mean list by timestamp
+        self.slope_seller = [0 for i in range(self.window)] 
+        self.slope_buyer = [0 for i in range(self.window)]
         self.agents_dict = OrderedDict()
 
     def exchangeMechanism(self, pair):
@@ -113,7 +129,7 @@ class Market():
         echo = self.echo
         agentList = list(inAgentList) # Makes a copy
 
-        # Loops in reverse so remove doesn't clash with the iteration pointer
+        # Loops in copy so remove doesn't clash with the iteration pointer
         for agent in agentList:
             # After the trade, both parts re-examin their preferences.
             agent.expect()
@@ -131,6 +147,37 @@ class Market():
                 inAgentList.remove(agent)
             else:
                 agent.paired = agent.traded = False  # Prepares next round
+    
+    def window_regress(self, data, window):
+        """Does the windowed regression and returns the slope
+
+        Args:
+            data (list)
+            window (int)
+        """
+
+        # Gets the intercepts for both types
+        y = data[-window:]
+        x = [i for i, _ in enumerate(y)]
+        slope, _ = np.polyfit(x, y, 1)
+        return round(slope, 2)     
+
+    def is_stable(self, window):
+        """Returns True if last n |slopes| are less than epsilon 
+        Args:
+            window (int)
+        """
+        
+        condition = (all(abs(slope) < self.epsilon for slope in 
+            chain(self.slope_seller[-window:], self.slope_buyer[-window:])))
+
+        if condition:
+            if self.echo:
+                print("Stability reached " 
+                f"Max past slope for seller {self.slope_seller[-window:]} \n"
+                f"Max past slope for buyer {self.slope_buyer[-window:]}")
+            return True
+        return False 
 
     def openMarket(self):
         """
@@ -160,6 +207,17 @@ class Market():
         for pair in paired:
             self.exchangeMechanism(pair)  # Only affects .traded
 
+        # Updates the representative agents list
+        s_mean = mean([s.expectedPrice for s in self.dinamicListSellers])
+        self.mean_seller.append(round(s_mean, 2))
+        b_mean = mean([b.expectedPrice for b in self.dinamicListBuyers])
+        self.mean_buyer.append(round(b_mean, 2))
+        
+        # Regreses the data
+        if self.time >= self.window:
+            self.slope_seller.append(self.window_regress(self.mean_seller, self.window))
+            self.slope_buyer.append(self.window_regress(self.mean_buyer, self.window))
+        
         # Makes the agent expect, updates their attrition, their prices and
         # decides who is tired and deletes them
         self.dinamicUpdater(self.dinamicListSellers), self.dinamicUpdater(
@@ -168,14 +226,26 @@ class Market():
         # Updates acive agents tracker:
         self.active_s_record.append(len(self.dinamicListSellers))
         self.active_b_record.append(len(self.dinamicListBuyers))
+
         self.endOfTime = self.checkEndOfTime()
 
     def checkEndOfTime(self):
-        # Checks also for positive amounts of both buyers and sellers
-        if (self.dinamicListBuyers and self.dinamicListSellers and
-                (self.time < self.maxrounds)):
+        """ Returns True after t_low only when:
+            - No agents are left
+            - Stability was reached
+            - t_high was reached 
+        """
+
+        if self.time < self.t_low:
+            return False
+        elif (self.dinamicListBuyers and 
+            self.dinamicListSellers and
+            not self.is_stable(self.window) and  
+                (self.time < self.maxrounds) ):
             return False
         else:
+            if self.echo:
+                print(f"final time at {self.time}")
             return True
 
     def matplotPath(self, agentList, color, alpha):
@@ -197,7 +267,7 @@ class Market():
         assert style in plt.style.available, NameError
         with plt.style.context(style):
 
-            tmax = self.maxrounds
+            tmax = self.time
             t_list = list(range(tmax))
 
             # Prints the record of expected prices on each round:
@@ -257,7 +327,6 @@ class Market():
             # Plots
             plt.show() 
                   
-
     def dictMaker(self, sim_id=0):
         """
         Makes an ordered dict from all agents in the market. Repeats
@@ -286,7 +355,6 @@ class Market():
             name = agent.name + "_"
             last_played = min(self.maxrounds+1, len(agent.pairedRecord))
 
-
            # Checks nature of agents
             if isinstance(agent, Seller):
                 URes = [agent.cost for i in range(last_played)]
@@ -303,3 +371,4 @@ class Market():
                      }
                 )
             )
+

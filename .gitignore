@@ -127,6 +127,5 @@ rename.py
 V3_Economy/test.py
 V3_Economy/output
 !V3_Economy/output/.gitkeep 
-stats.py
 # Ignore chromedriver.exe
 chromedriver.exe
