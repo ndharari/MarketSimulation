@@ -9,7 +9,7 @@ def stab_hist(dataFrame):
 
     bars = alt.Chart(dataFrame).mark_bar().encode(
         x=alt.X('T_max:Q', title="Estabilidad alcanzada", 
-         bin=alt.Bin(step=5), axis=alt.Axis(grid=False)),
+         bin=alt.Bin(step=5)),
         y=alt.Y('count()', axis=None)
     )
 
@@ -104,7 +104,8 @@ def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False):
                         scale=alt.Scale(zero=False))
             )
         ).properties(title='Grafico estilo Heymann et al (2014) '
-         f'para {"Vendedores" if side == "S" else "Compradores"}')
+         f'para {"Vendedores" if side == "S" else "Compradores"}'
+         )
 
         ures = alt.Chart(ures_df).mark_line(opacity=0.3).encode(
             x=alt.X('time:Q', title="Tiempo"),
@@ -116,7 +117,9 @@ def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False):
                                 domain=['S', 'B'],
                                 range=['green', 'red'])))
     chart = no_ures + ures
-    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
+    output = (chart & stab_hist(stab)).resolve_scale(x='shared').configure_axis(
+                    grid=False
+                    )
     if save:
         output.save(f'.\\output\\Heymann {side}.svg')
     if echo:
@@ -194,10 +197,12 @@ def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=Fal
                                 domain=['S', 'B'],
                                 range=['green', 'red', '#2E578C', '#E7A13D']))
         ).properties(
-            title=f'Recorrido de un {"vendedor" if side == "S" else "comprador"} al azar')
-
+            title=f'Recorrido de un {"vendedor" if side == "S" else "comprador"} al azar'
+            )
     chart = base + ures
-    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
+    output = (chart & stab_hist(stab)).resolve_scale(x='shared').configure_axis(
+                    grid=False
+                    )
 
     if save:
         output.save(f'.\\output\\Follow {side}.svg')
@@ -269,7 +274,9 @@ def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False):
         ).properties(title=f'Media vs media a lo largo de las simulaciones')
 
     chart = base + ures
-    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
+    output = (chart & stab_hist(stab)).resolve_scale(x='shared').configure_axis(
+                    grid=False
+                    )
 
     if save:
         output.save(f'.\\output\\avg vs avg.svg', scale_factor=2.0)
@@ -374,7 +381,9 @@ def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=Fal
         f' {"Vendedores" if side == "S" else "Compradores"}')
     
     chart = ures + avg + overall
-    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
+    output = alt.vconcat(chart, stab_hist(stab), spacing=0
+                    ).resolve_scale(x='shared'
+                    ).configure_axis( grid=False)
     if save:
         output.save(f'.\\output\\Inter-Intra {side}.svg', scale_factor=2.0)
 
