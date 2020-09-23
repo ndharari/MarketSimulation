@@ -60,21 +60,21 @@ Finalmente, en su manual introductorio, Hamill y Gilbert (2016) plantean dos mod
 
 ###  El Modelo
 
-Se propone un mercado donde un conjunto fijo de $A$ agentes heterogéneos, entre ellos vendedores $S$ y consumidores $B$ con $A = \{s_1,... s_n; \ b_1, ... b_m\}$, deciden en cada periodo $t \in {1, 2, ... \ T}$ si intercambiar o no una única unidad de un bien homogéneo. Ambos grupos operan de forma atomizada e independiente por lo que no hay posibilidad de cartelización o acuerdos tanto en la oferta como en la demanda. No se consideran funciones de producción, ganancias, ni riqueza: periodo a periodo los vendedores tendrán bienes a su disposición para vender y consumidores dinero para intercambiar por ellos. Se asume que cada individuo tiene una utilidad de reserva $U$ medida en términos monetarios que representa ---en el caso del vendedor $s_i$--- el costo mínimo $c_i$ por el que está dispuesto a desprenderse del bien en cuestión, mientras que en el caso del comprador $b_j$ el precio máximo idiosincrático $r_j$ dispuesto a pagar por el mismo. Estos valores son elegidos de manera aleatoria para cada jugador de forma que $\forall i, c_i \in \left[\underline{c}, \overline{c}\right]$ y  $\forall j, r_j\in \left[\underline{r}, \overline{r}\right]$, donde $\underline{c}, \overline{c} ; \ \underline{r}, \overline{r}$ son los valores mínimos y máximos posibles. En el contexto del siguiente trabajo, $\overline{c}< \underline{r}$ por lo que para cualquier valor de U los agentes podrían encontrar beneficios de intercambio.
+Se propone un mercado donde un conjunto fijo de $A$ agentes heterogéneos, entre ellos vendedores $S$ y consumidores $B$ con $A = \{s_1,... s_n; \ b_1, ... b_m\}$, deciden en cada periodo $t$ si intercambiar o no una única unidad de un bien homogéneo. Ambos grupos operan de forma atomizada e independiente por lo que no hay posibilidad de cartelización o acuerdos tanto en la oferta como en la demanda. No se consideran funciones de producción, ganancias, ni riqueza: periodo a periodo los vendedores tendrán bienes a su disposición para vender y consumidores dinero para intercambiar por ellos. Se asume que cada individuo tiene una utilidad de reserva $U$ medida en términos monetarios que representa ---en el caso del vendedor $s_i$--- el costo mínimo $c_i$ por el que está dispuesto a desprenderse del bien en cuestión, mientras que en el caso del comprador $b_j$ el precio máximo idiosincrático $r_j$ dispuesto a pagar por el mismo. Estos valores son elegidos de manera aleatoria para cada jugador de forma que $\forall i, c_i \in \left[\underline{c}, \overline{c}\right]$ y  $\forall j, r_j\in \left[\underline{r}, \overline{r}\right]$, donde $\underline{c}, \overline{c} ; \ \underline{r}, \overline{r}$ son los valores mínimos y máximos posibles. En el contexto del siguiente trabajo, $\overline{c}< \underline{r}$ por lo que para cualquier valor de U los agentes podrían encontrar beneficios de intercambio.
 
 En el inicio del juego, los agentes tienen un *prior* del precio esperado para el primer periodo, $p_{s, 1}, p_{b, 1}$, que representa un valor que creen *justo* por el bien en ese periodo. Este valor no puede ser mayor (o menor) que su utilidad de reserva, porque ningún agente puede pensar que el precio justo de un bien es mayor (menor) al que pagarían (recibirían) por él. Por este motivo, el *prior* individual se obtiene de forma aleatoria siguiendo una distribución uniforme donde $\forall i \  p_{s_i, 1}  \in \left[c_i, \overline{c}\right]$, como también, $\forall j, p_{b_j, 1}\in \left[\underline{r}, r_j\right]$. Esto implica, en el caso del vendedor, que su *prior* estará dentro del intervalo delimitado por el costo máximo posible y su propio costo. 
 
 Al inicio de cada ronda, los jugadores se aproximan al Mercado, el cual los aparea de forma aleatoria hasta agotar el numero de compradores o vendedores. En el caso en el que los conjuntos no tengan el mismo tamaño, habrá $|n-m|$ individuos que quedarán automáticamente fuera de las negociaciones. De esto se infiere fácilmente que para un determinado periodo no puede ocurrir que simultáneamente individuos de ambos conjuntos queden sin pareja.
 
-Una vez de a pares, cada jugador le informa al Mercado su precio de venta propuesto $\{p_{s_i, t};p_{b_j, t}\} $ de acuerdo a cuanto consideran que podrían intercambiar el producto en el turno $t$. El Mercado observa los precios y declara una transacción de cumplirse la siguiente condición:
+Una vez de a pares, cada jugador le informa al Mercado su precio de venta propuesto $\{p_{s_i, t};p_{b_j, t}\} $ de acuerdo a cuanto consideran que podrían intercambiar el producto. El Mercado observa los precios y declara una transacción de cumplirse la siguiente condición:
 $$
 \text{Condición de intercambio en  $t$ entre  $s_i$ y $b_j$} \\
 p_{s_i, t}\leq p_{b_j, t}
 $$
 
-Acto seguido, se realizará el intercambio. Una vez que todos los pares deciden si realizar o no la transacción, ambas partes se separan y todos los agentes que participaron en el mercado en $t$ ----agrupados o no---- reevalúan sus expectativas de precios para el siguiente periodo y deciden si continuarán participando en el mismo. El juego continúa hasta que terminen los turnos o hasta que no reste un número positivo de vendedores o consumidores. 
+Acto seguido, se realizará el intercambio. Una vez que todos los pares deciden si realizar o no la transacción, ambas partes se separan y todos los agentes que participaron en el mercado ----agrupados o no---- reevalúan sus expectativas de precios para el siguiente periodo y deciden si continuarán participando en el mismo. El juego continúa hasta que terminen los turnos o hasta que no reste un número positivo de vendedores o consumidores. 
 
-Resulta importante notar que el precio efectivo al que se realiza el intercambio en cada periodo, que de cumplirse la  de cumplirse la condición estará en el intervalo $\left[p_{s_i, t} ; p_{b_j, t}\right]$ no resulta relevante, ya que se busca se busca modelar como los agentes reevalúan sus precios esperados periodo a periodo. Otro aspecto central es que la condición de intercambio en $t$ es estáticamente independiente de las utilidades $U$ (costos, precios de reserva) generales de los agentes. Es decir, una vez definidos ambos precios esperados ---cuyas mecánicas de ajuste se explicarán en el siguiente apartado ---como los consumidores no reevalúan sus expectativas hasta el siguiente periodo, si $b_j$ se encuentra frente a un precio tal que $ r_j > p_{s_i, t} > p_{b_j, t} $ no comprará el bien aún cuando su precio es menor que el que estaría dispuesto a pagar, el Mercado no habilita la transacción. Esto ocurre porque el individuo, de aceptar un precio superior a $p_{b_j, t}$ sentiría que **en ese periodo** está siendo engañado y que es posible conseguir el bien por un precio menor. Por lo tanto, el Mercado prohíbe la transacción y este, luego de reevaluar sus expectativas, volverá a buscar una mejor oferta en el periodo siguiente.
+Resulta importante notar que el precio efectivo al que se realiza el intercambio en cada periodo, que de cumplirse la de cumplirse la condición estará en el intervalo $\left[p_{s_i, t} ; p_{b_j, t}\right]$ no resulta relevante, ya que se busca se busca modelar como los agentes reevalúan sus precios esperados periodo a periodo. Otro aspecto central es que la condición de intercambio en $t$ es estáticamente independiente de las utilidades $U$ (costos, precios de reserva) generales de los agentes. Es decir, una vez definidos ambos precios esperados ---cuyas mecánicas de ajuste se explicarán en el siguiente apartado ---como los consumidores no reevalúan sus expectativas hasta el siguiente periodo, si $b_j$ se encuentra frente a un precio tal que $ r_j > p_{s_i, t} > p_{b_j, t} $ no comprará el bien aún cuando su precio es menor que el que estaría dispuesto a pagar, el Mercado no habilita la transacción. Esto ocurre porque el individuo, de aceptar un precio superior a $p_{b_j, t}$ sentiría que **en ese periodo** está siendo engañado y que es posible conseguir el bien por un precio menor. Por lo tanto, el Mercado prohíbe la transacción y este, luego de reevaluar sus expectativas, volverá a buscar una mejor oferta en el periodo siguiente.
 
 #### Ajuste de expectativas
 
@@ -115,20 +115,19 @@ $$
 
 Por otro lado, se asume que los individuos mantienen cierta aversión a participar en el mercado y no lograr un intercambio. Sea entonces $ e \in \Z $ un parámetro de la resistencia de los individuos al fracaso, representando el número máximo de turnos consecutivos en los cuales el individuo formó parte de un par y no logró cerrar un intercambio. Este parámetro resulta esencial para asegurar el funcionamiento del modelo. Cuando los pares se forman, los individuos no tienen forma de reconocer a su interlocutor, sólo reciben del Mercado la confirmación - o negación- del intercambio. Suponga el escenario donde existe un vendedor con un costo alto $s_i(\hat{c})$ y el precio esperado del resto de los agentes es menor. Un comprador cualquiera, de encontrarse con $s_i(\hat{c})$ no puede identificar si el rechazo del intercambio ocurre porque el precio que demanda es demasiado exigente *en general* o sólo *en este caso particular*. De no limpiarse el mercado de aquellos consumidores con $U$ prohibitivos, la dinámica de precios esperados se mantiene indefinidamente en valores intermedios y las diferencias de cantidades de compradores y vendedores no se logran generar. De esta condición surge una importante salvedad: el juego terminará o bien al alcanzarse el número máximo de turnos o bien cuando de algún grupo (compradores, vendedores) ya no queden participantes.
 
-En el contexto del siguiente trabajo, tanto $e$ como $\Delta$ resultan parámetros generales del modelo comunes a todos los agentes, tanto consumidores como vendedores. Los costos y precios de reserva marcan la heterogeneidad. En resumen, cada agente tiene tres características individuales que mantienen a lo largo del juego, $U$ ---costo $c_i$ para vendedores y precio de reserva $r_j$ para compradores---, el parámetro de ajuste $\Delta$ por el cual actualizan el precio esperado y la resistencia a la deserción $ e \in \Z $ (*endurance*). Finalmente, cada jugador tiene un precio esperado que considera *"justo"* para cada periodo. A continuación se expone la implementación del modelo y las dinámicas encontradas. 
+En el contexto del siguiente trabajo, tanto $e$ como $\Delta$ resultan parámetros generales del modelo comunes a todos los agentes, tanto consumidores como vendedores. Los costos y precios de reserva marcan la heterogeneidad. En resumen, cada agente tiene tres características individuales que mantienen a lo largo del juego, $U$ ---costo $c_i$ para vendedores y precio de reserva $r_j$ para compradores---, el parámetro de ajuste $\Delta$ por el cual actualizan el precio esperado y la resistencia a la deserción $ e \in \Z $ (*endurance*). Finalmente, cada jugador tiene un precio esperado que considera *"justo"* para cada periodo. 
 
-#### Estabilidad
+#### Condiciones Terminales
 
-Para buscar la estabilidad del sistema vamos a mirar al vendedor y comprador *promedio*. 
+Hasta ahora se ha expuesto como opera turno a turno el sistema. Sin embargo, no sería práctico que el mismo se expanda indefinidamente en el tiempo: al menos es necesario un A continuación,  se expresarán las condiciones en las cuales el mismo termina. 
 
-[17:02, 7/10/2020] Nico Harari: hable con la rusa y me dijo que estacionariedad era demasiado. Así que me pidio que calcule alguna medida de "utilidad marginal"  por periodo.
-[17:03, 7/10/2020] Nico Harari: Así que voy a calcular en cada periodo la media entre los distintos Ps-Pb y si eso se mantiene dentro de un epsilon determinado de desvío durante una ventana diremos que es estable
+La primera restricción temporal del modelo proviene de su misma construcción: periodo a periodo, existe la posibilidad de que cualquiera de los agentes abandone el mercado para no volver. Esto ocurre independientemente de cuántos de sus compañeros continúan en el sistema. Esto implica la posibilidad de que en algún momento no queden compradores o vendedores a participar en el mercado. La primera restricción es que el conjunto de agentes activos de cada tipo para todo momento tenga tamaño positivo. De alcanzar una situación donde no queden compradores o vendedores, acabará el juego. 
 
+La segunda condición terminal responde a la estabilidad del sistema. Como se explicó anteriormente, los agentes periodo a periodo se encuentran con individuos del grupo opuesto, conocen sus precios esperados en ese turno, ignoran las expectativas de aquellos con los que no se ven y reaccionan de forma acorde. Ahora bien, un espectador externo, al preguntarse por el precio del bien en un turno determinado no puede más que describir como están distribuidos los precios esperados de los agentes. Quizás un vendedor particular espera conseguir un precio bajo o un consumidor está dispuesto a pagar un valor elevado, sin embargo los agentes en general consideran que el precio se encuentra *alrededor* de un valor. Esta dinámica proviene del comportamiento de los propios agentes: como se encuentran de a pares de forma aleatoria resulta improbable que las señales que reciban al intercambiar sus precios esperados sean muy distintas a la media de la población. Este fenómeno será específicamente relevante conforme hayan pasado los suficientes turnos para que varios de los agentes se hayan encontrado entre si. 
 
+Por este motivo se propone la siguiente medida de **estabilidad**: periodo a periodo se almacena la información de la media del precio esperado tanto de compradores o vendedores. Con estos datos se busca la tendencia $s$ definida como la pendiente de una regresión lineal de MCO en una ventana de tamaño $w$ para cada grupo. Si durante $w$ periodos seguidos $|s|<\epsilon$, se habrá encontrado estabilidad y se detendrá el modelo. Esta condición estará en efecto una vez pasada una cantidad $T_{low}$ de periodos, que garantiza que se habrán recolectado los datos necesarios para realizar la medida de estabilidad.
 
-CALCULAR ESTABILIDAD:
-
-PERIODO A PERIODO CALCULAR EL PROMEDIO DE LA DIFERENCIA ENTRE EL PRECIO DEL COMPRADOR Y EL PRECIO DEL VENDEDOR. (UTILIDAD MARGINAL) CUANDO ESTO SE ESTABILIZA (SD MENOR A EPSILON) LLEGAMOS A UNA ESTABILIDAD. 
+Finalmente, para evitar que el sistema continúe sin límite se agrega la ultima condición terminal, una vez alcanzado un numero $T^{Max}$ de turnos. A continuación se expone la implementación del modelo y las dinámicas encontradas. 
 
 ---
 
@@ -138,87 +137,13 @@ El presente trabajo utiliza el lenguaje de programación Python para generar las
 
 Siguiendo esta línea conceptual, se consideran cuatro *clases* dentro de la implementación, el mercado, cuyo rol es el de facilitar el intercambio entre los consumidores--vendedores, ambos tipos distintos de agentes, una clase en sí misma. A continuación se puede observar la estructura del sistema y sus relaciones 
 
-```mermaid
-classDiagram
-class Market{
-	staticListSellers (list) -- Lista de todos los vendedores
-	staticListBuyers (list) -- Lista de todos los compradores
-	dinamicListSellers (list) -- Lista de vendedores activos
-	dinamicListBuyers  (list) -- List de compradores activos
-	time (int) -- Turno actual
-	maxrounds (int)
-	endOfTime (bool)
+<img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Diagrams/classChart.png" alt="image-20200822191118626" style="zoom: 67%;" />
 
-	moveTime()
-	restart()
-	exchangeMechanism(pair)
-	randomPairing(listSellers, listBuyers)
-	dinamicUpdater(agentList)
-	openMarket()
-	checkEndOfTime()
-	}
+La clase `market` es la principal del modelo: contiene a los agentes, los aparea, obtiene sus precios esperados y les comunica a los agentes si se realiza el intercambio. Luego, almacena la información relativa a los vendedores y compradores medios para los calculos de estabilidad.  Antes de finalizar cada periodo, prepara a los agentes para el periodo posterior, haciendo que estos reevalúen sus expectativas y echa a quienes hayan alcanzado la resistencia máxima. Finalmente, luego de controlar que no se haya alcanzado la condición de estabilidad, que el número de compradores y vendedores sea mayor a cero ---y de no haber alcanzado la cantidad máxima de rondas--- avanza el tiempo. 
 
-class Agent{
-	id (str) -- Id de cada agente
-	endurance (int) -- Máximo número de fracasos
-	delta (float) -- Tasa fija de ajuste de precios
-	r (int) -- Parametro de redondeo
-	attrition (deque) -- Lista de largo fijo
-	paired, traded, tired  (bool) -- Rastreadores 
+Por su parte cada, uno de los distintos `Agent` genera sus parámetros individuales de forma aleatoria. Luego, conforme avanzan los turnos, actualiza y almacena la sucesión de precios esperados. A continuación un diagrama que muestra la secuencia de estados del sistema.
 
-	restart(self)
-	updatePriceRecord(self)
-	}
-          
-class Seller{
-	name (string) -- Nombre
-	minC (float) -- Costo mínimo posible
-	maxC (float) -- Costo máximo posible
-	cost (int) --  Costo específico para el vendedor
-	expectedPrice (int) -- Precio esperado "prior" para el primer turno
-	expectByDelta()
-	}
-
-class Buyer{
-	name (string) -- Nombre
-	minR (float) -- Precio de reserva mínimo posible.
-	maxR (float) -- Precio de reserva máximo posible.
-	reservePrice (int) -- Precio de reserva específico para el comprador.
-	expectedPrice (int) -- Precio esperado "prior" para el primer turno
-	expectByDelta()
-	}
-Market --> "1...A" Agent : Contiene
-Agent <|-- "1...S" Seller : Hereda
-Agent <|-- "1...B" Buyer : Hereda
-
-```
-
-La clase `market` es la principal del modelo: contiene a los agentes, los aparea, obtiene sus precios esperados y les comunica a los agentes si se realiza el intercambio. Antes de finalizar cada periodo, prepara a los agentes para el periodo posterior, haciendo que estos reevalúen sus expectativas y echa a quienes hayan alcanzado la resistencia máxima. Finalmente, luego de controlar que el número de compradores y vendedores sea mayor a cero ---y de no haber alcanzado la cantidad máxima de rondas--- avanza el tiempo. Por su parte cada uno de los distintos `Agent` genera sus parámetros individuales de forma aleatoria como también actualiza y almacena la sucesión de precios esperados de cada periodo. A continuación un diagrama que muestra la secuencia de estados del sistema:
-
-```mermaid
-stateDiagram
-    [*] --> marketOpens
-    marketOpens --> randomPairing
-    randomPairing --> exchangeMechanism
-    randomPairing --> NonPaired
-    state exchangeMechanism {
-        Paired --> Traded
-        Paired --> NonTraded
-    }
-    NonPaired --> dinamicUpdater
-    exchangeMechanism --> dinamicUpdater
-    state dinamicUpdater {
-        agents_expect --> agents_atrition : Si apareado
-        agents_expect --> keep_agent : No apareado
-        agents_atrition --> remove_agent : Límite de resistencia alcanzado
-        agents_atrition --> keep_agent : Límite de resistencia no alcanzado
-        
-        
-    }
-    dinamicUpdater --> checkEndOfTime
-    checkEndOfTime --> [*] : Si se alcanza max_runs o si S, B = 0
-    checkEndOfTime --> marketOpens : Si t<max_runs
-```
+<img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/stateChart.png" style="zoom:67%;" />
 
 Antes de continuar, es necesario mencionar un parámetro que cumple un rol meramente operacional: `resolution`, el redondeo o resolución del sistema. Al trabajar con realizaciones específicas y como el ajuste esta dado por la suma de un $\Delta$ específico, se decide que todos los valores de costos, precios de reserva y precios esperados pertenecerán al conjunto $\Z/res$ donde, para simplificar aún más, diremos que $res=\frac{1}{\Delta}$. Esta decisión no afecta el resultado de la simulación sino que sirve para facilitar el análisis. 
 
@@ -234,10 +159,10 @@ Los parámetros iniciales generales para ambos grupos se presentan en la tabla a
 
 |       Comprador       |       Vendedor        | Mercado |
 | :-------------------: | :-------------------: | :-----: |
-| $\underline{c} = 10$ | $\underline{r} = 20$ | $T=50$  |
+| $\underline{c} = 10$ | $\underline{r} = 20$ | $T_{low}=20 ; T^{max}=150$ |
 |   $\overline{c}=20$   |   $\overline{r}=30$   | $N=100$ |
-|     $\Delta =0.5$     |    $\Delta =0.50$     |         |
-|   `resolution` $=2$   |   `resolution` $=2$   |         |
+|     $\Delta =0.5$     |    $\Delta =0.50$     | $w=10$ |
+|   `resolution` $=2$   |   `resolution` $=2$   | $\epsilon= .10$ |
 
 #### Dinámicas de ajuste en los casos particulares
 
@@ -262,6 +187,8 @@ la varianble endurance garantiza en el modelo que los agentes puedan encontrar e
 sin embargo, la resistencia genera otro efecto. Al mantener más tiempo en el juego a los agentes minimiza la posibilidad que uno de ellos se termine yendo del sistema por "mala suerte", es decir una racha negativa de $e$ adversarios que lo rechazan aún cuando su producto podría ---en el final de la simulación--- ser competitivo. Con un valor más alto de $e$ este evento se vuelve menos recurrente.
 
 Ahora bien, este efecto positivo trae una consecuencia directa: si tarda más que los agentes se vayan del mercado, también ocurre para aquellos ineficientes. Por lo tanto, se tardará más en llegar al equilibrio
+
+- Los 
 
 
 

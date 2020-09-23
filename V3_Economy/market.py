@@ -18,7 +18,7 @@ class Market():
     """
 
     def __init__(self, listSellers, listBuyers, t_low = 20, 
-                maxrounds=500, window = 10, epsilon = .1, echo=True):
+                maxrounds=500, window = 10, epsilon = 0.1, echo=True):
         self.staticListSellers, self.staticListBuyers = listSellers, listBuyers
         # Needs list() to create the double
         self.dinamicListSellers = list(listSellers)
@@ -36,7 +36,6 @@ class Market():
         self.window = window
         self.slope_seller = [0 for i in range(self.window)] 
         self.slope_buyer = [0 for i in range(self.window)]
-        #Epsilon is defined as 2 times the max value of delta for the agents
         self.epsilon = epsilon
 
     def moveTime(self):
@@ -372,3 +371,81 @@ class Market():
                 )
             )
 
+
+
+# # Not working, seaborn implementation
+
+#     def prepareDf(self, dataDict):
+#         dataframe = pd.DataFrame.from_dict(dataDict, orient='index').fillna(0).T
+#         dataframe.index.names = ['time']
+#         out = dataframe.reset_index()
+#         out = out.melt("time")
+#         # Seaborn divides lines by colour
+#         out['tipo'] = ['S' if 'S' in x else 'B' for x in out['variable']]
+#         return out
+    
+#     def seaborn_graph(self, style='Solarize_Light2', 
+#                                     save=False, show_pic=True, name=0):
+#         data = self.prepareDf(self.agents_dict)
+#         assert style in plt.style.available, NameError
+#         with plt.style.context('Solarize_Light2'):
+
+#             newPal = dict(S = "green", B = "red")
+#             tmax = self.time
+
+#             # Prints the record of expected prices on each round
+#             sns.lineplot(x="time", y="value",
+#                         hue="tipo", units="variable", estimator=None, lw=1,
+#                         marker="o", alpha=0.25, palette=newPal, legend = False,
+#                         data=data)
+
+#             # Adds the aggregated lines and the standar deviation
+#             # sns.lineplot(x="time", y="value", alpha=0.7,
+#             #             hue="tipo", legend = False, palette=newPal,
+#             #             data=data)
+#             # Adds the bounds
+#             sns.lineplot(x="time", y="value",
+#                         hue="tipo", units="variable", estimator=None, lw=1,
+#                         alpha=0.5, palette=newPal, legend = False,
+#                         data=data)
+            
+#             ## Aesthetics
+#             # Checks for quantities and plurals in static
+#             numB = len(self.staticListBuyers)
+#             numS = len(self.staticListSellers)
+#             static_pluralB = 'es' if numB > 1 else ''
+#             static_pluralS = 'es' if numS > 1 else ''
+
+#             # Creates the Legend
+#             seller = mpatches.Patch(color='g', 
+#                     label=f'${numS}$ Vendedor{static_pluralS}')
+#             buyer = mpatches.Patch(color='r', 
+#                     label=f'${numB}$ Comprador{static_pluralB}')
+
+#             plt.legend(handles=[seller, buyer],
+#                                 bbox_to_anchor=(1.04, 1), loc="upper left")
+
+#             # Creates the remaining counter
+#             remainingBuyers = self.active_b_record[-1]
+#             remainingSellers = self.active_s_record[-1]
+#             # Checks for quantities and plurals in dinamic
+#             dinamic_pluralB = 'es' if numB > 1 else ''
+#             dinamic_pluralS = 'es' if numS > 1 else ''
+
+#             counter = (f"    En $T = {tmax}$\n{remainingSellers} Vendedor{dinamic_pluralS}"
+#                         f"\n{remainingBuyers} Comprador{dinamic_pluralB}")
+
+#             # place a text box in upper left in axes coords
+
+#             plt.annotate(counter, xy=(1, .63), xycoords='axes fraction',
+#                             xytext=(52, 0), textcoords='offset points')
+
+#             # Sets Title and axes lables           
+#             plt.xlabel("Tiempo")
+#             plt.ylabel("Precios Esperados")
+#             plt.title("Convergencia del precio esperado")
+
+#             if save:
+#                 plt.savefig(f".\\output\\{name}", bbox_inches='tight')
+#             if show_pic:
+#                 plt.show() 

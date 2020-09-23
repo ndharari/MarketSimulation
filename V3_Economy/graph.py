@@ -5,8 +5,26 @@ import pandas as pd
 from altair_saver import save
 
 
-def stab_boxplt(dataFrame):
+def stab_hist(dataFrame):
 
+    bars = alt.Chart(dataFrame).mark_bar().encode(
+        x=alt.X('T_max:Q', title="Estabilidad alcanzada", 
+         bin=alt.Bin(step=5), axis=alt.Axis(grid=False)),
+        y=alt.Y('count()', axis=None)
+    )
+
+    text = bars.mark_text(
+        align='center',
+        baseline='top',
+        dy=-10  # Nudges text to up a little
+    ).encode(
+        text='count()'
+    )
+
+    return (bars + text).properties(height=50)
+
+
+def stab_boxplt(dataFrame):
     output = alt.Chart(dataFrame).mark_boxplot(
         box = alt.MarkConfig(opacity=.7), 
         median=alt.MarkConfig(color="Black")).encode(
@@ -98,7 +116,7 @@ def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False):
                                 domain=['S', 'B'],
                                 range=['green', 'red'])))
     chart = no_ures + ures
-    output = chart & stab_boxplt(stab)
+    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
     if save:
         output.save(f'.\\output\\Heymann {side}.svg')
     if echo:
@@ -179,7 +197,7 @@ def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=Fal
             title=f'Recorrido de un {"vendedor" if side == "S" else "comprador"} al azar')
 
     chart = base + ures
-    output = chart & stab_boxplt(stab)
+    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
 
     if save:
         output.save(f'.\\output\\Follow {side}.svg')
@@ -251,7 +269,7 @@ def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False):
         ).properties(title=f'Media vs media a lo largo de las simulaciones')
 
     chart = base + ures
-    output = chart & stab_boxplt(stab)
+    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
 
     if save:
         output.save(f'.\\output\\avg vs avg.svg', scale_factor=2.0)
@@ -356,7 +374,7 @@ def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=Fal
         f' {"Vendedores" if side == "S" else "Compradores"}')
     
     chart = ures + avg + overall
-    output = chart & stab_boxplt(stab)
+    output = (chart & stab_hist(stab)).resolve_scale(x='shared')
     if save:
         output.save(f'.\\output\\Inter-Intra {side}.svg', scale_factor=2.0)
 
