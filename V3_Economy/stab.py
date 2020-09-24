@@ -23,7 +23,10 @@ def large_simulator(market, N, save_df=False):
     
     # Creates the Dicts
     active_dict = OrderedDict()
-    stability_data = [["Name", "Config", "T_max", "Stable", "endurance"]]   
+    stability_data = [["Name", "Config", "T_max", "Stable", "endurance"]]
+
+    if not os.path.exists(f".\\output\\Large"):
+        os.mkdir(f".\\output\\Large")   
 
     # Prepares name for files
     num_b = len(market.staticListBuyers)
@@ -97,11 +100,12 @@ for pair in s_b_configs:
         output = alt.Chart(active_df).mark_bar().encode(
         x=alt.X('time:Q', title="Tiempo"),
         y=alt.Y('count(value)', title="Simulaciones"),
-        color= alt.Color('value:O', legend=alt.Legend(title="Configuraciones"),
+        color= alt.Color('value:O', legend=alt.Legend(title="Configuraciones",
+                                                      columns = 4),
                         scale=alt.Scale(scheme="turbo"))
         ).properties(
             title=f'Numero de simulaciones con cada configuración. Endurance = {e}',
-            height=60
+            height=70
             )
         print(df_name)
         output.save(f".\\output\\Large\\N sim for {df_name}.html")
@@ -110,22 +114,14 @@ for pair in s_b_configs:
         bars = alt.Chart(stab_df).mark_bar().encode(
             x=alt.X('T_max:Q', title="Estabilidad alcanzada", 
             bin=alt.Bin(step=5)),
-            y=alt.Y('count()', axis=None),
-            color= alt.Color('Config:O', legend=alt.Legend(title="Configuraciones"),
+            y=alt.Y('count()', title="Simulaciones"),
+            color= alt.Color('Config:O', legend=alt.Legend(title="Configuraciones",
+                                                            columns= 4),
                         scale=alt.Scale(scheme="turbo")
         )
-        )
-    
-        text = bars.mark_text(
-            align='center',
-            baseline='top',
-            dy=-10  # Nudges text to up a little
-        ).encode(
-            text='count()'
-        )
-
-        second = (bars + text).properties(height=50)
-        second.save(f".\\output\\Large\\Stab {df_name}.html")
+        ).properties(title=f'Configuraciones al alcanzar estabilidad. Endurance = {e}',
+            height=70)
+        bars.save(f".\\output\\Large\\Stab {df_name}.html")
         
         
 

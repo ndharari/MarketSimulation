@@ -18,7 +18,7 @@ class Market():
     """
 
     def __init__(self, listSellers, listBuyers, t_low = 20, 
-                maxrounds=500, window = 10, epsilon = 0.1, echo=True):
+                maxrounds=500, window = 10, epsilon = 0.05, echo=True):
         self.staticListSellers, self.staticListBuyers = listSellers, listBuyers
         # Needs list() to create the double
         self.dinamicListSellers = list(listSellers)

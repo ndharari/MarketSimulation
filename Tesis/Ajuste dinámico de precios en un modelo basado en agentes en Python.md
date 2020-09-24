@@ -162,7 +162,7 @@ Los parámetros iniciales generales para ambos grupos se presentan en la tabla a
 | $\underline{c} = 10$ | $\underline{r} = 20$ | $T_{low}=20 ; T^{max}=150$ |
 |   $\overline{c}=20$   |   $\overline{r}=30$   | $N=100$ |
 |     $\Delta =0.5$     |    $\Delta =0.50$     | $w=10$ |
-|   `resolution` $=2$   |   `resolution` $=2$   | $\epsilon= .10$ |
+|   `resolution` $=2$   |   `resolution` $=2$   | $\epsilon= 0.05$ |
 
 #### Dinámicas de ajuste en los casos particulares
 

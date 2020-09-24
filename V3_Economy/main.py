@@ -119,7 +119,7 @@ def simulation(market, N, echo=False, save_pic=False, save_df=False):
 
 # Sets the Parameters
 save_pic, save_df, echo = True, True, False
-s_b_configs = [[3, 4], [5, 3], [6, 3], [5, 5]]
+s_b_configs = [[3,3], [4,3], [3, 4], [5, 3], [6, 3], [5, 5]]
 es = [3, 4]
 
 # Runs 200 simulations for each configuration. Saves ind and agg info.
