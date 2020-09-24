@@ -254,7 +254,7 @@ class Market():
             tline = [i for i in range(len(path))]
             plt.plot(tline, path, color, alpha=alpha)
 
-    def matplotGraph(self, style='Solarize_Light2', save=False, name=0):
+    def matplotGraph(self, style='Solarize_Light2', save=False, folder="", name=0 ):
         """" 
         Graphs the price path, the costs and the reserve price for all
         sellers and buyers.
@@ -320,7 +320,7 @@ class Market():
             # Saves File
 
             if save:
-                plt.savefig(f".\\output\\{name}", bbox_inches='tight')
+                plt.savefig(f".\\output\\{folder}{name}", bbox_inches='tight')
 
             
             # Plots

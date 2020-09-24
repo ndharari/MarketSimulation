@@ -23,6 +23,33 @@ def stab_hist(dataFrame):
 
     return (bars + text).properties(height=50)
 
+def stacked_hist(dataframe, endurance, echo=False, save=False, folder=""):
+    # Checks if chromedriver is in directory for saving
+    if save and not os.path.isfile('./chromedriver.exe'):
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), 
+                                'chromedriver.exe')
+
+    # Prepares the data Frame    
+    dataframe.index.names = ['time']
+    dataframe = dataframe.reset_index()
+    # Melts the dataframe for Altair
+    dataframe = dataframe.melt("time")
+    dataframe.dropna(inplace= True)
+
+    output = alt.Chart(dataframe).mark_bar().encode(
+        x=alt.X('time:Q', title="Tiempo"),
+        y=alt.Y('count(value)', title="Porcentaje",
+                stack="normalize", 
+                axis=alt.Axis(format='.0%')),
+        color= alt.Color('value:O', legend=alt.Legend(title="Indicadores"),
+                        scale=alt.Scale(scheme="greenblue"))
+    ).properties(title=f'Agentes activos como porcentaje. Endurance = {endurance}',
+                height=30)
+    if save:
+        output.save(f'.\\output\\{folder}Activos como % Endurance = {endurance}.svg')
+    if echo:
+            return output
+    pass
 
 def stab_boxplt(dataFrame):
     output = alt.Chart(dataFrame).mark_boxplot(
@@ -33,7 +60,7 @@ def stab_boxplt(dataFrame):
     return output
 
 # Heymann et al style graph
-def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False):
+def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False, folder=""):
     """ Graphs an aggregated style graph like the one found in Heymann et al 2014
 
     Arguments:
@@ -121,12 +148,12 @@ def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False):
                     grid=False
                     )
     if save:
-        output.save(f'.\\output\\Heymann {side}.svg')
+        output.save(f'.\\output\\{folder}Heymann {side}.svg')
     if echo:
             return output
 
 # Sample following
-def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=False, save=False):
+def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=False, save=False, folder=""):
     """ Graphs all the expected prices of an agent and its averages
 
     Arguments:
@@ -205,12 +232,12 @@ def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=Fal
                     )
 
     if save:
-        output.save(f'.\\output\\Follow {side}.svg')
+        output.save(f'.\\output\\{folder}Follow {side}.svg')
     if echo:
             return output
 
 # Overall Average of sellers and buyers
-def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False):
+def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False, folder=""):
     """ Graphs an aggregated style graph showing Avg Price vs Avg Price
 
     Arguments:
@@ -279,13 +306,13 @@ def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False):
                     )
 
     if save:
-        output.save(f'.\\output\\avg vs avg.svg', scale_factor=2.0)
+        output.save(f'.\\output\\{folder}avg vs avg.svg', scale_factor=2.0)
 
     if echo:
             return output
 
 # Inter_intra comparison
-def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=False):
+def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=False, folder=""):
     """ Graphs an aggregated style graph showing the average between each simulation
 
     Arguments:
@@ -385,9 +412,23 @@ def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=Fal
                     ).resolve_scale(x='shared'
                     ).configure_axis( grid=False)
     if save:
-        output.save(f'.\\output\\Inter-Intra {side}.svg', scale_factor=2.0)
+        output.save(f'.\\output\\{folder}Inter-Intra {side}.svg', scale_factor=2.0)
 
     if echo:
             return output
 
-    
+def bulk_alt(simulation_df, stab_df, echo, save, folder):
+
+    # Makes the Heymann et al style graph
+    heymann(simulation_df, stab_df, "B", echo=echo, save=save, folder=folder)
+    heymann(simulation_df, stab_df, "S", echo=echo, save=save, folder=folder)
+    # Aggregates and follows a sample agent
+    following_sample(simulation_df, stab_df, "S", 0, echo=echo, save=save, folder=folder)
+    following_sample(simulation_df, stab_df, "B", 0, echo=echo, save=save, folder=folder)
+
+    # Aggregates and follows all agents
+    avg_vs_avg(simulation_df, stab_df, echo=echo, save=save, folder=folder)
+
+    # Aggregates and follows all agents
+    intra_inter(simulation_df, stab_df, "S", echo=echo, save=save, folder=folder)
+    intra_inter(simulation_df, stab_df, "B", echo=echo, save=save, folder=folder)
