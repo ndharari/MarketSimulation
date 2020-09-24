@@ -166,7 +166,7 @@ Los parámetros iniciales generales para ambos grupos se presentan en la tabla a
 
 #### Dinámicas de ajuste en los casos particulares
 
-A continuación se presentan dos instanciaciones aleatorias de las dinámicas de ajuste para los casos donde $\{S=1; B=2\}, \{S=3; B=3\},\{S=4; B=3\}$ y para nivel de $e=3$. la idea es mostrar ciertos patrones generales, los cuales quedarán en mayor evidencia en el apartado siguiente. 
+A continuación se presentan dos instanciaciones aleatorias de las dinámicas de ajuste para los casos donde $\{S=1; B=2\}, \{S=3; B=3\},\{S=4; B=3\}$ y para nivel de $e=4$. la idea es mostrar ciertos patrones generales, los cuales quedarán en mayor evidencia en el apartado siguiente. 
 
 Mirando las dinámicas es posible diferenciar dos momentos distintos: una periodo de convergencia en el que los agentes 
 

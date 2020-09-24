@@ -9,6 +9,7 @@ import pandas as pd
 
 import altair as alt
 from altair_saver import save
+alt.data_transformers.disable_max_rows() # For Plotting porpuse
 
 from agents import Buyer, Seller
 from market import Market
@@ -27,7 +28,7 @@ from graph import *
 """
 
 # Simulator function
-def simulation(market, N, echo=False, save_pic=False, show_pic=True, save_df=False):
+def simulation(market, N, echo=False, save_pic=False, save_df=False):
     """Runs the simulation for a given market N times.
        If Echo, prints a Matplotlib graphs
 
@@ -48,7 +49,7 @@ def simulation(market, N, echo=False, save_pic=False, show_pic=True, save_df=Fal
     # Creates the Dicts
     simulation_dict = OrderedDict()
     active_dict = OrderedDict()
-    stability_data = [["Name", "T_Sellers", "T_Buyers", "T_max", "Stable", "endurance"]]  
+    stability_data = [["Name", "Config", "T_max", "Stable", "endurance"]]  
 
     # Prepares name for files
     num_b = len(market.staticListBuyers)
@@ -57,6 +58,8 @@ def simulation(market, N, echo=False, save_pic=False, show_pic=True, save_df=Fal
     # Fetches Endurance Data
     e = market.staticListBuyers[0].endurance
     folder = f"{df_name} - endurance = {e}\\"
+    if not os.path.exists(f".\\output\\{folder}"):
+        os.mkdir(f".\\output\\{folder}")
 
     for i in range(N):
         while not market.endOfTime:
@@ -75,14 +78,14 @@ def simulation(market, N, echo=False, save_pic=False, show_pic=True, save_df=Fal
         simulation_dict.update(market.agents_dict)
 
         # Extracts active records
-        total_agents = [x + y for x, y in zip (market.active_s_record, market.active_b_record)]
+        total_agents = [f"{x}S-{y}B" for x, y in zip(market.active_s_record, 
+                                                        market.active_b_record)]
         active_dict[i+1] = total_agents
 
 
-        # Extracts stability data [id, T_sellers, T_buyers, T_max, Stable, Endurance]
+        # Extracts stability data [id, Config, T_max, Stable, Endurance]
         current_stab = [i+1, 
-        market.active_s_record[-1],
-        market.active_b_record[-1],
+        f"{market.active_s_record[-1]}S-{market.active_b_record[-1]}B",
         market.time,
         market.time<market.maxrounds,
         market.staticListSellers[0].endurance]
@@ -115,28 +118,28 @@ def simulation(market, N, echo=False, save_pic=False, show_pic=True, save_df=Fal
     return sim_df, stab_df, active_df
 
 # Sets the Parameters
-save_pic, save_df, echo = False, True, False
-num_s, num_b = 3, 3 
-endurance = 4
-name = f"S{num_s}B{num_b}"
-folder = f"{name} - endurance = {endurance}\\"
+save_pic, save_df, echo = True, True, False
+s_b_configs = [[3, 4], [5, 3], [6, 3], [5, 5]]
+es = [3, 4]
 
+# Runs 200 simulations for each configuration. Saves ind and agg info.
+for pair in s_b_configs:
+    # Sets up everything
+    num_s, num_b = pair[0], pair[1]
+    name = f"S{num_s}B{num_b}"
+    listSellers = [Seller(i, 10, 20, endurance=0, delta=0.5) for i in range(num_s)]
+    listBuyers = [Buyer(i, 30, 40, endurance=0, delta=0.5) for i in range(num_b)]
+    market = Market(listSellers, listBuyers, t_low = 20, maxrounds=150, echo=echo)
+    # For all endurances
+    for e in es:
+        for agent in chain(listSellers, listBuyers):
+            agent.endurance = e
+            agent.change_endurance()
+        folder = f"{name} - endurance = {e}\\"
 
-# Sets up everything
-listSellers = [Seller(i, 10, 20, endurance=endurance, delta=0.5) for i in range(num_s)]
-listBuyers = [Buyer(i, 30, 40, endurance=endurance, delta=0.5) for i in range(num_b)]
-market = Market(listSellers, listBuyers, t_low = 20, maxrounds=150, echo=echo)
+        # Runs the simulations
+        simulation_df, stab_df, active_df = simulation(market, 100, echo=echo, 
+                                                            save_pic = save_pic,save_df=save_df)
 
-# Runs the simulations
-simulation_df, stab_df, active_df = simulation(market, 200, echo=echo,
-                                    save_pic=save_pic, save_df=save_df)
-
-
-alt.data_transformers.disable_max_rows() # For Plotting porpuse
-# Prints all main graphs
-bulk_alt(simulation_df, stab_df, echo=echo, save=save_pic, folder=folder)
-
-# Stability Plots
-stacked_hist(active_df, endurance, echo=echo, save=save_pic, folder=folder)
-
-
+        # Prints all main graphs
+        bulk_alt(simulation_df, stab_df, echo=echo, save=save_pic, folder=folder)

@@ -23,11 +23,14 @@ def stab_hist(dataFrame):
 
     return (bars + text).properties(height=50)
 
-def stacked_hist(dataframe, endurance, echo=False, save=False, folder=""):
+def stacked_hist(dataframe, endurance, echo=False, save=False, folder="", name=""):
     # Checks if chromedriver is in directory for saving
     if save and not os.path.isfile('./chromedriver.exe'):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), 
                                 'chromedriver.exe')
+    # checks if output folder exists
+    if not os.path.exists(f".\\output\\{folder}"):
+        os.mkdir(f".\\output\\{folder}")                                
 
     # Prepares the data Frame    
     dataframe.index.names = ['time']
@@ -38,18 +41,17 @@ def stacked_hist(dataframe, endurance, echo=False, save=False, folder=""):
 
     output = alt.Chart(dataframe).mark_bar().encode(
         x=alt.X('time:Q', title="Tiempo"),
-        y=alt.Y('count(value)', title="Porcentaje",
-                stack="normalize", 
-                axis=alt.Axis(format='.0%')),
-        color= alt.Color('value:O', legend=alt.Legend(title="Indicadores"),
-                        scale=alt.Scale(scheme="greenblue"))
-    ).properties(title=f'Agentes activos como porcentaje. Endurance = {endurance}',
-                height=30)
+        y=alt.Y('count(value)', title="Simulaciones"),
+        color= alt.Color('value:O', legend=alt.Legend(
+                                    title="Configuraciones",
+                                    columns=3),
+                        scale=alt.Scale(scheme="turbo"))
+    ).properties(title=f'Numero de simulaciones con cada configuración. Endurance = {endurance}',
+                height=60)
     if save:
-        output.save(f'.\\output\\{folder}Activos como % Endurance = {endurance}.svg')
+        output.save(f'.\\output\\{folder}N sim for {name}.svg')
     if echo:
             return output
-    pass
 
 def stab_boxplt(dataFrame):
     output = alt.Chart(dataFrame).mark_boxplot(
@@ -78,6 +80,9 @@ def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False, f
     if save and not os.path.isfile('./chromedriver.exe'):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), 
                                 'chromedriver.exe')
+    #checks if output folder exists
+    if not os.path.exists(f".\\output\\{folder}"):
+        os.mkdir(f".\\output\\{folder}")                                
 
     plot_df = pd.DataFrame()
 
@@ -172,6 +177,9 @@ def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=Fal
     if save and not os.path.isfile('./chromedriver.exe'):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), 
                                 'chromedriver.exe')
+    #checks if output folder exists
+    if not os.path.exists(f".\\output\\{folder}"):
+        os.mkdir(f".\\output\\{folder}")                                
 
     plot_df = pd.DataFrame()
     ures_df = pd.DataFrame()
@@ -254,6 +262,9 @@ def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False, folder="
     if save and not os.path.isfile('./chromedriver.exe'):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), 
                                 'chromedriver.exe')
+    #checks if output folder exists
+    if not os.path.exists(f".\\output\\{folder}"):
+        os.mkdir(f".\\output\\{folder}")                                
 
     plot_df = pd.DataFrame()
     ures_df = pd.DataFrame()
@@ -332,6 +343,9 @@ def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=Fal
     if save and not os.path.isfile('./chromedriver.exe'):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), 
                                 'chromedriver.exe')
+    #checks if output folder exists
+    if not os.path.exists(f".\\output\\{folder}"):
+        os.mkdir(f".\\output\\{folder}")
     
     plot_avg=pd.DataFrame()
     plot_overall=pd.DataFrame()

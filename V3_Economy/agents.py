@@ -91,6 +91,10 @@ class Agent:
         self.priceRecord = [self.expectedPrice]
         self.paired = self.traded = self.tired = False
         self.pairedRecord, self.tradedRecord = [], []
+    
+    def change_endurance(self):
+        self.attrition = deque([0 for i in range(self.endurance)],
+                               maxlen=self.endurance)  
 
 
 class Buyer(Agent):
