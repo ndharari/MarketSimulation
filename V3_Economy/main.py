@@ -17,14 +17,10 @@ from graph import *
 
 #CHANGELOG:
 """
-- Moved call to graphs to a bulk function
-
 """
 
 # TODO: Known problems / Future improvements:
 """
-- Collect Stability data for multiple endurances
-- Think of a plot 
 """
 
 # Simulator function
@@ -119,8 +115,11 @@ def simulation(market, N, echo=False, save_pic=False, save_df=False):
 
 # Sets the Parameters
 save_pic, save_df, echo = True, True, False
+# s_b_configs = [[3,3], [4,3], [3, 4], [5, 3], [6, 3], [5, 5]]
+# es = [3, 4]
+
 s_b_configs = [[3,3], [4,3], [3, 4], [5, 3], [6, 3], [5, 5]]
-es = [3, 4]
+es = [3]
 
 # Runs 200 simulations for each configuration. Saves ind and agg info.
 for pair in s_b_configs:
@@ -129,7 +128,7 @@ for pair in s_b_configs:
     name = f"S{num_s}B{num_b}"
     listSellers = [Seller(i, 10, 20, endurance=0, delta=0.5) for i in range(num_s)]
     listBuyers = [Buyer(i, 30, 40, endurance=0, delta=0.5) for i in range(num_b)]
-    market = Market(listSellers, listBuyers, t_low = 20, maxrounds=150, echo=echo)
+    market = Market(listSellers, listBuyers, t_low = 20, maxrounds=500, echo=echo)
     # For all endurances
     for e in es:
         for agent in chain(listSellers, listBuyers):

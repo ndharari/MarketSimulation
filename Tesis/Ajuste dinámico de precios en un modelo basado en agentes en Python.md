@@ -83,7 +83,7 @@ Como se explicó en el apartado anterior, los agentes reevalúan periodo a perio
 
 
 
->##### Ajuste de precios del vendedor
+>###### **Ajuste de precios del vendedor**
 >
 >$$
 >\begin{equation}
@@ -95,19 +95,21 @@ Como se explicó en el apartado anterior, los agentes reevalúan periodo a perio
 >\end{equation}
 >$$
 >Donde el precio esperado no puede resultar menor que el costo individual.
+
+
+
+
+>###### Ajuste de precios del comprador
 >
-
-
->##### Ajuste de precios del comprador
 >$$
 >\begin{equation}
-p_{b_j, t+1} = \left\{
-\begin{array}{ll}
-p_{j_i, t} - \Delta & {\textrm{si se efectúa el intercambio}} \\
-{\min{\{ p_{b_j, t} + \Delta}; \ r_{j}\}}  & {\textrm{si no se efectúa el intercambio}} \\
-\end{array}\right.
-\end{equation}
-$$
+>p_{b_j, t+1} = \left\{
+>\begin{array}{ll}
+>p_{j_i, t} - \Delta & {\textrm{si se efectúa el intercambio}} \\
+>{\min{\{ p_{b_j, t} + \Delta}; \ r_{j}\}}  & {\textrm{si no se efectúa el intercambio}} \\
+>\end{array}\right.
+>\end{equation}
+>$$
 >
 >Donde el precio esperado no puede resultar mayor al precio de reserva.
 
@@ -153,9 +155,7 @@ El código en su totalidad puede encontrarse [aquí](https://github.com/ndharari
 
 ### Resultados
 
-En el presente apartado se muestran los resultados de las dinámicas de ajuste del modelo para distintas cantidades de compradores y vendedores. Al comienzo de cada simulación estas cantidades se definan y se inicializan los agentes, los cuales se mantendrán idénticos en las $100$ simulaciones de $50$ turnos que se realizan de cada caso. Para facilitar las comparaciones, se mantendrán ciertos parámetros constantes a lo largo de las distintas rondas de simulaciones, como los intervalos de $U$, la tasa fija de ajuste de precio $\Delta$, solución del modelo. Los valores específicos para las utilidades de reserva y los *prior* del precio esperado para el primer periodo son instanciados con cada agente al comienzo de las rondas y se mantienen a lo largo del proceso. Además, se repite la simulación para dos valores de la variable $e$ ---`endurance`--- para ver el efecto del cambio de este parámetro en el sistema.  
-
-Los parámetros iniciales generales para ambos grupos se presentan en la tabla a continuación. 
+En el presente apartado se muestran los resultados de las dinámicas de ajuste del modelo para distintas cantidades de compradores y vendedores. Al comienzo de cada simulación estas cantidades se definan y se inicializan los agentes, los cuales se mantendrán idénticos en las $100$ simulaciones. Para facilitar las comparaciones se mantendrán fijos a lo largo de las rondas los intervalos de $U$, la tasa fija de ajuste de precio $\Delta$, la ventana de estabilidad $w$ con su valor máximo $\epsilon$ y los valores mínimos y máximos de turnos. Los valores específicos para las utilidades de reserva y los *prior* del precio esperado para el primer periodo son instanciados con cada agente al comienzo de las rondas y se mantienen a lo largo del proceso. Los parámetros iniciales se presentan en la tabla a continuación. 
 
 |       Comprador       |       Vendedor        | Mercado |
 | :-------------------: | :-------------------: | :-----: |
@@ -164,23 +164,92 @@ Los parámetros iniciales generales para ambos grupos se presentan en la tabla a
 |     $\Delta =0.5$     |    $\Delta =0.50$     | $w=10$ |
 |   `resolution` $=2$   |   `resolution` $=2$   | $\epsilon= 0.05$ |
 
-#### Dinámicas de ajuste en los casos particulares
+#### Caso simple: un vendedor, dos compradores
 
-A continuación se presentan dos instanciaciones aleatorias de las dinámicas de ajuste para los casos donde $\{S=1; B=2\}, \{S=3; B=3\},\{S=4; B=3\}$ y para nivel de $e=4$. la idea es mostrar ciertos patrones generales, los cuales quedarán en mayor evidencia en el apartado siguiente. 
+Comenzaremos por el caso más simple, en el que un sólo vendedor se encuentra con dos compradores. En los gráficos se muestran los precios esperados de los agentes en cada turno, representados por las líneas de círculos, acompañados de las utilidades de reserva, marcadas con líneas finas horizontales ambas verdes para los vendedores y rojas para los compradores. Al observar el resultado, es posible diferenciar tres etapas distintas en el proceso de ajuste que serán luego compartidas para los casos con mayor número de agentes: convergencia, regateo y estabilidad. 
 
-Mirando las dinámicas es posible diferenciar dos momentos distintos: una periodo de convergencia en el que los agentes 
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S1B2/S1B2 - 23.png" alt="S1B2 - 23" style="zoom: 80%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S1B2/S1B2 - 92.png" alt="S1B2 - 92" style="zoom: 80%;" /> |
+| :----------------------------------------------------------: |
+| *Gráficos elegidos al azar para valores de \{S=1; B=2; e=3\}* |
 
-Patrones generales que se pueden encontrar en las dinámicas:
+El periodo de convergencia se encuentra al comenzar la simulación. Recordemos que el precio esperado con el que cada agente comienza es elegido de forma aleatoria, siempre menor a su precio de reserva. Por esto es posible que su precio esperado se encuentre distante del resto de los actores del mercado. En los casos a continuación durante los primeros turnos el precio esperado del vendedor es menor que los de los compradores, por lo que siempre que se encuentra con ellos vende y se vuelve paulatinamente más exigente. En el caso de los compradores, como son más, hay turnos en los que alguno de ellos no se encuentra con un vendedor por lo que su exigencia decae. Por esto, en el segundo gráfico el precio esperado de uno de los vendedores es significativamente menor al otro. En esta parte del proceso, los agentes no suelen abandonar el mercado simplemente porque aún no comenzó la etapa en la que se encuentran con propuestas no atractivas, recordar que se definió $\overline{c}< \underline{r}$ por lo que en el inicio cualquier par de agentes encuentra beneficios de intercambio. 
 
-- Es necesario recordar que la condición para que un agente abandone el mercado no responde de forma directa a su precio individual de reserva, o incluso al valor de su precio esperado, sino a la coincidencia de encontrarse de forma consecutiva en un numero de fracasos al intercambiar con sus pares. La seguidilla de encuentros fallidos ----aquellos donde el precio ofrecido por el vendedor es mayor al del comprador--- puede ocurrir tanto para aquellos agentes cuyo precio esperado se encuentra alrededor del precio esperado del resto, como para  aquellos cuyo precio esperado 
+Ahora bien, cuando los precios esperados de los agentes no garantizan que cualquier par de vendedor-comprador encuentre beneficio en el intercambio, comienza la etapa de regateo. Es aquí donde los agentes se empiezan a encontrar con propuestas que no les son atractivas y que comienzan a rechazar. A medida que avanzan los turnos, es posible que alguno se enfrente de forma consecutiva con $e$ oportunidades frustradas y que abandone el mercado. Esto puede suceder cuando el precio promedio del mercado supera su utilidad de reserva, pero no es necesario que sea en esas circunstancias. Es útil recordar que la condición para que un agente abandone el mercado no responde de forma directa a su precio individual de reserva, o incluso al valor de su precio esperado, sino a la coincidencia de encontrarse de forma consecutiva en un numero de fracasos al intercambiar con sus pares. La seguidilla de encuentros fallidos ----aquellos donde el precio ofrecido por el vendedor es mayor al del comprador--- puede ocurrir en cualquier momento, sea prohibitivo el precio de mercado o no ya que depende del azar de los encuentros. De esta forma es posible que un agente que *debería* quedarse en el juego según sus utilidades de reserva abandone al encontrarse aleatoriamente en una seguidilla de encuentros desventajosos. Respecto a este fenómeno se hará mayor hincapié en la secciones siguientes, especialmente cuando se discuta el parámetro de estabilidad.
 
-- Existe un primer periodo de convergencia donde los agentes van actualizando sus expectativas antes que estas convergen a un nivel medio. En este periodo el sistema toma ciertas características complejas: como el apareamiento periodo a periodo resulta aleatorio es posible que *por casualidad* un agente que debería quedarse en el juego según sus utilidades de reserva abandone debido a que se encontró con  este periodo, al encontrarse aleatoriamente en una seguidilla de encuentros 
+Es así como los agentes van reevaluando sus expectativas (y abandonando el sistema) de acuerdo a quienes se encuentran periodo a periodo. Eventualmente, éstas tienen un cambio menor a lo largo del modelo, de forma que la media para ambos grupos se mantiene constante durante al menos, $w$ periodos. En este contexto, decimos que se alcanzó estabilidad. Esta condición suele suceder, como se mostrará más adelante, cuando la cantidad de compradores y vendedores es igual.
+
+No obstante las dinámicas individuales, la aleatoriedad en el apareamiento de compradores y vendedores sugiere la necesidad de analizar los resultados agregados a través de las $N$ instancias, todas con agentes idénticos. A continuación se presentan dos gráficas posibles: un gráfico estilo Heymann et al (2014) donde se muestra el precio mínimo, máximo y promedio de uno de los grupos (en este caso, compradores) junto con una instanciación particular de muestra y el gráfico de medias vs medias en cada periodo a lo largo de las simulaciones, ambos acompañados con histogramas que muestran el número de simulaciones que alcanzan estabilidad en cada turno. 
+
+En el primero se puede apreciar que el precio máximo nunca supera el precio de reserva más elevado del mercado (ya que nadie espera un precio mayor al propio de reserva) mientras que una vez la mayor parte de las simulaciones comienza a alcanzar estabilidad el precio mínimo iguala o supera el  menor precio de reserva, lo que significa que es éste quien termina abandonando el mercado. En estos turnos, la media de los compradores supera este valor mínimo, estabilizándose en puntos apenas superiores. Es importante recordar que a medida que las simulaciones finalizan, su media no es contabilizada en la media total, lo que explica la característica zigzageante una vez superado el turno 90: en este momento, sólo queda una simulación por mostrar. 
+
+En el gráfico de la derecha puede apreciarse el motivo por el cual se considera como medida de estabilidad la media de los precios esperados: tanto a través de las simulaciones como en cada simulación individual los agentes parecen "seguir" la media del grupo contrario, marcando de esta forma los momentos generales de convergencia, regateo (aquellos puntos donde se mantienen muy próximas las curvas) y convergencia. Esto tiene una explicación bastante intuitiva: cada agente recibe información de un contrincante por vez sin saber si se trata de un nuevo individuo o no y su reacción responde a si la nueva propuesta es mejor (o peor) a las vistas anteriormente, o mejor dicho, a la recalibración de las expectativas dadas las propuestas previas. De esta forma el mercado se mueve alrededor de los valores medios, reaccionando a las posibilidades de cambio de los precios que perciban los agentes
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S1B2/Heymann B.svg" alt="Heymann B" style="zoom: 67%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S1B2/avg vs avg.svg" alt="avg vs avg" style="zoom:33%;" /> |
+| :----------------------------------------------------------: |
+|    *Gráficos agregados para valores de \{S=1; B=2; e=3\}*    |
+
+#### Simulaciones con más agentes: casos individuales y agregados
+
+El caso presentado en el apartado anterior resulta ilustrador de como funcionan las dinámicas de ajuste en circunstancias simples con pocos agentes. Sin embargo, no es necesario aumentar enormemente el número de $\{S, B\}$ individuos iniciales para que el sistema se torne más complejo; note que el número de configuraciones finales distintas es de $S\times B$ individuos, sin considerar la posibilidad de precios medios finales mayores o menores. Sin embargo, es posible encontrar que la cantidades relativa inicial de compradores y vendedores cumple un rol fundamental a la hora de definir el precio de equilibrio emergente y es por esto que el presente apartado se divide en tres secciones, una donde las cantidades son idénticas, otra donde se encuentra prevalencia de vendedores y una tercera con mayoría compradores. El análisis de las dinámicas agregadas a través de las simulaciones se reserva para apartados posteriores.
+
+<h5 style="margin-bottom:0;">Igual cantidad de compradores y vendedores</h5>
+<h6 style="margin-top:0;">El precio medio suele permanecer en valores intermedios</h6>
+
+A continuación se presentan las dinámicas resultantes de simulaciones realizadas para los casos con \{S=3; B=3\},\{S=5; B=5\} ambos con $e=4$. 
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S3B3 - 10.png" alt="S3B3 - 10" style="zoom:67%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S3B3 - 78.png" alt="S3B3 - 78" style="zoom:67%;" /> |
+| :----------------------------------------------------------: |
+|  *Gráficos ilustrativos para valores de \{S=3; B=3; e=4\}*   |
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+|<img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S5B5 - 98.png" alt="S5B5 - 98" style="zoom: 50%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S5B5 - 94.png" alt="S5B5 - 94" style="zoom: 50%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S5B5 - 42.png" alt="S5B5 - 42" style="zoom:50%;" />|
+| :----------------------------------------------------------: |
+|  *Gráficos ilustrativos para valores de \{S=5; B=5; e=4\}*   |
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S3B3 - Inter-Intra B.svg" alt="S3B3 - Inter-Intra B" style="zoom:33%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S5B5 - Inter-Intra B.svg" alt="S5B5 - Inter-Intra B" style="zoom:33%;" /> |
+| :----------------------------------------------------------: | ------------------------------------------------------------ |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S3B3 - Inter-Intra S.svg" alt="S3B3 - Inter-Intra S" style="zoom:33%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/S=B/S5B5 - Inter-Intra S.svg" alt="S5B5 - Inter-Intra S" style="zoom:33%;" /> |
+|    *Gráficos agregados para valores de \{S=3; B=3; e=4\}*    | *Gráficos agregados para valores de \{S=5; B=5; e=4\}*       |
+
+<h5 style="margin-bottom:0;">Mayor cantidad de compradores</h5>
+<h6 style="margin-top:0;">El precio medio suele subir</h6>
+
+A continuación se presentan las dinámicas resultantes de simulaciones realizadas para los casos con\{S=3; B=4\} ambos con $e=4$. 
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/BmayorS/S3B4 - 66.png" alt="S3B4 - 66" style="zoom:67%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/BmayorS/S3B4 - 21.png" alt="S3B4 - 21" style="zoom: 67%;" /> |
+| :----------------------------------------------------------: |
+|  *Gráficos ilustrativos para valores de \{S=3; B=4; e=4\}*   |
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/BmayorS/S3B4 - Inter-Intra S.svg" alt="S3B4 - Inter-Intra S" style="zoom:33%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/BmayorS/S3B4 - Inter-Intra B.svg" alt="S3B4 - Inter-Intra B" style="zoom: 33%;" /> |
+| :----------------------------------------------------------: |
+|    *Gráficos agregados para valores de \{S=3; B=4; e=4\}*    |
 
 
+<h5 style="margin-bottom:0;">Mayor cantidad de vendedores</h5>
+<h6 style="margin-top:0;">El precio medio suele bajar</h6>
 
+A continuación se presentan las dinámicas resultantes de simulaciones realizadas para los casos con\{S=6; B=3\} con $e=4$. 
 
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/SmayorB/S6B3 - 90.png" alt="S6B3 - 90" style="zoom: 67%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/SmayorB/S6B3 - 50.png" alt="S6B3 - 50" style="zoom:67%;" /> |
+| :----------------------------------------------------------: |
+|  *Gráficos ilustrativos para valores de \{S=6; B=3; e=4\}*   |
 
-##### El rol de la resistencia
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/SmayorB/S6B3 - Inter-Intra S.svg" alt="S6B3 - Inter-Intra S" style="zoom:33%;" /><img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/SmayorB/S6B3 - Inter-Intra B.svg" alt="S6B3 - Inter-Intra B" style="zoom:33%;" /> |
+| :----------------------------------------------------------: |
+|    *Gráficos agregados para valores de \{S=6; B=3; e=4\}*    |
+
+#### El rol de la resistencia
 
 la varianble endurance garantiza en el modelo que los agentes puedan encontrar equilibrios a precios por encima del promedio. Esto ocurre porque, si los agentes se mantienen dando vueltas en el mercado, ensucian las señales de precios que reciben los otros. Si es posible que te encuentres con un individuo cuya utilidad ya fue descartada por el mercado (y vos, de no saberlo, reaccionás acordemente) se encuentra una tendencia a que los consumidores y vendedores se queden donde estan
 
@@ -188,11 +257,45 @@ sin embargo, la resistencia genera otro efecto. Al mantener más tiempo en el ju
 
 Ahora bien, este efecto positivo trae una consecuencia directa: si tarda más que los agentes se vayan del mercado, también ocurre para aquellos ineficientes. Por lo tanto, se tardará más en llegar al equilibrio
 
-- Los 
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B3-E3.png" alt="N sim for S3B3-E3" style="zoom: 67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S5B5-E3.png" alt="N sim for S5B5-E3" style="zoom: 67%;" /> |      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B3-E4.png" alt="N sim for S3B3-E4" style="zoom: 67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S5B5-E4.png" alt="N sim for S5B5-E4" style="zoom:67%;" /> |      |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B3-E5.png" alt="N sim for S3B3-E5" style="zoom: 67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S5B5-E5.png" alt="N sim for S5B5-E5" style="zoom:67%;" /> |      |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B3-E6.png" alt="N sim for S3B3-E6" style="zoom: 67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S5B5-E6.png" alt="N sim for S5B5-E6" style="zoom:67%;" /> |      |
+| *Recopilado en 1000 iteraciones de \{S=3; B=3}*              | *Recopilado en 1000 iteraciones de \{S=5; B=5}*              |      |
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B4-E3.png" alt="N sim for S3B4-E3" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S6B3-E3.png" alt="N sim for S6B3-E3" style="zoom: 67%;" /> |      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B4-E4.png" alt="N sim for S3B4-E4" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S6B3-E5.png" alt="N sim for S6B3-E5" style="zoom:67%;" /> |      |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B4-E5.png" alt="N sim for S3B4-E5" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S6B3-E5.png" alt="N sim for S6B3-E5" style="zoom:67%;" /> |      |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S3B4-E6.png" alt="N sim for S3B4-E6" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/N sim for S6B3-E6.png" alt="N sim for S6B3-E6" style="zoom:67%;" /> |      |
+| *Recopilado en 1000 iteraciones de \{S=3; B=4}*              | *Recopilado en 1000 iteraciones de \{S=6; B=3}*              |      |
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B3-E3.png" alt="Stab S3B3-E3" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S5B5-E3.png" alt="Stab S5B5-E3" style="zoom:67%;" /> |      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B3-E4.png" alt="Stab S3B3-E4" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S5B5-E4.png" alt="Stab S5B5-E4" style="zoom:67%;" /> |      |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B3-E5.png" alt="Stab S3B3-E5" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S5B5-E5.png" alt="Stab S5B5-E5" style="zoom:67%;" /> |      |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B3-E6.png" alt="Stab S3B3-E6" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S5B5-E6.png" alt="Stab S5B5-E6" style="zoom:67%;" /> |      |
+| *Recopilado en 1000 iteraciones de \{S=3; B=3}*              | *Recopilado en 1000 iteraciones de \{S=5; B=5}*              |      |
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+
+| ![Stab S3B4-E3](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B4-E3.png) |      | ![Stab S6B3-E3](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S6B3-E3.png) |
+| ------------------------------------------------------------ | ---- | ------------------------------------------------------------ |
+| ![Stab S3B4-E4](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B4-E4.png) |      | ![Stab S6B3-E4](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S6B3-E4.png) |
+| ![Stab S3B4-E5](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B4-E5.png) |      | ![Stab S6B3-E5](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S6B3-E5.png) |
+| ![Stab S3B4-E6](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S3B4-E6.png) |      | ![Stab S6B3-E6](Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Estabilidad/Stab S6B3-E6.png) |
+| *Recopilado en 1000 iteraciones de \{S=3; B=3}*              |      | *Recopilado en 1000 iteraciones de \{S=3; B=3}*              |
 
 
 
-#### Tendencias generales
+### Conclusiones
+
+
 
 ---
 
@@ -256,9 +359,12 @@ Wilhite, A. (2001). Bilateral Trade and ‘Small-World’ Networks. *Computation
 
 ##### Gráficos de casos particulares
 
-- Gráficos presentados para casos particulares con niveles de $e=3$. $A$ y $B$ son dos rondas distintas elegidas al azar.
+- Gráficos presentados para casos particulares para valores de \{S=1; B=2; e=3\}
 
-- Gráficos presentados para casos particulares con niveles de $e=3$
+
+
+- Gráficos presentados para casos particulares para valores de \{S=1; B=2; e=3\}
+- 
 
 ##### Gráficos agregados
 
@@ -268,3 +374,11 @@ Wilhite, A. (2001). Bilateral Trade and ‘Small-World’ Networks. *Computation
   - El gráfico $E$ muestra el recorrido de un vendedor al azar en las distintas $N=100$ simulaciones.
   - Los gráficos $F$ y $G$ siguen el formato presente en Heymann et al (2014): muestran la menor y mayor realización del precio esperado (respectivamente, en colores rojo y violeta), su media (representada por los círculos azules) para cada periodo con una realización aleatoria. El primero muestra el valor para los compradores, el segundo para los vendedores.
   - Los gráficos $H$ e $I$ superponen el promedio a lo largo de las $N$ simulaciones para cada tipo de agentes con los promedios del precio esperado presentes en cada una de las simulaciones. La nube resultante muestra el movimiento promedio general del sistema. El primero 
+
+##### Resistencia
+
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/N sim for S3B3.gif" alt="N sim for S3B3" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/Stab S3B3.gif" alt="Stab S3B3" style="zoom:67%;" /> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/N sim for S3B4.gif" alt="N sim for S3B4" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/Stab S3B4.gif" alt="Stab S3B4" style="zoom:67%;" /> |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/N sim for S5B5.gif" alt="N sim for S5B5" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/Stab S5B5.gif" alt="Stab S5B5" style="zoom:67%;" /> |
+| <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/N sim for S6B3.gif" alt="N sim for S6B3" style="zoom:67%;" /> | <img src="Ajuste dinámico de precios en un modelo basado en agentes en Python.assets/Gifs/Stab S6B3.gif" alt="Stab S6B3" style="zoom:67%;" /> |

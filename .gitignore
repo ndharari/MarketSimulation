@@ -124,6 +124,7 @@ dmypy.json
 Legacy/
 # Ignore minor scripts
 rename.py
+gifmaker.py
 V3_Economy/test.py
 V3_Economy/output
 !V3_Economy/output/.gitkeep 
