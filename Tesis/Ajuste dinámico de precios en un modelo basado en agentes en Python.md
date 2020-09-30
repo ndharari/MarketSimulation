@@ -203,37 +203,39 @@ Ahora bien, en el segundo caso ocurre algo particular: en algún momento de la e
 
 | <img src="assets/S=B/S3B3 - 78.png" alt="S3B3 - 78" style="zoom:67%;" /><img src="assets/S=B/S3B3 - 10.png" alt="S3B3 - 10" style="zoom:67%;" /> |
 | :----------------------------------------------------------: |
-|  *Gráficos ilustrativos para valores de \{S=3; B=3; e=4\}*   |
+| *Gráficos ilustrativos para valores de $\{S=3; B=3; e=4\}$*  |
 
 No obstante, si se realiza una simulación con más agentes, como en el ejemplo a continuación $\{S=5; B=5; e=4\}$, hay mayores posibilidades de que algún individuo abandone sorpresivamente el mercado. Aún así, la mayor parte de las simulaciones ($56/100$) terminan como en primer gráfico: en pocos turnos en valores intermedios. Sin embargo un porcentaje importante se toma más turnos para alcanzar la estabilidad, debido a que en algún momento alguno de los agentes cumplió su condición de resistencia y abandonó el mercado. El segundo gráfico muestra uno de estas simulaciones, esta vez mostrando el caso donde inicialmente dos compradores abandonan el mercado llevando el precio esperado hacia abajo. Naturalmente, esta dinámica resulta más lenta de llegar a la estabilidad. 
 
 Aun así, la tercera gráfica muestra una posibilidad poco probable (sólo ocurre una vez) pero que resalta la aleatoriedad detrás del abandono del mercado en el modelo: el desfasaje de individuos no ocurre una vez si no dos. La primera vez al inicio del sistema vendedores abandonan el mercado generando un impulso al aumento del precio esperado promedio. Sin embargo, no se llega al equilibrio en valores elevados, si no que alrededor del turno $200$ las cantidades relativas de agentes se invierten: ahora es el comprador quien tiene la ventaja. El precio desciende a lo largo de los turnos restantes para alcanzar equilibrio en un precio esperado alrededor de $20$.
 
-|<img src="assets/S=B/S5B5 - 98.png" alt="S5B5 - 98" style="zoom: 50%;" /><img src="assets/S=B/S5B5 - 94.png" alt="S5B5 - 94" style="zoom: 50%;" /><img src="assets/S=B/S5B5 - 42.png" alt="S5B5 - 42" style="zoom:50%;" />|
+| <img src="assets/S=B/S5B5 - 98.png" alt="S5B5 - 98" style="zoom: 50%;" /><img src="assets/S=B/S5B5 - 94.png" alt="S5B5 - 94" style="zoom: 50%;" /><img src="assets/S=B/S5B5 - 42.png" alt="S5B5 - 42" style="zoom:50%;" /> |
 | :----------------------------------------------------------: |
-|  *Gráficos ilustrativos para valores de \{S=5; B=5; e=4\}*   |
+| *Gráficos ilustrativos para valores de $\{S=5; B=5; e=4\}$*  |
 
-A continuación se presenta una forma simple de evidenciar el comportamiento del sistema, esta vez agregando las $N$ distintas realizaciones. Los gráficos muestran tanto para cada grupo la media de los precios esperados *dentro* de cada simulación y *entre* las simulaciones acompañados de un histograma del momento turno donde fue alcanzada la estabilidad.  De esta forma se puede apreciar ciertos puntos. En primer lugar, en ambas simulaciones la mayoría de los casos concluye relativamente rápido, de forma que en los periodos iniciales la media dentro y entre para ambos grupos se mantiene en valores intermedios. No obstante, también se puede apreciar que algunas simulaciones no responden a esta dinámica y representan los casos antes mencionados. En el caso de la derecha, la realización con el doble desfasaje de individuos domina los últimos $200$ turnos de la simulación, de forma que ambas medias son idénticas (porque sólo resta una simulación por terminar) 
+A continuación se presenta una forma simple de evidenciar el comportamiento del sistema, esta vez agregando las $N$ distintas realizaciones. Los gráficos muestran tanto para cada grupo la media de los precios esperados *dentro* de cada simulación y *entre* las simulaciones acompañados de un histograma del momento turno donde fue alcanzada la estabilidad.  De esta forma se puede apreciar ciertos puntos. En primer lugar, en ambas simulaciones la mayoría de los casos concluye relativamente rápido, de forma que en los periodos iniciales la media dentro y entre para ambos grupos se mantiene en valores intermedios. No obstante, también se puede apreciar que algunas simulaciones no responden a esta dinámica y representan los casos antes mencionados. En el caso de la derecha, la realización con el doble desfasaje de individuos domina los últimos $200$ turnos de la simulación, de forma que ambas medias son idénticas (porque sólo resta una simulación por terminar).
 
 | <img src="assets/S=B/S3B3 - Inter-Intra B.svg" alt="S3B3 - Inter-Intra B" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra B.svg" alt="S5B5 - Inter-Intra B" style="zoom:33%;" /> |
 | :----------------------------------------------------------: | ------------------------------------------------------------ |
 | <img src="assets/S=B/S3B3 - Inter-Intra S.svg" alt="S3B3 - Inter-Intra S" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra S.svg" alt="S5B5 - Inter-Intra S" style="zoom:33%;" /> |
-|    *Gráficos agregados para valores de \{S=3; B=3; e=4\}*    | *Gráficos agregados para valores de \{S=5; B=5; e=4\}*       |
+|   *Gráficos agregados para valores de \${S=3; B=3; e=4\}$*   | *Gráficos agregados para valores de $\{S=5; B=5; e=4\}$*     |
 
 <h5 style="margin-bottom:0;">Mayor cantidad de compradores</h5>
 <h6 style="margin-top:0;">El precio medio suele subir</h6>
 
-A continuación se presentan las dinámicas resultantes de simulaciones realizadas para los casos con\{S=3; B=4\} ambos con $e=4$. 
+A continuación analizaremos el resultado de una superioridad numérica de compradores. Se presentan las dinámicas resultantes de simulaciones realizadas con $\{S=3; B=4; e=4\}$. A la izquierda se ve el resultado esperado (y más común), la existencia de un comprador adicional que retorna periodo a periodo menos exigente fuerza el precio medio a subir y lleva al sistema a un equilibrio con un precio elevado.
 
-| <img src="assets/BmayorS/S3B4 - 66.png" alt="S3B4 - 66" style="zoom:67%;" /><img src="assets/BmayorS/S3B4 - 21.png" alt="S3B4 - 21" style="zoom: 67%;" /> |
+El caso de la derecha resulta particular: de forma azarosa, algún comprador abandona el mercado en el comienzo de la etapa de regateo.  De esta forma, al no existir más el desbalance de cantidades, el resultado final es similar al analizado en el apartado anterior, con precio final intermedio y estabilidad temprana.
+
+| <img src="assets/BmayorS/S3B4 - 21.png" alt="S3B4 - 66" style="zoom:67%;" /><img src="assets/BmayorS/S3B4 - 62.png" alt="S3B4 - 21" style="zoom: 67%;" /> |
 | :----------------------------------------------------------: |
-|  *Gráficos ilustrativos para valores de \{S=3; B=4; e=4\}*   |
+| *Gráficos ilustrativos para valores de $\{S=3; B=4; e=4\}$*  |
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+Para mostrar el comportamiento agregado en esta sección complementaremos la gráfica *dentro-entre* (a la izquierda) con el recorrido de un vendedor al azar a lo largo de las distintas simulaciones acompañado por su media general. A primera vista resalta la similitud de ambos gráficos: el comportamiento de cada uno de los individuos sigue de cerca al comportamiento general en su mayoría de la forma esperada, más compradores subir el precio. De aquellas simulaciones que alcanzan un precio mayor algunas terminan con precios mayores, estables al superar una segunda utilidad de reserva. Esto resulta de la pérdida de otro vendedor adicional, logrando un equilibrio con precio aún mayor. Respecto de las configuraciones posibles al terminar las simulaciones se profundizará en el siguiente apartado.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+También es posible que ocurran dos resultados particulares: unos $11$ casos terminan prematuramente (como se muestra en el ejemplo anterior) debido a que algún comprador abandona el mercado y el precio resulta intermedio. ¿Qué ocurre entonces si dos compradores abandonan el mercado al comienzo de la situación? Bueno, se espera ver el resultado donde el precio cae, hasta alcanzar estabilidad en valores menores. Respecto a este tipo de dinámicas se discutirá a continuación.
 
-| <img src="assets/BmayorS/S3B4 - Inter-Intra S.svg" alt="S3B4 - Inter-Intra S" style="zoom:33%;" /><img src="assets/BmayorS/S3B4 - Inter-Intra B.svg" alt="S3B4 - Inter-Intra B" style="zoom: 33%;" /> |
+| <img src="assets/BmayorS/S3B4 - Inter-Intra S.svg" alt="S3B4 - Inter-Intra S" style="zoom: 67%;" /> <img src="assets/BmayorS/S3B4 - Follow S.svg" alt="S3B4 - Follow S" style="zoom:67%;" /> |
 | :----------------------------------------------------------: |
 |    *Gráficos agregados para valores de \{S=3; B=4; e=4\}*    |
 
@@ -241,19 +243,19 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat s
 <h5 style="margin-bottom:0;">Mayor cantidad de vendedores</h5>
 <h6 style="margin-top:0;">El precio medio suele bajar</h6>
 
-A continuación se presentan las dinámicas resultantes de simulaciones realizadas para los casos con\{S=6; B=3\} con $e=4$. 
+Finalmente queda por exponer la última variante, cuando hay una mayor variedad de vendedores: en esta oportunidad se presentan dos instanciaciones del caso de $\{S=6; B=3; e=4\}$. Ahora, será la mitad de los vendedores que retornan periodo a periodo menos exigentes debido que no encuentran pareja. Esto genera que el precio medio caiga de forma más acelerada al principio y a medida que los vendedores son desplazados del mercado 
 
-| <img src="assets/SmayorB/S6B3 - 90.png" alt="S6B3 - 90" style="zoom: 67%;" /><img src="assets/SmayorB/S6B3 - 65.png" alt="S6B3 - 50" style="zoom:67%;" /> |
+| <img src="assets/SmayorB/S6B3 - 19.png" alt="S6B3 - 19" style="zoom:67%;" /><img src="assets/SmayorB/S6B3 - 65.png" alt="S6B3 - 50" style="zoom:67%;" /> |
 | :----------------------------------------------------------: |
-|  *Gráficos ilustrativos para valores de \{S=6; B=3; e=4\}*   |
+| *Gráficos ilustrativos para valores de $\{S=6; B=3; e=4\}$*  |
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
+En este caso los gráficos *dentro-entre* muestran un comportamiento bastante unificado: todos las simulaciones terminan de la forma esperada, con el precio medio del sistema para ambos grupos en valores bajos. Una posible explicación de esta consistencia resulta del gran desbalance de cantidades, que no sólo acelera la convergencia resultante como se explica arriba, sino también porque si la diferencia entre ambos grupos es especialmente elevada la probabilidad de que abandonen de forma azarosa el numero indicado de compradores como para dar vuelta las cantidades relativas es menor comparada con los casos anteriores.
 
 | <img src="assets/SmayorB/S6B3 - Inter-Intra S.svg" alt="S6B3 - Inter-Intra S" style="zoom: 67%;" /><img src="assets/SmayorB/S6B3 - Inter-Intra B.svg" alt="S6B3 - Inter-Intra B" style="zoom: 67%;" /> |
 | :----------------------------------------------------------: |
 |    *Gráficos agregados para valores de \{S=6; B=3; e=4\}*    |
+
+De esta forma, en los tres apartados que preceden se mostraron los resultados buscados en la construcción del modelo: la cantidad relativa inicial de agentes determina en la gran mayoría como varía el precio esperado de los agentes. En resumidas cuentas: a igual cantidad de compradores y vendedores el precio medio suele permanecer en valores intermedios, mientras que si hay mayor cantidad de compradores el precio medio suele subir y si hay mayor cantidad de vendedores el precio medio suele bajar.
 
 #### El rol de la resistencia
 
@@ -273,35 +275,39 @@ Ahora bien, este efecto positivo trae una consecuencia directa: si tarda más qu
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
 
 | <img src="assets/Estabilidad/N sim for S3B4-E3.png" alt="N sim for S3B4-E3" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E3.png" alt="N sim for S6B3-E3" style="zoom: 67%;" /> |      |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- |
 | <img src="assets/Estabilidad/N sim for S3B4-E4.png" alt="N sim for S3B4-E4" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E5.png" alt="N sim for S6B3-E5" style="zoom:67%;" /> |      |
 | <img src="assets/Estabilidad/N sim for S3B4-E5.png" alt="N sim for S3B4-E5" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E5.png" alt="N sim for S6B3-E5" style="zoom:67%;" /> |      |
 | <img src="assets/Estabilidad/N sim for S3B4-E6.png" alt="N sim for S3B4-E6" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E6.png" alt="N sim for S6B3-E6" style="zoom:67%;" /> |      |
-| *Recopilado en 1000 iteraciones de \{S=3; B=4}*              | *Recopilado en 1000 iteraciones de \{S=6; B=3}*              |      |
+|      *Recopilado en 1000 iteraciones de $\{S=3; B=4\}$*      |      *Recopilado en 1000 iteraciones de $\{S=6; B=3\}$*      |      |
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
 
 | <img src="assets/Estabilidad/Stab S3B3-E3.png" alt="Stab S3B3-E3" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E3.png" alt="Stab S5B5-E3" style="zoom:67%;" /> |      |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- |
 | <img src="assets/Estabilidad/Stab S3B3-E4.png" alt="Stab S3B3-E4" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E4.png" alt="Stab S5B5-E4" style="zoom:67%;" /> |      |
 | <img src="assets/Estabilidad/Stab S3B3-E5.png" alt="Stab S3B3-E5" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E5.png" alt="Stab S5B5-E5" style="zoom:67%;" /> |      |
 | <img src="assets/Estabilidad/Stab S3B3-E6.png" alt="Stab S3B3-E6" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E6.png" alt="Stab S5B5-E6" style="zoom:67%;" /> |      |
-| *Recopilado en 1000 iteraciones de \{S=3; B=3}*              | *Recopilado en 1000 iteraciones de \{S=5; B=5}*              |      |
+|      *Recopilado en 1000 iteraciones de $\{S=3; B=3\}$*      |      *Recopilado en 1000 iteraciones de $\{S=5; B=5\}$*      |      |
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
 
 | ![Stab S3B4-E3](assets/Estabilidad/Stab S3B4-E3.png) |      | ![Stab S6B3-E3](assets/Estabilidad/Stab S6B3-E3.png) |
-| ------------------------------------------------------------ | ---- | ------------------------------------------------------------ |
+| :--------------------------------------------------: | ---- | :--------------------------------------------------: |
 | ![Stab S3B4-E4](assets/Estabilidad/Stab S3B4-E4.png) |      | ![Stab S6B3-E4](assets/Estabilidad/Stab S6B3-E4.png) |
 | ![Stab S3B4-E5](assets/Estabilidad/Stab S3B4-E5.png) |      | ![Stab S6B3-E5](assets/Estabilidad/Stab S6B3-E5.png) |
 | ![Stab S3B4-E6](assets/Estabilidad/Stab S3B4-E6.png) |      | ![Stab S6B3-E6](assets/Estabilidad/Stab S6B3-E6.png) |
-| *Recopilado en 1000 iteraciones de \{S=3; B=3}*              |      | *Recopilado en 1000 iteraciones de \{S=3; B=3}*              |
+|  *Recopilado en 1000 iteraciones de $\{S=3; B=4\}$*  |      |  *Recopilado en 1000 iteraciones de $\{S=6; B=3\}$*  |
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
 
+---
 
 ### Conclusiones
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis erat sem. Praesent lobortis id metus at sollicitudin. Aliquam fringilla vulputate mauris a posuere. Nulla porta sem vel lacus fermentum, id dapibus magna fermentum. Nullam at ex vel ex congue blandit. Integer tempus mi neque. In hac habitasse platea dictumst. Vestibulum at nunc eros. Donec consequat ornare risus, eu faucibus nulla tincidunt ac. Vivamus pulvinar nisl a sollicitudin malesuada. Nulla facilisis nisl non lorem facilisis, in ultrices dolor efficitur. Aliquam eleifend id lorem sit amet faucibus. Curabitur eget lectus in nunc interdum semper non sed nisl. Ut rutrum tristique massa ac tempus.
 
 ---
 
@@ -362,24 +368,6 @@ Wilhite, A. (2001). Bilateral Trade and ‘Small-World’ Networks. *Computation
 ---
 
 ### Anexo
-
-##### Gráficos de casos particulares
-
-- Gráficos presentados para casos particulares para valores de \{S=1; B=2; e=3\}
-
-
-
-- Gráficos presentados para casos particulares para valores de \{S=1; B=2; e=3\}
-- 
-
-##### Gráficos agregados
-
-- Gráficos agregados para con niveles de $e=3$ donde:
-  -  El gráfico $C$ muestra el promedio para cada tipo de agente en cada uno de los turnos a lo largo de las $N=100$ simulaciones.
-  - El gráfico $D$ muestra el recorrido de un comprador al azar en las distintas $N=100$ simulaciones.
-  - El gráfico $E$ muestra el recorrido de un vendedor al azar en las distintas $N=100$ simulaciones.
-  - Los gráficos $F$ y $G$ siguen el formato presente en Heymann et al (2014): muestran la menor y mayor realización del precio esperado (respectivamente, en colores rojo y violeta), su media (representada por los círculos azules) para cada periodo con una realización aleatoria. El primero muestra el valor para los compradores, el segundo para los vendedores.
-  - Los gráficos $H$ e $I$ superponen el promedio a lo largo de las $N$ simulaciones para cada tipo de agentes con los promedios del precio esperado presentes en cada una de las simulaciones. La nube resultante muestra el movimiento promedio general del sistema. El primero 
 
 ##### Resistencia
 

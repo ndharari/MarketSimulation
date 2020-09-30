@@ -49,7 +49,7 @@ def stacked_hist(dataframe, endurance, echo=False, save=False, folder="", name="
     ).properties(title=f'Numero de simulaciones con cada configuración. Endurance = {endurance}',
                 height=60)
     if save:
-        output.save(f'.\\output\\{folder}N sim for {name}.svg')
+        output.save(f'.\\output\\{folder}N sim for {name}.html')
     if echo:
             return output
 
@@ -153,7 +153,7 @@ def heymann(dataFrame, stab, side="S", style='opaque', echo=False, save=False, f
                     grid=False
                     )
     if save:
-        output.save(f'.\\output\\{folder}Heymann {side}.svg')
+        output.save(f'.\\output\\{folder}Heymann {side}.html')
     if echo:
             return output
 
@@ -240,7 +240,7 @@ def following_sample(dataFrame, stab, side="S", name=0, style='opaque', echo=Fal
                     )
 
     if save:
-        output.save(f'.\\output\\{folder}Follow {side}.svg')
+        output.save(f'.\\output\\{folder}Follow {side}.html')
     if echo:
             return output
 
@@ -317,7 +317,7 @@ def avg_vs_avg(dataFrame, stab, style='opaque', echo=False, save=False, folder="
                     )
 
     if save:
-        output.save(f'.\\output\\{folder}avg vs avg.svg', scale_factor=2.0)
+        output.save(f'.\\output\\{folder}avg vs avg.html', scale_factor=2.0)
 
     if echo:
             return output
@@ -426,7 +426,7 @@ def intra_inter(dataFrame, stab,  side="S", style='opaque', echo=False, save=Fal
                     ).resolve_scale(x='shared'
                     ).configure_axis( grid=False)
     if save:
-        output.save(f'.\\output\\{folder}Inter-Intra {side}.svg', scale_factor=2.0)
+        output.save(f'.\\output\\{folder}Inter-Intra {side}.html', scale_factor=2.0)
 
     if echo:
             return output
