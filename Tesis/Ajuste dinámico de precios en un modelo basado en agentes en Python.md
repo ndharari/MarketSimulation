@@ -218,7 +218,7 @@ A continuación se presenta una forma simple de evidenciar el comportamiento del
 | <img src="assets/S=B/S3B3 - Inter-Intra B.png" alt="S3B3 - Inter-Intra B" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra B.png" alt="S5B5 - Inter-Intra B" style="zoom:33%;" /> |
 | :----------------------------------------------------------: | ------------------------------------------------------------ |
 | <img src="assets/S=B/S3B3 - Inter-Intra S.png" alt="S3B3 - Inter-Intra S" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra S.png" alt="S5B5 - Inter-Intra S" style="zoom:33%;" /> |
-|   *Gráficos agregados para valores de \${S=3; B=3; e=4\}$*   | *Gráficos agregados para valores de $\{S=5; B=5; e=4\}$*     |
+|   *Gráficos agregados para valores de $\{S=3; B=3; e=4\}$*   | *Gráficos agregados para valores de $\{S=5; B=5; e=4\}$*     |
 
 <h5 style="margin-bottom:0;">Mayor cantidad de compradores</h5>
 <h6 style="margin-top:0;">El precio medio suele subir</h6>
@@ -237,7 +237,7 @@ También es posible que ocurran dos resultados particulares: unos $11$ casos ter
 
 | <img src="assets/BmayorS/S3B4 - Inter-Intra S.png" alt="S3B4 - Inter-Intra S" style="zoom: 67%;" /> <img src="assets/BmayorS/S3B4 - Follow S.png" alt="S3B4 - Follow S" style="zoom:67%;" /> |
 | :----------------------------------------------------------: |
-|    *Gráficos agregados para valores de \{S=3; B=4; e=4\}*    |
+|   *Gráficos agregados para valores de $\{S=3; B=4; e=4\}$*   |
 
 
 <h5 style="margin-bottom:0;">Mayor cantidad de vendedores</h5>
@@ -253,7 +253,7 @@ En este caso los gráficos *dentro-entre* muestran un comportamiento bastante un
 
 | <img src="assets/SmayorB/S6B3 - Inter-Intra S.png" alt="S6B3 - Inter-Intra S" style="zoom: 67%;" /><img src="assets/SmayorB/S6B3 - Inter-Intra B.png" alt="S6B3 - Inter-Intra B" style="zoom: 67%;" /> |
 | :----------------------------------------------------------: |
-|    *Gráficos agregados para valores de \{S=6; B=3; e=4\}*    |
+|   *Gráficos agregados para valores de $\{S=6; B=3; e=4\}$*   |
 
 De esta forma, en los tres apartados que preceden se mostraron los resultados buscados en la construcción del modelo: la cantidad relativa inicial de agentes determina en la gran mayoría como varía el precio esperado de los agentes. En resumidas cuentas: a igual cantidad de compradores y vendedores el precio medio suele permanecer en valores intermedios, mientras que si hay mayor cantidad de compradores el precio medio suele subir y si hay mayor cantidad de vendedores el precio medio suele bajar.
 
@@ -344,15 +344,3 @@ VanderPlas, J., Granger, B., Heer, J., Moritz, D., Wongsuphasawat, K., Satyanara
 Vriend, N. J. (1995). Self-organization of markets: An example of a computational approach. *Computational Economics*, *8*(3), 205-231. https://doi.org/10.1007/BF01298460
 
 Wilhite, A. (2001). Bilateral Trade and ‘Small-World’ Networks. *Computational Economics*, *18*, 49-64.
-
----
-
-### Anexo
-
-##### Gráficos animados de resistencia
-
-| <img src="assets/Gifs/N sim for S3B3.gif" alt="N sim for S3B3" style="zoom:67%;" /> | <img src="assets/Gifs/Stab S3B3.gif" alt="Stab S3B3" style="zoom:67%;" /> |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="assets/Gifs/N sim for S3B4.gif" alt="N sim for S3B4" style="zoom:67%;" /> | <img src="assets/Gifs/Stab S3B4.gif" alt="Stab S3B4" style="zoom:67%;" /> |
-| <img src="assets/Gifs/N sim for S5B5.gif" alt="N sim for S5B5" style="zoom:67%;" /> | <img src="assets/Gifs/Stab S5B5.gif" alt="Stab S5B5" style="zoom:67%;" /> |
-| <img src="assets/Gifs/N sim for S6B3.gif" alt="N sim for S6B3" style="zoom:67%;" /> | <img src="assets/Gifs/Stab S6B3.gif" alt="Stab S6B3" style="zoom:67%;" /> |
