@@ -265,39 +265,19 @@ Sin embargo, este parámetro tiene asociada una consecuencia no menor. Como se e
 
 Para evidenciar este efecto se realizó una segunda ronda de simulaciones. Para cada una de las cantidades iniciales de casos *$\{S=3; B=3\}, \{S=5; B=5\}, \{S=6; B=3\}, \{S=4; B=3\}$* se inicializaron los agentes con los mismos parámetros que en el ejercicio anterior. En cada caso, se realizaron $1000$ simulaciones para cada cada uno de los siguientes valores de $e\in \{3,4,5,6\}$ recopilando las configuraciones de vendedores y compradores activas en cada momento y el turno en el que se alcanza la estabilidad. 
 
-| <img src="assets/Estabilidad/N sim for S3B3-E3.png" alt="N sim for S3B3-E3" style="zoom: 67%;" /> | <img src="assets/Estabilidad/N sim for S5B5-E3.png" alt="N sim for S5B5-E3" style="zoom: 67%;" /> |      |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- |
-| <img src="assets/Estabilidad/N sim for S3B3-E4.png" alt="N sim for S3B3-E4" style="zoom: 67%;" /> | <img src="assets/Estabilidad/N sim for S5B5-E4.png" alt="N sim for S5B5-E4" style="zoom:67%;" /> |      |
-| <img src="assets/Estabilidad/N sim for S3B3-E5.png" alt="N sim for S3B3-E5" style="zoom: 67%;" /> | <img src="assets/Estabilidad/N sim for S5B5-E5.png" alt="N sim for S5B5-E5" style="zoom:67%;" /> |      |
-| <img src="assets/Estabilidad/N sim for S3B3-E6.png" alt="N sim for S3B3-E6" style="zoom: 67%;" /> | <img src="assets/Estabilidad/N sim for S5B5-E6.png" alt="N sim for S5B5-E6" style="zoom:67%;" /> |      |
-|      *Recopilado en 1000 iteraciones de $\{S=3; B=3\}$*      |      *Recopilado en 1000 iteraciones de $\{S=5; B=5\}$*      |      |
+![](assets/Estabilidad/Est 1.png)
 
 Comenzaremos por mostrar el número de simulaciones activas que por configuración de vendedores-compradores en cada turno. En un primer momento podemos evidenciar que todos los casos mantienen sus cantidades iniciales en la etapa inicial de convergencia. Luego, la posibilidad de abandonar el sistema y la resistencia entran en juego. Es de esta forma que en los periodos subsiguientes empiezan que mantienen esa configuración inicial son menores, ya sea porque alcanzaron estabilidad (el caso más común cuando $S=B$)  o porque algún participante abandonó el sistema (más común cuando $S\neq B $. De cualquier forma, es evidente que a mayores valores de $e$ menor es la fragmentación en distintos grupos y se logra un resultado más cohesivo, especialmente cuando el número inicial de agentes es grande. Nuevamente, el número de configuraciones finales distintas posibles es de $(S+1)\times (B+1)$ individuos. Y cuando los valores de $e$ son bajos, más configuraciones totales aparecen, aún cuando (como se verá también más adelante) la mayor parte de ellas lo hace de la forma esperada.
 
-| <img src="assets/Estabilidad/N sim for S3B4-E3.png" alt="N sim for S3B4-E3" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E3.png" alt="N sim for S6B3-E3" style="zoom: 67%;" /> |      |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- |
-| <img src="assets/Estabilidad/N sim for S3B4-E4.png" alt="N sim for S3B4-E4" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E5.png" alt="N sim for S6B3-E5" style="zoom:67%;" /> |      |
-| <img src="assets/Estabilidad/N sim for S3B4-E5.png" alt="N sim for S3B4-E5" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E5.png" alt="N sim for S6B3-E5" style="zoom:67%;" /> |      |
-| <img src="assets/Estabilidad/N sim for S3B4-E6.png" alt="N sim for S3B4-E6" style="zoom:67%;" /> | <img src="assets/Estabilidad/N sim for S6B3-E6.png" alt="N sim for S6B3-E6" style="zoom:67%;" /> |      |
-|      *Recopilado en 1000 iteraciones de $\{S=3; B=4\}$*      |      *Recopilado en 1000 iteraciones de $\{S=6; B=3\}$*      |      |
+![](assets/Estabilidad/Est 2.png)
 
 También es posible analizar los resultados según el momento en el que alcanzan una situación de estabilidad. En este caso, es simple ver como no sólo el aumento de la resistencia influye en disminuir el número de configuraciones finales, si no también que aquellas configuraciones similares concluyen por "momentos". Por ejemplo, en el caso $\{S=5; B=5, e=4\}$ es bien claro que aquellos que encuentran equilibrio $\{S=5; B=5\}$ finalizan entre los turnos $30-50$ mientras que aquellos donde un participante abandona sorpresivamente el mercado se llega a la estabilidad alrededor del turno $140$. Más allá de los factores particulares y de los resultados atípicos (los cuales disminuyen con el aumento de $e$) la proporción más grande de casos finaliza temprano y de la forma esperada.
 
-| <img src="assets/Estabilidad/Stab S3B3-E3.png" alt="Stab S3B3-E3" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E3.png" alt="Stab S5B5-E3" style="zoom:67%;" /> |      |
-| :----------------------------------------------------------: | :----------------------------------------------------------: | ---- |
-| <img src="assets/Estabilidad/Stab S3B3-E4.png" alt="Stab S3B3-E4" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E4.png" alt="Stab S5B5-E4" style="zoom:67%;" /> |      |
-| <img src="assets/Estabilidad/Stab S3B3-E5.png" alt="Stab S3B3-E5" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E5.png" alt="Stab S5B5-E5" style="zoom:67%;" /> |      |
-| <img src="assets/Estabilidad/Stab S3B3-E6.png" alt="Stab S3B3-E6" style="zoom:67%;" /> | <img src="assets/Estabilidad/Stab S5B5-E6.png" alt="Stab S5B5-E6" style="zoom:67%;" /> |      |
-|      *Recopilado en 1000 iteraciones de $\{S=3; B=3\}$*      |      *Recopilado en 1000 iteraciones de $\{S=5; B=5\}$*      |      |
+![](assets/Estabilidad/Est 3.png)
 
 En el caso de las situaciones donde el número inicial de cada grupo es distinto la dinámica no resulta muy distinta a la ya descripta. Igualmente, ciertas diferencias se pueden encontrar. Por un lado, como se explicó en el apartado anterior, existe la posibilidad (especialmente en el caso $\{S=3; B=4\})$ que azarosamente un individuo abandone el proceso y que el sistema encuentre equilibrio en precios intermedios, como se puede ver para el caso $e=4$. 
 
-| ![Stab S3B4-E3](assets/Estabilidad/Stab S3B4-E3.png) |      | ![Stab S6B3-E3](assets/Estabilidad/Stab S6B3-E3.png) |
-| :--------------------------------------------------: | ---- | :--------------------------------------------------: |
-| ![Stab S3B4-E4](assets/Estabilidad/Stab S3B4-E4.png) |      | ![Stab S6B3-E4](assets/Estabilidad/Stab S6B3-E4.png) |
-| ![Stab S3B4-E5](assets/Estabilidad/Stab S3B4-E5.png) |      | ![Stab S6B3-E5](assets/Estabilidad/Stab S6B3-E5.png) |
-| ![Stab S3B4-E6](assets/Estabilidad/Stab S3B4-E6.png) |      | ![Stab S6B3-E6](assets/Estabilidad/Stab S6B3-E6.png) |
-|  *Recopilado en 1000 iteraciones de $\{S=3; B=4\}$*  |      |  *Recopilado en 1000 iteraciones de $\{S=6; B=3\}$*  |
+![](assets/Estabilidad/Est 4.png)
 
 Ahora bien, en ambos casos y especialmente para los valores más grandes de $e$ ocurre que se alcanza estabilidad sin haber logrado reducir el número de agentes hasta que se igualen en ambos grupos. Esto no necesariamente implica que la dinámica no genera ajuste; recordar que la condición terminal no considera el número de agentes en el sistema, sólo el comportamiento de la media de los precios esperados para cada grupo a lo largo del tiempo. Especialmente en situaciones donde los agentes tienen precios de reserva cercanos puede suceder que la variación de las expectativas del resto de los agentes no sea lo suficientemente grande como para no activar la condición de estabilidad. Sin embargo, este resultado no invalida de ninguna manera el objetivo del modelo, que en definitiva encuentra efectivamente que el precio final en la mayoría de los casos es cercano al la utilidad de reserva del $|n-m|$ -avo individuo
 
