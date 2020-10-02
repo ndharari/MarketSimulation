@@ -186,7 +186,7 @@ En el primer gráfico se puede apreciar que el precio máximo nunca supera el pr
 
 En el gráfico de la derecha puede apreciarse el motivo por el cual se considera como medida de estabilidad la media de los precios esperados: tanto a través de las simulaciones como en cada simulación individual los agentes parecen "seguir" la media del grupo contrario, marcando de esta forma los momentos generales de convergencia, regateo (aquellos puntos donde se mantienen muy próximas las curvas) y convergencia. Esto tiene una explicación bastante intuitiva: cada agente recibe información de un contrincante por vez sin saber si se trata de un nuevo individuo o no y su reacción responde a si la nueva propuesta es mejor (o peor) a las vistas anteriormente, o mejor dicho, a la recalibración de las expectativas dadas las propuestas previas. De esta forma el mercado se mueve alrededor de los valores medios, reaccionando a las posibilidades de cambio de los precios que perciban los agentes
 
-| <img src="assets/S1B2/Heymann B.svg" alt="Heymann B" style="zoom: 67%;" /><img src="assets/S1B2/avg vs avg.svg" alt="avg vs avg" style="zoom:33%;" /> |
+| <img src="assets/S1B2/Heymann B.png" alt="Heymann B" style="zoom: 67%;" /><img src="assets/S1B2/avg vs avg.png" alt="avg vs avg" style="zoom:33%;" /> |
 | :----------------------------------------------------------: |
 |   *Gráficos agregados para valores de $\{S=1; B=2; e=3\}$*   |
 
@@ -215,9 +215,9 @@ Aun así, la tercera gráfica muestra una posibilidad poco probable (sólo ocurr
 
 A continuación se presenta una forma simple de evidenciar el comportamiento del sistema, esta vez agregando las $N$ distintas realizaciones. Los gráficos muestran tanto para cada grupo la media de los precios esperados *dentro* de cada simulación y *entre* las simulaciones acompañados de un histograma del momento turno donde fue alcanzada la estabilidad.  De esta forma se puede apreciar ciertos puntos. En primer lugar, en ambas simulaciones la mayoría de los casos concluye relativamente rápido, de forma que en los periodos iniciales la media dentro y entre para ambos grupos se mantiene en valores intermedios. No obstante, también se puede apreciar que algunas simulaciones no responden a esta dinámica y representan los casos antes mencionados. En el caso de la derecha, la realización con el doble desfasaje de individuos domina los últimos $200$ turnos de la simulación, de forma que ambas medias son idénticas (porque sólo resta una simulación por terminar).
 
-| <img src="assets/S=B/S3B3 - Inter-Intra B.svg" alt="S3B3 - Inter-Intra B" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra B.svg" alt="S5B5 - Inter-Intra B" style="zoom:33%;" /> |
+| <img src="assets/S=B/S3B3 - Inter-Intra B.png" alt="S3B3 - Inter-Intra B" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra B.png" alt="S5B5 - Inter-Intra B" style="zoom:33%;" /> |
 | :----------------------------------------------------------: | ------------------------------------------------------------ |
-| <img src="assets/S=B/S3B3 - Inter-Intra S.svg" alt="S3B3 - Inter-Intra S" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra S.svg" alt="S5B5 - Inter-Intra S" style="zoom:33%;" /> |
+| <img src="assets/S=B/S3B3 - Inter-Intra S.png" alt="S3B3 - Inter-Intra S" style="zoom:33%;" /> | <img src="assets/S=B/S5B5 - Inter-Intra S.png" alt="S5B5 - Inter-Intra S" style="zoom:33%;" /> |
 |   *Gráficos agregados para valores de \${S=3; B=3; e=4\}$*   | *Gráficos agregados para valores de $\{S=5; B=5; e=4\}$*     |
 
 <h5 style="margin-bottom:0;">Mayor cantidad de compradores</h5>
@@ -235,7 +235,7 @@ Para mostrar el comportamiento agregado en esta sección complementaremos la gr�
 
 También es posible que ocurran dos resultados particulares: unos $11$ casos terminan prematuramente (como se muestra en el ejemplo anterior) debido a que algún comprador abandona el mercado y el precio resulta intermedio. ¿Qué ocurre entonces si dos compradores abandonan el mercado al comienzo de la situación? Bueno, se espera ver el resultado donde el precio cae, hasta alcanzar estabilidad en valores menores. Respecto a este tipo de dinámicas se discutirá a continuación.
 
-| <img src="assets/BmayorS/S3B4 - Inter-Intra S.svg" alt="S3B4 - Inter-Intra S" style="zoom: 67%;" /> <img src="assets/BmayorS/S3B4 - Follow S.svg" alt="S3B4 - Follow S" style="zoom:67%;" /> |
+| <img src="assets/BmayorS/S3B4 - Inter-Intra S.png" alt="S3B4 - Inter-Intra S" style="zoom: 67%;" /> <img src="assets/BmayorS/S3B4 - Follow S.png" alt="S3B4 - Follow S" style="zoom:67%;" /> |
 | :----------------------------------------------------------: |
 |    *Gráficos agregados para valores de \{S=3; B=4; e=4\}*    |
 
@@ -251,7 +251,7 @@ Finalmente queda por exponer la última variante, cuando hay una mayor variedad 
 
 En este caso los gráficos *dentro-entre* muestran un comportamiento bastante unificado: todos las simulaciones terminan de la forma esperada, con el precio medio del sistema para ambos grupos en valores bajos. Una posible explicación de esta consistencia resulta del gran desbalance de cantidades, que no sólo acelera la convergencia resultante como se explica arriba, sino también porque si la diferencia entre ambos grupos es especialmente elevada la probabilidad de que abandonen de forma azarosa el numero indicado de compradores como para dar vuelta las cantidades relativas es menor comparada con los casos anteriores.
 
-| <img src="assets/SmayorB/S6B3 - Inter-Intra S.svg" alt="S6B3 - Inter-Intra S" style="zoom: 67%;" /><img src="assets/SmayorB/S6B3 - Inter-Intra B.svg" alt="S6B3 - Inter-Intra B" style="zoom: 67%;" /> |
+| <img src="assets/SmayorB/S6B3 - Inter-Intra S.png" alt="S6B3 - Inter-Intra S" style="zoom: 67%;" /><img src="assets/SmayorB/S6B3 - Inter-Intra B.png" alt="S6B3 - Inter-Intra B" style="zoom: 67%;" /> |
 | :----------------------------------------------------------: |
 |    *Gráficos agregados para valores de \{S=6; B=3; e=4\}*    |
 
