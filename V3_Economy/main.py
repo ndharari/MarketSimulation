@@ -21,6 +21,7 @@ from graph import *
 
 # TODO: Known problems / Future improvements:
 """
+Bug: Altair does not want to export to svg or png
 """
 
 # Simulator function
